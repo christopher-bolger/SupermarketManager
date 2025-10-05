@@ -32,8 +32,8 @@ class LinkedListTest {
         assertTrue(list.add("HI"));
         assertTrue(list.add("HIIII"));
         assertTrue(list.add("Howdy"));
-        assertTrue(list.insert(1, "position 1"));
+        assertTrue(list.insert(2, "position 2"));
+        assertFalse(list.insert(5, "not possible"));
         assertEquals(4, list.size());
-        System.out.println(list);
     }
 }

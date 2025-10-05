@@ -32,7 +32,7 @@ public class LinkedList<E> {
         while(temp.next != null){
             temp = temp.next;
         }
-        return temp.addNode() && temp.add(content);
+        return temp.addNode() && temp.addElement(content);
 //        if(this.element == null){
 //            return setElement(content);
 //        }else if(next != null){
@@ -88,6 +88,6 @@ public class LinkedList<E> {
     }
 
     public String toString(){
-        return element.toString();
+        return element == null ? "" : element.toString() + "\n" + next.toString();
     }
 }
