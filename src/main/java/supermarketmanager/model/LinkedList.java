@@ -44,6 +44,8 @@ public class LinkedList<E> {
         //But the recursion would probably be slower
     }
 
+    //TODO
+    //Change to reflect above
     public boolean insert(int index, E element) {
         if ((index < 0 || index > size()) && element != null)
             return false;
