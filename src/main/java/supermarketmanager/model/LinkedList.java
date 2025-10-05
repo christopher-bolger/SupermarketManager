@@ -33,6 +33,7 @@ public class LinkedList<E> {
             temp = temp.next;
         }
         return temp.addNode() && temp.addElement(content);
+
 //        if(this.element == null){
 //            return setElement(content);
 //        }else if(next != null){
