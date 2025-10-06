@@ -1,11 +1,6 @@
 package main.java.supermarketmanager.model;
 
-import java.io.InvalidClassException;
-import java.util.InvalidPropertiesFormatException;
 import java.util.Objects;
-
-// TODO:
-// - Separate the Node from the list
 
 public class LinkedList<E> {
     private Node<E> head, tail;
