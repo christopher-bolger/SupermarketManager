@@ -23,16 +23,14 @@ public class LinkedList<E> {
 
     // Add element/node methods
     public boolean add(E content) {
-        if(this.element == null){
-            this.element = content;
-            return addNode();
-        }
+        if(this.element != null || content == null)
+            return false;
 
-        LinkedList<E> temp = next;
+        LinkedList<E> temp = this;
         while(temp.next != null){
             temp = temp.next;
         }
-        return temp.addNode() && temp.addElement(content);
+        return temp.addNode() && temp.next.addElement(content);
 
 //        if(this.element == null){
 //            return setElement(content);
@@ -45,8 +43,6 @@ public class LinkedList<E> {
         //But the recursion would probably be slower
     }
 
-    //TODO
-    //Change to reflect above
     public boolean insert(int index, E element) {
         if ((index < 0 || index > size()) && element != null)
             return false;
@@ -81,6 +77,26 @@ public class LinkedList<E> {
             return true;
         }
         return false;
+    }
+
+    //getter methods
+    //TODO
+    // What if an element is passed that does not exist within the list?
+    public E get(E element){
+        LinkedList<E> temp = this;
+        boolean found = false;
+        while(temp.next != null) {
+            if (temp.getElement().equals(element)){
+                found = true;
+                break;
+                }
+            temp = temp.next;
+        }
+        return found ? temp.getElement() : null;
+    }
+
+    private E getElement() {
+        return element;
     }
 
     //misc methods

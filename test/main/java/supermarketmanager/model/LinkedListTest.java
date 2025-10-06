@@ -19,6 +19,7 @@ class LinkedListTest {
 
     @Test
     void testSize() {
+        assertEquals(0, list.size());
         assertTrue(list.add("HI"));
         assertEquals(1, list.size());
         assertTrue(list.add("HIIII"));
@@ -32,8 +33,16 @@ class LinkedListTest {
         assertTrue(list.add("HI"));
         assertTrue(list.add("HIIII"));
         assertTrue(list.add("Howdy"));
+        assertFalse(list.add(null));
+        assertEquals(3, list.size());
+    }
+
+    @Test
+    void testInsert(){
+        list.add("Hi");
+        list.add("Howdy");
+        list.add("Hello");
         assertTrue(list.insert(2, "position 2"));
         assertFalse(list.insert(5, "not possible"));
-        assertEquals(4, list.size());
     }
 }
