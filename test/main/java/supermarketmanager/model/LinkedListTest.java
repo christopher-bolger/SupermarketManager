@@ -5,44 +5,76 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class LinkedListTest {
-    LinkedList<String> list;
+    LinkedList<String> emptyList, listWithElements;
 
     @org.junit.jupiter.api.BeforeEach
     void setUp() {
-        list = new LinkedList<>();
+        emptyList = new LinkedList<>();
+        listWithElements = new LinkedList<>();
+        listWithElements.add("Hi");
+        listWithElements.add("Howdy");
+        listWithElements.add("Hello");
+        listWithElements.add("Morning");
     }
 
     @org.junit.jupiter.api.AfterEach
     void tearDown() {
-        list = null;
+        emptyList = listWithElements = null;
     }
 
     @Test
     void testSize() {
-        assertEquals(0, list.size());
-        assertTrue(list.add("HI"));
-        assertEquals(1, list.size());
-        assertTrue(list.add("HIIII"));
-        assertEquals(2, list.size());
-        assertFalse(list.add(null));
-        assertEquals(2, list.size());
+        assertEquals(0, emptyList.size());
+        assertTrue(emptyList.add("HI"));
+        assertEquals(1, emptyList.size());
+        assertTrue(emptyList.add("HIIII"));
+        assertEquals(2, emptyList.size());
+        assertFalse(emptyList.add(null));
+        assertEquals(2, emptyList.size());
     }
 
     @Test
     void testAdd(){
-        assertTrue(list.add("HI"));
-        assertTrue(list.add("HIIII"));
-        assertTrue(list.add("Howdy"));
-        assertFalse(list.add(null));
-        assertEquals(3, list.size());
+        assertTrue(emptyList.add("HI"));
+        assertTrue(emptyList.add("HIIII"));
+        assertTrue(emptyList.add("Howdy"));
+        assertFalse(emptyList.add(null));
+        assertEquals(3, emptyList.size());
     }
 
     @Test
     void testInsert(){
-        list.add("Hi");
-        list.add("Howdy");
-        list.add("Hello");
-        assertTrue(list.insert(2, "position 2"));
-        assertFalse(list.insert(5, "not possible"));
+        assertTrue(listWithElements.insert(2, "position 2"));
+        assertTrue(listWithElements.insert(4, "position 4"));
+        assertFalse(listWithElements.insert(6, "not possible")); // 6 elements in array but it counts from 0
+        assertFalse(listWithElements.insert(-1, "not possible"));
+        assertFalse(emptyList.insert(0, "EmptyList, can't insert"));
+        emptyList.add("FirstElement");
+        assertTrue(emptyList.insert(0, "Now it should work"));
+    }
+
+    @Test
+    void testGet(){
+        assertEquals("Morning", listWithElements.get(listWithElements.size()-1));
+        assertEquals("Hi", listWithElements.get("Hi"));
+        assertEquals("Hi", listWithElements.get(0));
+        assertNull(listWithElements.get("NotInTheList"));
+        assertNull(listWithElements.get(listWithElements.size()));
+    }
+
+    @Test
+    void testGetFirst(){
+        assertNull(emptyList.getFirst());
+        assertEquals("Hi", listWithElements.getFirst());
+        listWithElements.insert(0, "iH");
+        assertEquals("iH", listWithElements.getFirst());
+    }
+
+    @Test
+    void testGetLast(){
+        assertNull(emptyList.getLast());
+        assertEquals("Morning", listWithElements.getLast());
+        listWithElements.add("Evening");
+        assertEquals("Evening", listWithElements.getLast());
     }
 }

@@ -2,109 +2,158 @@ package main.java.supermarketmanager.model;
 
 import java.io.InvalidClassException;
 import java.util.InvalidPropertiesFormatException;
+import java.util.Objects;
+
+// TODO:
+// - Separate the Node from the list
 
 public class LinkedList<E> {
-    public LinkedList<E> next;
-    private E element;
+    private Node<E> head, tail;
 
     public LinkedList() {
-        next = null;
-        element = null;
-    }
-
-    private LinkedList(E element, LinkedList<E> next) throws Exception{
-        if(element != null){
-            this.element = element;
-            this.next = next;
-        }else{
-            throw new Exception("Something went wrong");
-        }
+        head = new Node<E>();
+        tail = head;
     }
 
     // Add element/node methods
-    public boolean add(E content) {
-        if(this.element != null || content == null)
+    public boolean add(E element) {
+        if(element == null)
             return false;
 
-        LinkedList<E> temp = this;
-        while(temp.next != null){
-            temp = temp.next;
-        }
-        return temp.addNode() && temp.next.addElement(content);
-
-//        if(this.element == null){
-//            return setElement(content);
-//        }else if(next != null){
-//            return next.add(element);
-//        }else{
-//            return addNode() && next.add(content);
-//        }
-        //My assumption is that there's less overhead without a while loop
-        //But the recursion would probably be slower
+        if(tail.getContent() != null)
+            addNode();
+        return tail.setContent(element);
     }
 
     public boolean insert(int index, E element) {
-        if ((index < 0 || index > size()) && element != null)
+        if(!checkIndex(index) || element == null)
             return false;
 
+        if(index == 0){
+            head = new Node<>(element, head.next);
+            return true;
+        }
+
+        Node<E> node = head;
         int count = 0;
-        LinkedList<E> temp = this;
-        while(count != index-1) {
-            temp = temp.next;
+        while(count != index-1){
+            node = node.next;
             count++;
         }
 
-        LinkedList<E> nextLink = temp.next;
-        try {
-            temp.next = new LinkedList<E>(element, nextLink);
-            return true;
-        }catch (Exception e) {
-            return false;
-        }
+        Node<E> nextLink = node.next;
+        node.next = new Node<>(element, nextLink);
+        return true;
     }
 
-    private boolean addElement(E element) {
-        if(this.element == null) {
-            this.element = element;
-            return true;
-        }
-        return false;
+    private void addNode(){
+        tail.next = new Node<E>();
+        tail = tail.next;
     }
 
-    private boolean addNode(){
-        if(next == null) {
-            next = new LinkedList<E>();
-            return true;
-        }
-        return false;
-    }
-
-    //getter methods
-    //TODO
-    // What if an element is passed that does not exist within the list?
+    //get element methods
     public E get(E element){
-        LinkedList<E> temp = this;
+        Node<E> node = head;
         boolean found = false;
-        while(temp.next != null) {
-            if (temp.getElement().equals(element)){
+        do{
+            if (node.getContent().equals(element)) {
                 found = true;
                 break;
-                }
-            temp = temp.next;
-        }
-        return found ? temp.getElement() : null;
+            }
+            node = node.next;
+        }while(node != tail);
+        return found ? node.getContent() : null;
     }
 
-    private E getElement() {
-        return element;
+    public E get(int index){
+        if(checkIndex(index)){
+            Node<E> node = head;
+            int count = 0;
+
+            while(count != index){
+                node = node.next;
+                count++;
+            }
+            return node.getContent();
+        }
+        return null;
+    }
+
+    public E getFirst(){
+        return head.getContent();
+    }
+
+    public E getLast(){
+        return tail.getContent();
     }
 
     //misc methods
+    private boolean checkIndex(int index){
+        return index > -1 && index < size();
+    }
+
     public int size(){
-        return next == null ? 0 : next.size()+1;
+        if(head.getContent() == null)
+            return 0;
+
+        Node<E> node = head;
+        int count = 1;
+        while(node != tail){
+            count++;
+            node = node.next;
+        }
+        return count;
     }
 
     public String toString(){
-        return element == null ? "" : element.toString() + "\n" + next.toString();
+        Node<E> node = head;
+        StringBuilder string = new StringBuilder();
+        do{
+            string.append(node.getContent()).append("\n");
+            node = node.next;
+        }while(node != tail);
+
+        return string.toString();
+    }
+
+    private class Node<E>{
+        private E content;
+        public Node<E> next;
+
+        public Node(){
+            content = null;
+            next = null;
+        }
+
+        public Node(E content, Node<E> next){
+            if(next != null) {
+                setContent(content);
+                this.next = next;
+            }
+        }
+
+        public boolean setContent(E content){
+            if(content != null) {
+                this.content = content;
+                return true;
+            }
+            return false;
+        }
+
+        public E getContent(){
+            return content;
+        }
+
+        public String toString(){
+            return content.toString();
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Node<?> node = (Node<?>) o;
+            return Objects.equals(content, node.content) && Objects.equals(next, node.next);
+        }
     }
 }
