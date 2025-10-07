@@ -111,9 +111,10 @@ class LinkedListTest {
         assertTrue(listWithElements.remove("Howdy"));
         check = listWithElements.toString();
         assertFalse(check.contains("Howdy"));
-        listWithElements.add("Good Morning");
-        assertEquals("Good Morning", listWithElements.get("Good Morning"));
+        assertTrue(listWithElements.add("Good Morning"));
+        assertEquals("Good Morning", listWithElements.getLast());
         assertEquals(3, listWithElements.size());
         assertNull(listWithElements.get("Howdy"));
+        assertEquals("Hello", listWithElements.getFirst());
     }
 }
