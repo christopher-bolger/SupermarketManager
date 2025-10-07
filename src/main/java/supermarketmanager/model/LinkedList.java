@@ -47,16 +47,22 @@ public class LinkedList<E> {
     }
 
     //get element methods
+    //TODO
+    //Needs work
     public E get(E element){
+        if(size() == 1)
+            return head.getContent().equals(element) ? head.getContent() : null;
+
         Node<E> node = head;
         boolean found = false;
         do{
-            if (node.getContent().equals(element)) {
+            if(node.getContent().equals(element)) {
                 found = true;
                 break;
             }
             node = node.next;
-        }while(node != tail);
+        }while(node != null);
+
         return found ? node.getContent() : null;
     }
 
@@ -106,35 +112,14 @@ public class LinkedList<E> {
     }
 
 //    TODO
-//    This doesn't work. Needs work.
+//    REDO
     public boolean remove(E element){
         if(element == null || head.getContent() == null)
             return false;
 
-        boolean found = false;
-        if(size() > 1){
-            Node<E> target = head, previous = new Node<>();
-            while(target.next != null){
-                if(target.getContent().equals(element)) {
-                    found = true;
-                    break;
-                }
-                previous.next = head;
-                target = target.next;
-            }
-            if(!found)
-                return false;
-
-            //Telling me it could be null but the if statement prevents that?
-            //I should always go through the while at least once
-            previous.next = target.next;
-        }else{
-            if (head.getContent().equals(element)) {
-                head = new Node<>();
-                tail = head;
-            }
+        Node<E> temp = head;
+        while(temp != null){
         }
-        return true;
     }
 
     //misc methods
