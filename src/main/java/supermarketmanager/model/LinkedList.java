@@ -25,7 +25,7 @@ public class LinkedList<E> {
             return false;
 
         if(index == 0){
-            head = new Node<>(element, head.next);
+            head = new Node<>(element, head);
             return true;
         }
 
@@ -82,6 +82,61 @@ public class LinkedList<E> {
         return tail.getContent();
     }
 
+    //removal methods
+    public boolean remove(int index){
+        if(!checkIndex(index))
+            return false;
+
+        if(index == 0) {
+            head = head.next;
+            return true;
+        }
+
+        Node<E> temp = head;
+        int count = 0;
+        while(count != index-1){
+            temp = temp.next;
+            count++;
+        }
+        if(temp.next == tail)
+            tail = temp;
+        else
+            temp.next = temp.next.next;
+        return true;
+    }
+
+//    TODO
+//    This doesn't work. Needs work.
+    public boolean remove(E element){
+        if(element == null || head.getContent() == null)
+            return false;
+
+        boolean found = false;
+        if(size() > 1){
+            Node<E> target = head, previous = new Node<>();
+            while(target.next != null){
+                if(target.getContent().equals(element)) {
+                    found = true;
+                    break;
+                }
+                previous.next = head;
+                target = target.next;
+            }
+            if(!found)
+                return false;
+
+            //Telling me it could be null but the if statement prevents that?
+            //I should always go through the while at least once
+            previous.next = target.next;
+        }else{
+            if (head.getContent().equals(element)) {
+                head = new Node<>();
+                tail = head;
+            }
+        }
+        return true;
+    }
+
     //misc methods
     private boolean checkIndex(int index){
         return index > -1 && index < size();
@@ -93,7 +148,7 @@ public class LinkedList<E> {
 
         Node<E> node = head;
         int count = 1;
-        while(node != tail){
+        while(node.next != null){
             count++;
             node = node.next;
         }
