@@ -68,6 +68,10 @@ class LinkedListTest {
         assertEquals("Hi", listWithElements.getFirst());
         listWithElements.insert(0, "iH");
         assertEquals("iH", listWithElements.getFirst());
+        listWithElements.insert(0, "hmm");
+        //Making sure there's no data loss
+        assertEquals("hmm", listWithElements.getFirst());
+        assertEquals("iH", listWithElements.get(1));
     }
 
     @Test
@@ -76,5 +80,40 @@ class LinkedListTest {
         assertEquals("Morning", listWithElements.getLast());
         listWithElements.add("Evening");
         assertEquals("Evening", listWithElements.getLast());
+    }
+
+    @Test
+    void testRemoveByIndex(){
+        assertFalse(emptyList.remove(0)); //empty list
+        assertTrue(listWithElements.remove(0));
+        assertNull(listWithElements.get(3)); // list is of size() 3
+        assertFalse(listWithElements.remove(100)); //outside range
+        String check = listWithElements.toString();
+        assertFalse(check.contains("Hi"));
+        assertTrue(listWithElements.remove(listWithElements.size()-1));
+        check = listWithElements.toString();
+        assertFalse(check.contains("Morning"));
+        listWithElements.add("Good Morning");
+        assertEquals("Good Morning", listWithElements.get(listWithElements.size() - 1));
+        assertEquals(3, listWithElements.size());
+        assertNull(listWithElements.get(4));
+    }
+
+    @Test
+    void testRemoveByElement(){
+        assertFalse(emptyList.remove("Nothing")); //empty list
+        assertTrue(listWithElements.remove("Hi"));
+        assertEquals(3, listWithElements.size());
+        assertNull(listWithElements.get(4)); // list is of size() 3
+        assertFalse(listWithElements.remove("Not in List")); //outside range
+        String check = listWithElements.toString();
+        assertFalse(check.contains("Hi"));
+        assertTrue(listWithElements.remove("Howdy"));
+        check = listWithElements.toString();
+        assertFalse(check.contains("Howdy"));
+        listWithElements.add("Good Morning");
+        assertEquals("Good Morning", listWithElements.get("Good Morning"));
+        assertEquals(3, listWithElements.size());
+        assertNull(listWithElements.get("Howdy"));
     }
 }
