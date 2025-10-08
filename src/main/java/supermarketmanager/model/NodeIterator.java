@@ -5,7 +5,7 @@ import java.util.function.Consumer;
 
 public class NodeIterator<K> implements Iterator<K> {
 
-    private LinkedList<K> list;
+    private final LinkedList<K> list;
     private Node<K> position, lastPosition;
 
     public NodeIterator(Node<K> node, LinkedList<K> list) {
@@ -15,19 +15,19 @@ public class NodeIterator<K> implements Iterator<K> {
 
     @Override
     public boolean hasNext() {
-        return position != null;
+        return position.next != null;
     }
 
     @Override
     public K next() {
         lastPosition = position;
         position = position.next;
-        return position.getContent();
+        return lastPosition.getContent();
     }
 
     @Override
     public void remove() {
-        list.remove(lastPosition);
+        list.remove(lastPosition.getContent());
     }
 
     @Override
