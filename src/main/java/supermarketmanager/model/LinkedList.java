@@ -41,7 +41,7 @@ public class LinkedList<E> implements List<E>{
 
     @Override
     public void add(int index, E element) {
-        if(!checkIndex(index) || element == null)
+        if(!isValidIndex(index) || element == null)
             return;
 
         if(index == 0){
@@ -69,33 +69,16 @@ public class LinkedList<E> implements List<E>{
     //TODO
     //Needs work
     public E get(E element){
-       Node<E> temp=head;
-        //while(temp!=null && !temp.getContent().equals(element)) temp=temp.next;
-        for(temp=head; temp!=null && !temp.getContent().equals(element); temp=temp.next);
-        return temp==null ? null : temp.getContent();
+       Node<E> temp;
+       for(temp=head;
+           temp!=null && !temp.getContent().equals(element);
+           temp=temp.next);
 
-
-
-        if(isEmpty())
-            return null;
-        if(size() == 1)
-            return head.getContent().equals(element) ? head.getContent() : null;
-
-        Node<E> node = head;
-        boolean found = false;
-        do{
-            if(node.getContent().equals(element)) {
-                found = true;
-                break;
-            }
-            node = node.next;
-        }while(node.getContent() != null);
-
-        return found ? node.getContent() : null;
+       return temp == null ? null : temp.getContent();
     }
 
     public E get(int index){
-        if(checkIndex(index)){
+        if(isValidIndex(index)){
             Node<E> node = head;
             int count = 0;
 
@@ -110,7 +93,7 @@ public class LinkedList<E> implements List<E>{
 
     @Override
     public E set(int index, E element) {
-        if(!checkIndex(index))
+        if(!isValidIndex(index))
             return null;
 
         Node<E> temp = head;
@@ -163,7 +146,7 @@ public class LinkedList<E> implements List<E>{
 
     //removal methods
     public E remove(int index){
-        if(!checkIndex(index))
+        if(!isValidIndex(index))
             return null;
 
         Node<E> removed = head;
@@ -230,7 +213,7 @@ public class LinkedList<E> implements List<E>{
 
     @Override
     public List<E> subList(int fromIndex, int toIndex) {
-        if(isEmpty() || !checkIndex(fromIndex) || !checkIndex(toIndex))
+        if(isEmpty() || !isValidIndex(fromIndex) || !isValidIndex(toIndex))
             return List.of();
 
         int index = 0;
@@ -267,62 +250,60 @@ public class LinkedList<E> implements List<E>{
 
     @Override
     public void addFirst(E e) {
-        List.super.addFirst(e);
+        if(e == null)
+            return;
+        head = new Node<>(e, head);
     }
 
     @Override
     public void addLast(E e) {
-        List.super.addLast(e);
+        add(e);
     }
 
     //    TODO
 // I feel like this is overly complicated
+    @Override
     public boolean remove(Object element){
-        if(element == null || isEmpty())
+        Node<E> temp, prev = head;
+        for(temp = head; temp != null && !temp.getContent().equals(element); temp=temp.next) prev = temp;
+
+        if(temp == null)
             return false;
-
-        if(size() == 1)
-            if(head.getContent().equals(element)) {
-                clear();
-                return true;
-            }else return false;
-
-        if(head.getContent().equals(element)){
-            head = head.next;
-            return true;
-        }else {
-            Node<E> temp = head;
-            boolean found = false;
-            while (temp.next != null) {
-                if (temp.next.getContent().equals(element)) {
-                    found = true;
-                    break;
-                }
-                temp = temp.next;
-            }
-            if(found && temp.next.next != null){
-                temp.next = temp.next.next;
-                return true;
-            }else if(found) {
-                tail = temp.next;
-                return true;
-            }else return false;
-        }
+        if(prev.next.next == null) {
+            prev.next = new Node<>();
+            tail = prev.next;
+        }else prev.next = prev.next.next;
+        return true;
     }
 
     @Override
     public boolean containsAll(Collection<?> c) {
-        return false;
+        for(Object o : c)
+            if(!contains(o))
+                return false;
+        return true;
     }
 
     @Override
     public boolean addAll(Collection<? extends E> c) {
-        return false;
+        if(c == null || c.contains(null))
+            return false;
+
+        for(E o : c)
+            add(o);
+        return true;
     }
 
     @Override
     public boolean addAll(int index, Collection<? extends E> c) {
-        return false;
+        if(!isValidIndex(index) || c == null || c.contains(null))
+            return false;
+
+        for(E o : c) {
+            add(index, o);
+            index++;
+        }
+        return true;
     }
 
     @Override
@@ -351,7 +332,7 @@ public class LinkedList<E> implements List<E>{
     }
 
     //misc methods
-    private boolean checkIndex(int index){
+    private boolean isValidIndex(int index){
         return index > -1 && index < size();
     }
 
@@ -391,7 +372,12 @@ public class LinkedList<E> implements List<E>{
 
     @Override
     public Object[] toArray() {
-        return new Object[0];
+        Object[] array = new Object[size()];
+        Node<E> temp = head;
+        for(int i = 0; i < array.length; i++){
+            array[i] = temp.getContent();
+        }
+        return array;
     }
 
     @Override
