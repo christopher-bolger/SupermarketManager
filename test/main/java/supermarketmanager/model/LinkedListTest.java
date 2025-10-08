@@ -1,20 +1,25 @@
 package main.java.supermarketmanager.model;
 
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class LinkedListTest {
-    LinkedList<String> emptyList, listWithElements;
+    LinkedList<String> emptyList, listWithElements, listWithOneElement;
 
     @org.junit.jupiter.api.BeforeEach
     void setUp() {
         emptyList = new LinkedList<>();
+
         listWithElements = new LinkedList<>();
         listWithElements.add("Hi");
         listWithElements.add("Howdy");
         listWithElements.add("Hello");
         listWithElements.add("Morning");
+
+        listWithOneElement = new LinkedList<>();
+        listWithOneElement.add("Single");
     }
 
     @org.junit.jupiter.api.AfterEach
@@ -46,6 +51,7 @@ class LinkedListTest {
     void testInsert(){
         assertTrue(listWithElements.insert(2, "position 2"));
         assertTrue(listWithElements.insert(4, "position 4"));
+        assertFalse(listWithElements.insert(0, null));
         assertFalse(listWithElements.insert(6, "not possible")); // 6 elements in array but it counts from 0
         assertFalse(listWithElements.insert(-1, "not possible"));
         assertFalse(emptyList.insert(0, "EmptyList, can't insert"));
@@ -58,8 +64,14 @@ class LinkedListTest {
         assertEquals("Morning", listWithElements.get(listWithElements.size()-1));
         assertEquals("Hi", listWithElements.get("Hi"));
         assertEquals("Hi", listWithElements.get(0));
+        assertEquals("Single", listWithOneElement.getFirst());
+        assertEquals("Single", listWithOneElement.get(0));
+        assertEquals("Single", listWithOneElement.get("Single"));
+        assertNull(listWithOneElement.get(null));
         assertNull(listWithElements.get("NotInTheList"));
         assertNull(listWithElements.get(listWithElements.size()));
+        assertTrue(listWithElements.add("Good Morning"));
+        assertEquals("Good Morning", listWithElements.getLast());
     }
 
     @Test
@@ -82,39 +94,93 @@ class LinkedListTest {
         assertEquals("Evening", listWithElements.getLast());
     }
 
-    @Test
-    void testRemoveByIndex(){
-        assertFalse(emptyList.remove(0)); //empty list
-        assertTrue(listWithElements.remove(0));
-        assertNull(listWithElements.get(3)); // list is of size() 3
-        assertFalse(listWithElements.remove(100)); //outside range
-        String check = listWithElements.toString();
-        assertFalse(check.contains("Hi"));
-        assertTrue(listWithElements.remove(listWithElements.size()-1));
-        check = listWithElements.toString();
-        assertFalse(check.contains("Morning"));
-        listWithElements.add("Good Morning");
-        assertEquals("Good Morning", listWithElements.get(listWithElements.size() - 1));
-        assertEquals(3, listWithElements.size());
-        assertNull(listWithElements.get(4));
+    @Nested
+    class testRemoveByIndex {
+        @Test
+        void testEmptyList(){
+            assertFalse(emptyList.remove(0));
+        }
+
+        @Test
+        void testSingleItemList(){
+            assertTrue(listWithOneElement.remove(0));
+            assertFalse(listWithOneElement.remove(1));
+            assertFalse(listWithOneElement.remove(0));
+        }
+
+        @Test
+        void testMultiItemList(){
+            assertTrue(listWithElements.remove(1));
+            assertNull(listWithElements.get(3)); // is now size() 3 so index 3 doesn't exist
+            String check = listWithElements.toString();
+            assertFalse(check.contains("Howdy"));
+            assertTrue(listWithElements.remove(listWithElements.size()-1));
+            assertEquals(2, listWithElements.size());
+            check = listWithElements.toString();
+            assertFalse(check.contains("Morning"));
+            assertNull(listWithElements.get(3)); // "Morning" was removed, size is now 2;
+            assertTrue(listWithElements.remove(listWithElements.size()-1));
+            assertEquals(1, listWithElements.size());
+        }
+    }
+
+    @Nested
+    class testRemoveByElement{
+        @Test
+        void testEmptyList(){
+            assertFalse(emptyList.remove(null));
+            assertFalse(emptyList.remove("Nothing"));
+        }
+
+        @Test
+        void testSingleItemList(){
+            assertFalse(listWithOneElement.remove(null));
+            assertFalse(listWithOneElement.remove("Not in List"));
+            assertTrue(listWithOneElement.remove("Single"));
+            assertNull(listWithOneElement.get("Single"));
+        }
+
+        @Test
+        void testMultiItemList(){
+            assertFalse(listWithElements.remove(null));
+            assertEquals(4, listWithElements.size());
+
+            assertTrue(listWithElements.remove("Hi"));
+            assertFalse(listWithElements.toString().contains("Hi"));
+            assertEquals(3, listWithElements.size());
+            assertEquals("Howdy", listWithElements.getFirst());
+
+            assertFalse(listWithElements.remove("Not in List"));
+            assertNotNull(listWithElements.get("Howdy"));
+            assertTrue(listWithElements.remove("Howdy"));
+            assertNull(listWithElements.get("Howdy"));
+            assertEquals("Hello", listWithElements.getFirst());
+        }
     }
 
     @Test
-    void testRemoveByElement(){
-        assertFalse(emptyList.remove("Nothing")); //empty list
-        assertTrue(listWithElements.remove("Hi"));
-        assertEquals(3, listWithElements.size());
-        assertNull(listWithElements.get(4)); // list is of size() 3
-        assertFalse(listWithElements.remove("Not in List")); //outside range
-        String check = listWithElements.toString();
-        assertFalse(check.contains("Hi"));
-        assertTrue(listWithElements.remove("Howdy"));
-        check = listWithElements.toString();
-        assertFalse(check.contains("Howdy"));
-        assertTrue(listWithElements.add("Good Morning"));
-        assertEquals("Good Morning", listWithElements.getLast());
-        assertEquals(3, listWithElements.size());
-        assertNull(listWithElements.get("Howdy"));
-        assertEquals("Hello", listWithElements.getFirst());
+    void testClear(){
+        assertTrue(listWithOneElement.clear());
+        assertTrue(emptyList.clear());
+        assertTrue(listWithOneElement.clear());
+    }
+
+    @Test
+    void testToString(){
+        String string = emptyList.toString();
+        assertNull(string);
+        string = listWithOneElement.toString();
+        assertTrue(string.contains("Single"));
+        string = listWithElements.toString();
+        assertTrue(string.contains("Hi"));
+        assertTrue(string.contains("Howdy"));
+        assertTrue(string.contains("Hello"));
+        assertTrue(string.contains("Morning"));
+        listWithOneElement.remove("Single");
+        string = listWithOneElement.toString();
+        assertNull(string);
+        listWithOneElement.add("Single");
+        string = listWithOneElement.toString();
+        assertNotNull(string);
     }
 }
