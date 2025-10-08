@@ -1,8 +1,14 @@
 package main.java.supermarketmanager.model;
 
+import java.util.Iterator;
 import java.util.Objects;
+import java.util.Spliterator;
+import java.util.function.Consumer;
 
-public class LinkedList<E> {
+//TODO
+//Look at implementing Iterable & Iterator -> On the notes
+//Maybe also implement List
+public class LinkedList<E>{
     private Node<E> head, tail;
 
     public LinkedList() {
@@ -50,6 +56,8 @@ public class LinkedList<E> {
     //TODO
     //Needs work
     public E get(E element){
+        if(isEmpty())
+            return null;
         if(size() == 1)
             return head.getContent().equals(element) ? head.getContent() : null;
 
@@ -104,21 +112,45 @@ public class LinkedList<E> {
             temp = temp.next;
             count++;
         }
-        if(temp.next == tail)
+        if(temp.next == tail) {
             tail = temp;
-        else
+            tail.next = null;
+        }else
             temp.next = temp.next.next;
         return true;
     }
 
 //    TODO
-//    REDO
+// I feel like this is overly complicated
     public boolean remove(E element){
-        if(element == null || head.getContent() == null)
+        if(element == null || isEmpty())
             return false;
 
-        Node<E> temp = head;
-        while(temp != null){
+        if(size() == 1)
+            if(head.getContent().equals(element)) {
+                return clear();
+            }else return false;
+
+        if(head.getContent().equals(element)){
+            head = head.next;
+            return true;
+        }else {
+            Node<E> temp = head;
+            boolean found = false;
+            while (temp.next != null) {
+                if (temp.next.getContent().equals(element)) {
+                    found = true;
+                    break;
+                }
+                temp = temp.next;
+            }
+            if(found && temp.next.next != null){
+                temp.next = temp.next.next;
+                return true;
+            }else if(found) {
+                tail = temp.next;
+                return true;
+            }else return false;
         }
     }
 
@@ -127,8 +159,14 @@ public class LinkedList<E> {
         return index > -1 && index < size();
     }
 
+    public boolean clear(){
+        head = new Node<>();
+        tail = head;
+        return true;
+    }
+
     public int size(){
-        if(head.getContent() == null)
+        if(head == null || head.getContent() == null)
             return 0;
 
         Node<E> node = head;
@@ -140,14 +178,20 @@ public class LinkedList<E> {
         return count;
     }
 
+    public boolean isEmpty(){
+        return head.getContent() == null;
+    }
+
     public String toString(){
+        if(head.getContent() == null)
+            return null;
+
         Node<E> node = head;
         StringBuilder string = new StringBuilder();
-        do{
-            string.append(node.getContent()).append("\n");
+        while(node != null){
+            string.append(node.getContent().toString()).append("\n");
             node = node.next;
-        }while(node != tail);
-
+        }
         return string.toString();
     }
 
