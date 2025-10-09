@@ -29,13 +29,16 @@ public class LinkedList<E> implements List<E>{
         tail = head;
     }
 
-    // TODO Contract?
     // Add element/node methods
     public boolean add(E element) {
         if(element == null)
             return false;
-        tail.setContent(element);
-        addNode();
+        if(tail.getContent() == null)
+            tail.setContent(element);
+        else{
+            addNode();
+            tail.setContent(element);
+        }
         return true;
     }
 
@@ -106,12 +109,14 @@ public class LinkedList<E> implements List<E>{
         return temp.getContent();
     }
 
+    @Override
     public E getFirst(){
-        return size() > 0 ? head.getContent() : null;
+        return isEmpty() ? head.getContent() : null;
     }
 
+    @Override
     public E getLast(){
-        return size() > 0 ? tail.getContent() : null;
+        return isEmpty() ? tail.getContent() : null;
     }
 
     @Override
@@ -141,10 +146,22 @@ public class LinkedList<E> implements List<E>{
 
     @Override
     public List<E> reversed() {
-        return List.super.reversed();
+        if(isEmpty())
+            return List.of();
+
+        LinkedList<E> reversedOrder = new LinkedList<>();
+        int index = size()-1;
+        Node<E> temp = head;
+        while(index > -1){
+            reversedOrder.addFirst(temp.getContent());
+            temp = temp.next;
+            index--;
+        }
+        return reversedOrder;
     }
 
     //removal methods
+    @Override
     public E remove(int index){
         if(!isValidIndex(index))
             return null;
@@ -307,8 +324,13 @@ public class LinkedList<E> implements List<E>{
     }
 
     @Override
+    //TODO
+    // do I need to check if this.containsAll(c)?
     public boolean removeAll(Collection<?> c) {
-        return false;
+        if(isEmpty() || c.isEmpty())
+            return false;
+
+        return true;
     }
 
     @Override
@@ -323,7 +345,14 @@ public class LinkedList<E> implements List<E>{
 
     @Override
     public void replaceAll(UnaryOperator<E> operator) {
-        List.super.replaceAll(operator);
+        if(isEmpty())
+            return;
+
+        Node<E> temp = head;
+        while(temp != null && temp.getContent() != null){
+            temp.setContent(operator.apply(temp.getContent()));
+            temp = temp.next;
+        }
     }
 
     @Override
@@ -344,20 +373,25 @@ public class LinkedList<E> implements List<E>{
     public int size(){
         Node<E> node = head;
         int count = 0;
-        while(node.getContent() != null){
+        while(node != null && node.getContent() != null){
             count++;
             node = node.next;
         }
         return count;
     }
 
+    @Override
     public boolean isEmpty(){
         return head.getContent() == null;
     }
 
     @Override
     public boolean contains(Object o) {
-        return false;
+        if(isEmpty())
+            return false;
+        Node<E> temp;
+        for(temp = head; temp != null && temp.getContent().equals(o); temp = temp.next);
+        return temp != null && temp.getContent().equals(o);
     }
 
     @Override
@@ -380,9 +414,26 @@ public class LinkedList<E> implements List<E>{
         return array;
     }
 
+    //TODO
+    // Since it's using T is it telling me this is going to be a different type?
+    // or is it just using it to signify an array, which would be a different type to the base
+    // object?
     @Override
     public <T> T[] toArray(T[] a) {
-        return null;
+        if(a.length < size())
+            a = Arrays.copyOf(a, size());
+
+        Node<E> temp = head;
+        int i;
+        for(i = 0; i < size(); i++){
+            a[i] = (T) temp.getContent();
+            temp = temp.next;
+        }
+
+        if(i < a.length)
+            for(;i < a.length; i++) a[i] = null;
+
+        return a;
     }
 
     @Override
@@ -391,12 +442,12 @@ public class LinkedList<E> implements List<E>{
     }
 
     public String toString(){
-        if(head.getContent() == null)
+        if(isEmpty())
             return null;
 
         Node<E> node = head;
         StringBuilder string = new StringBuilder();
-        while(node != null){
+        while(node != null && node.getContent() != null){
             string.append(node.getContent().toString()).append("\n");
             node = node.next;
         }
