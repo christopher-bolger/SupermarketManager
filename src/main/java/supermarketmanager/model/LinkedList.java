@@ -30,6 +30,8 @@ public class LinkedList<E> implements List<E>{
     }
 
     // Add element/node methods
+    //test complete
+    @Override
     public boolean add(E element) {
         if(element == null)
             return false;
@@ -43,6 +45,7 @@ public class LinkedList<E> implements List<E>{
     }
 
     @Override
+    //test complete
     public void add(int index, E element) {
         if(!isValidIndex(index) || element == null)
             return;
@@ -63,38 +66,48 @@ public class LinkedList<E> implements List<E>{
         node.next = new Node<>(element, nextLink);
     }
 
-    private void addNode(){
-        tail.next = new Node<E>();
-        tail = tail.next;
+    @Override
+    public void addFirst(E e) {
+        if(e == null)
+            return;
+        head = new Node<>(e, head);
+    }
+
+    @Override
+    public void addLast(E e) {
+        add(e);
     }
 
     //get element methods
-    //TODO
-    //Needs work
+    //test completed
     public E get(E element){
-       Node<E> temp;
-       for(temp=head;
-           temp!=null && !temp.getContent().equals(element);
+        if(isEmpty())
+            return null;
+       Node<E> temp = head;
+       for(;temp!=null && !temp.getContent().equals(element);
            temp=temp.next);
 
        return temp == null ? null : temp.getContent();
     }
 
+    @Override
+    //test completed
     public E get(int index){
-        if(isValidIndex(index)){
-            Node<E> node = head;
-            int count = 0;
+        if(!isValidIndex(index))
+            return null;
 
-            while(count != index){
-                node = node.next;
-                count++;
-            }
-            return node.getContent();
+        Node<E> node = head;
+        int count = 0;
+        while(count != index){
+            node = node.next;
+            count++;
         }
-        return null;
+        return node.getContent();
+
     }
 
     @Override
+    //test finished
     public E set(int index, E element) {
         if(!isValidIndex(index))
             return null;
@@ -110,23 +123,30 @@ public class LinkedList<E> implements List<E>{
     }
 
     @Override
+    //test completed
     public E getFirst(){
         return !isEmpty() ? head.getContent() : null;
     }
 
     @Override
+    //test completed
     public E getLast(){
         return !isEmpty() ? tail.getContent() : null;
     }
 
     @Override
+    //test complete
     public E removeFirst() {
         if(isEmpty())
             return null;
-        Node<E> temp = new Node<>();
-        temp.setContent(head.getContent());
-        remove(head.getContent());
-        return temp.getContent();
+
+        Node<E> removedObject = new Node<>();
+        removedObject.setContent(head.getContent());
+        if(size() == 1)
+            clear();
+        else
+            head = head.next;
+        return removedObject.getContent();
     }
 
     @Override
@@ -150,22 +170,6 @@ public class LinkedList<E> implements List<E>{
         temp.next = new Node<>();
         tail = temp.next;
         return removedObject.getContent();
-    }
-
-    @Override
-    public List<E> reversed() {
-        if(isEmpty())
-            return List.of();
-
-        LinkedList<E> reversedOrder = new LinkedList<>();
-        int index = size()-1;
-        Node<E> temp = head;
-        while(index > -1){
-            reversedOrder.addFirst(temp.getContent());
-            temp = temp.next;
-            index--;
-        }
-        return reversedOrder;
     }
 
     //removal methods
@@ -194,6 +198,24 @@ public class LinkedList<E> implements List<E>{
     }
 
     @Override
+    //test complete
+    public List<E> reversed() {
+        if(isEmpty())
+            return List.of();
+
+        LinkedList<E> reversedOrder = new LinkedList<>();
+        int index = size()-1;
+        Node<E> temp = head;
+        while(index > -1){
+            reversedOrder.addFirst(temp.getContent());
+            temp = temp.next;
+            index--;
+        }
+        return reversedOrder;
+    }
+
+    @Override
+    // test finished
     public int indexOf(Object o) {
         if(isEmpty())
             return -1;
@@ -209,6 +231,7 @@ public class LinkedList<E> implements List<E>{
     }
 
     @Override
+    // test finished
     public int lastIndexOf(Object o) {
         if(isEmpty())
             return -1;
@@ -217,13 +240,14 @@ public class LinkedList<E> implements List<E>{
         int foundIndex = -1;
         Node<E> temp = head;
 
-        while(temp.getContent() != null){
-            if(temp.getContent().equals(o))
+        while(temp != null){
+            if(temp.getContent().equals(o)){
                 foundIndex = index;
+            }
             temp = temp.next;
             index++;
         }
-        return foundIndex;
+        return Math.max(foundIndex, -1);
     }
 
     @Override
@@ -237,6 +261,7 @@ public class LinkedList<E> implements List<E>{
     }
 
     @Override
+    //test incomplete
     public List<E> subList(int fromIndex, int toIndex) {
         if(isEmpty() || !isValidIndex(fromIndex) || !isValidIndex(toIndex))
             return List.of();
@@ -273,20 +298,8 @@ public class LinkedList<E> implements List<E>{
         return List.super.parallelStream();
     }
 
-    @Override
-    public void addFirst(E e) {
-        if(e == null)
-            return;
-        head = new Node<>(e, head);
-    }
-
-    @Override
-    public void addLast(E e) {
-        add(e);
-    }
-
     //    TODO
-// I feel like this is overly complicated
+    // I feel like this is overly complicated
     @Override
     public boolean remove(Object element){
         if(isEmpty())
@@ -374,11 +387,17 @@ public class LinkedList<E> implements List<E>{
         return index > -1 && index < size();
     }
 
+    private void addNode(){
+        tail.next = new Node<E>();
+        tail = tail.next;
+    }
+
     public void clear(){
         head = new Node<>();
         tail = head;
     }
 
+    // test finished
     public int size(){
         Node<E> node = head;
         int count = 0;
@@ -391,7 +410,7 @@ public class LinkedList<E> implements List<E>{
 
     @Override
     public boolean isEmpty(){
-        return head == null || head.getContent() == null;
+        return head.getContent() == null;
     }
 
     @Override

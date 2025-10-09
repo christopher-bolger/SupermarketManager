@@ -39,6 +39,7 @@ class LinkedListTest {
         assertEquals(2, emptyList.size());
         assertFalse(emptyList.add(null));
         assertEquals(2, emptyList.size());
+        assertEquals(4, listWithElements.size());
     }
 
     @Test
@@ -77,35 +78,91 @@ class LinkedListTest {
         assertEquals(reversed.getLast(), listWithElements.getFirst());
     }
 
-    @Test
-    void testRemoveFirst(){
-        assertNull(emptyList.removeFirst());
-        assertEquals(listWithElements.getFirst(), listWithElements.removeFirst());
-        assertEquals(listWithOneElement.getFirst(), listWithOneElement.removeFirst());
-        assertTrue(listWithOneElement.isEmpty());
+    @Nested
+    class testAdd{
+        @Test
+        void testAdd(){
+            assertTrue(emptyList.add("HI"));
+            assertTrue(emptyList.add("HIIII"));
+            assertTrue(emptyList.add("Howdy"));
+            assertFalse(emptyList.add(null));
+            assertEquals(3, emptyList.size());
+        }
+
+        @Test
+        void testAddIndex(){
+            emptyList.add(0,"HI"); // empty list, can't add if no index
+            assertTrue(emptyList.isEmpty());
+            listWithOneElement.add(1, "Second"); // can't add if the index doesn't already have something there
+            assertEquals(1, listWithOneElement.size());
+            listWithElements.add(1,"Fella");
+            assertEquals(5, listWithElements.size()); //verifying addition to list, no loss in data
+            assertEquals("Fella", listWithElements.get(1));
+            assertEquals("Howdy", listWithElements.get(2)); // was in index 1, was pushed to index 2
+        }
+
     }
 
-    @Test
-    void testAdd(){
-        assertTrue(emptyList.add("HI"));
-        assertTrue(emptyList.add("HIIII"));
-        assertTrue(emptyList.add("Howdy"));
-        assertFalse(emptyList.add(null));
-        assertEquals(3, emptyList.size());
+    @Nested
+    class testGet{
+        @Test
+        void testGetElement(){
+            assertNull(emptyList.get("hi"));
+            assertNotNull(listWithElements.get("Hi"));
+            assertNotNull(listWithOneElement.get("Single"));
+            assertNull(listWithOneElement.get("Morning"));
+        }
+
+        @Test
+        void testGetElementIndex(){
+            assertNull(emptyList.get(0));
+            assertNotNull(listWithElements.get(0));
+            assertNotNull(listWithOneElement.get(0));
+            assertNull(listWithOneElement.get(1));
+            assertNull(listWithElements.get(listWithElements.size()));
+        }
+
+        @Test
+        void testGetFirst(){
+            assertNull(emptyList.getFirst());
+            assertNotNull(listWithElements.getFirst());
+            assertNotNull(listWithOneElement.getFirst());
+        }
+
+        @Test
+        void testGetLast(){
+            assertNull(emptyList.getLast());
+            assertEquals(listWithOneElement.getFirst(), listWithOneElement.getLast());
+            assertNotNull(listWithElements.getLast());
+        }
     }
-//
-//    @Test
-//    void testInsert(){
-//        assertTrue(listWithElements.insert(2, "position 2"));
-//        assertTrue(listWithElements.insert(4, "position 4"));
-//        assertFalse(listWithElements.insert(0, null));
-//        assertFalse(listWithElements.insert(6, "not possible")); // 6 elements in array but it counts from 0
-//        assertFalse(listWithElements.insert(-1, "not possible"));
-//        assertFalse(emptyList.insert(0, "EmptyList, can't insert"));
-//        emptyList.add("FirstElement");
-//        assertTrue(emptyList.insert(0, "Now it should work"));
-//    }
-//
+
+    @Nested
+    class testRemove{
+        @Test
+        void testRemoveElement(){
+
+        }
+
+        @Test
+        void testRemoveIndex(){
+
+        }
+
+        @Test
+        void testRemoveLast(){
+
+        }
+
+        @Test
+        void testRemoveFirst(){
+            assertNull(emptyList.removeFirst());
+            assertEquals(listWithElements.getFirst(), listWithElements.removeFirst());
+            assertEquals(listWithOneElement.getFirst(), listWithOneElement.removeFirst());
+            assertTrue(listWithOneElement.isEmpty());
+        }
+    }
+
 //    @Test
 //    void testGet(){
 //        assertEquals("Morning", listWithElements.get(listWithElements.size()-1));
