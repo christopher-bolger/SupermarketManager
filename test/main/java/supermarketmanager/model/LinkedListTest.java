@@ -77,15 +77,22 @@ class LinkedListTest {
         assertEquals(reversed.getLast(), listWithElements.getFirst());
     }
 
-//
-//    @Test
-//    void testAdd(){
-//        assertTrue(emptyList.add("HI"));
-//        assertTrue(emptyList.add("HIIII"));
-//        assertTrue(emptyList.add("Howdy"));
-//        assertFalse(emptyList.add(null));
-//        assertEquals(3, emptyList.size());
-//    }
+    @Test
+    void testRemoveFirst(){
+        assertNull(emptyList.removeFirst());
+        assertEquals(listWithElements.getFirst(), listWithElements.removeFirst());
+        assertEquals(listWithOneElement.getFirst(), listWithOneElement.removeFirst());
+        assertTrue(listWithOneElement.isEmpty());
+    }
+
+    @Test
+    void testAdd(){
+        assertTrue(emptyList.add("HI"));
+        assertTrue(emptyList.add("HIIII"));
+        assertTrue(emptyList.add("Howdy"));
+        assertFalse(emptyList.add(null));
+        assertEquals(3, emptyList.size());
+    }
 //
 //    @Test
 //    void testInsert(){
