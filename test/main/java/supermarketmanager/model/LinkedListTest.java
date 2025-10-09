@@ -70,6 +70,13 @@ class LinkedListTest {
         assertEquals(0, testList.size());
     }
 
+    @Test
+    void testReversedOrder(){
+        LinkedList<String> reversed = (LinkedList<String>) listWithElements.reversed();
+        assertEquals(reversed.getFirst(), listWithElements.getLast());
+        assertEquals(reversed.getLast(), listWithElements.getFirst());
+    }
+
 //
 //    @Test
 //    void testAdd(){
