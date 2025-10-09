@@ -111,34 +111,42 @@ public class LinkedList<E> implements List<E>{
 
     @Override
     public E getFirst(){
-        return isEmpty() ? head.getContent() : null;
+        return !isEmpty() ? head.getContent() : null;
     }
 
     @Override
     public E getLast(){
-        return isEmpty() ? tail.getContent() : null;
+        return !isEmpty() ? tail.getContent() : null;
     }
 
     @Override
     public E removeFirst() {
-        Node<E> temp = head;
-        head = head.next;
+        if(isEmpty())
+            return null;
+        Node<E> temp = new Node<>();
+        temp.setContent(head.getContent());
+        remove(head.getContent());
         return temp.getContent();
     }
 
     @Override
     public E removeLast() {
-        Node<E> temp = head;
+        if(isEmpty())
+            return null;
 
-        int indexToRemove = size()-2;
-        int index = 0;
-
-        while(index != indexToRemove){
-            temp = temp.next;
-            index++;
+        Node<E> removedObject = new Node<>();
+        removedObject.setContent(head.next.getContent());
+        if(head == tail) {
+            clear();
+            return removedObject.getContent();
         }
 
-        Node<E> removedObject = temp.next;
+        Node<E> temp = head;
+        while(temp.next.next != tail){
+            temp = temp.next;
+        }
+
+        removedObject.setContent(head.next.getContent());
         temp.next = new Node<>();
         tail = temp.next;
         return removedObject.getContent();
@@ -281,15 +289,16 @@ public class LinkedList<E> implements List<E>{
 // I feel like this is overly complicated
     @Override
     public boolean remove(Object element){
-        Node<E> temp, prev = head;
-        for(temp = head; temp != null && !temp.getContent().equals(element); temp=temp.next) prev = temp;
-
-        if(temp == null)
+        if(isEmpty())
             return false;
-        if(prev.next.next == null) {
-            prev.next = new Node<>();
-            tail = prev.next;
-        }else prev.next = prev.next.next;
+
+        Node<E> temp = head;
+        int index = 1;
+        for(; temp.next != null && !temp.next.getContent().equals(element) && isValidIndex(index); temp = temp.next) index++;
+        if(isValidIndex(index))
+            temp.next = temp.next.next;
+        else
+            removeLast();
         return true;
     }
 
@@ -382,7 +391,7 @@ public class LinkedList<E> implements List<E>{
 
     @Override
     public boolean isEmpty(){
-        return head.getContent() == null;
+        return head == null || head.getContent() == null;
     }
 
     @Override
