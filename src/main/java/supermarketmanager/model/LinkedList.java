@@ -143,9 +143,16 @@ public class LinkedList<E> implements List<E>{
         if(!contains(element))
             return false; //saving time & memory
 
-        Node<E> temp = head, prev = null;
-        for(; temp!=null && !temp.getContent().equals(element); temp = temp.next) prev = temp;
+//        Node<E> temp = head;
+//        Node<E> prev = null;
+//        for(; temp != null && !temp.getContent().equals(element); temp = temp.next) prev = temp;
 
+        Node<E> temp = head;
+        Node<E> prev = null;
+        while(temp != null && !temp.getContent().equals(element)){
+            prev = temp;
+            temp = temp.next;
+        }
         //Surely there's a better way to do this
         //But I think these are edge cases?
         //if temp is null item isn't found
@@ -157,7 +164,7 @@ public class LinkedList<E> implements List<E>{
         if(temp.next == null)
             return removeLast().equals(element); //should never be false
 
-        prev.next.next = temp.next;
+        prev.next = temp.next;
         return true;
     }
 
@@ -196,11 +203,17 @@ public class LinkedList<E> implements List<E>{
         Node<E> removedObject = new Node<>(), temp = head;
         removedObject.setContent(tail.getContent());
 
+        if(head == tail){
+            clear();
+            return removedObject.getContent();
+        }
+
         while(temp.next != tail){
             temp = temp.next;
         }
-        temp.next = new Node<>();
-        tail = temp.next;
+
+        temp.next = null;
+        tail = temp;
         return removedObject.getContent();
     }
 
@@ -468,8 +481,10 @@ public class LinkedList<E> implements List<E>{
         Node<E> node = head;
         StringBuilder string = new StringBuilder();
         while(node != null){
-            System.out.println(node);
-            string.append(node).append("\n");
+            if(node != tail)
+                string.append(node).append("\n");
+            else
+                string.append(node);
             node = node.next;
         }
         return string.toString();
