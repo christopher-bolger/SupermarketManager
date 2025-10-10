@@ -141,7 +141,15 @@ class LinkedListTest {
     class testRemove{
         @Test
         void testRemoveElement(){
-
+            assertFalse(emptyList.remove("Hi")); // doesn't exist
+            assertTrue(listWithOneElement.remove("Single"));
+            assertTrue(listWithOneElement.isEmpty()); // verifying removal
+            assertTrue(listWithElements.remove(listWithElements.getFirst())); // "Hi"
+            assertTrue(listWithElements.remove(listWithElements.getLast())); // "Morning"
+            assertEquals(2, listWithElements.size()); // was 4, removed 2 = 2
+            String whatsLeft = listWithElements.toString();
+            assertTrue(whatsLeft.contains("Howdy"));
+            assertTrue(whatsLeft.contains("Hello"));
         }
 
         @Test

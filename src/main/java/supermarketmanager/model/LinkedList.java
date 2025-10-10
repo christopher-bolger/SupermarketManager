@@ -51,7 +51,7 @@ public class LinkedList<E> implements List<E>{
             return;
 
         if(index == 0){
-            head = new Node<>(element, head);
+            addFirst(element);
             return;
         }
 
@@ -134,6 +134,46 @@ public class LinkedList<E> implements List<E>{
         return !isEmpty() ? tail.getContent() : null;
     }
 
+    //removal methods
+    //    TODO
+    // I feel like this is overly complicated
+    @Override
+    //test complete
+    public boolean remove(Object element){
+        if(isEmpty())
+            return false; //saving time & memory
+
+        Node<E> temp = head, prev = null;
+        for(; temp!=null && !temp.getContent().equals(element); temp = temp.next) prev = temp;
+
+        //Surely there's a better way to do this
+        //But I think these are edge cases?
+        //if temp is null item isn't found
+        //if prev is null it's the first object
+        //if temp.next == null then it's the last object
+        //otherwise there will be a reference to .next.next
+        if(temp == null)
+            return false;
+        if(prev == null)
+            return removeFirst().equals(element); //should never be false
+        if(temp.next == null)
+            return removeLast().equals(element); //should never be false
+
+        prev.next.next = temp.next;
+        return true;
+    }
+
+    @Override
+    public E remove(int index){
+        if(isEmpty())
+            return null;
+        Node<E> temp = new Node<>();
+        temp.setContent(get(index));
+        if(temp.getContent() == null)
+            return null;
+        return remove(index);
+    }
+
     @Override
     //test complete
     public E removeFirst() {
@@ -155,46 +195,23 @@ public class LinkedList<E> implements List<E>{
             return null;
 
         Node<E> removedObject = new Node<>();
-        removedObject.setContent(head.next.getContent());
-        if(head == tail) {
-            clear();
-            return removedObject.getContent();
-        }
-
+        removedObject.setContent(tail.getContent());
+//        if(size() == 1) {
+//            clear();
+//            return removedObject.getContent();
+//        }
+//
         Node<E> temp = head;
-        while(temp.next.next != tail){
+        while(temp.next != null && temp.next != tail){
             temp = temp.next;
         }
-
-        removedObject.setContent(head.next.getContent());
         temp.next = new Node<>();
         tail = temp.next;
+//
+//        removedObject.setContent(head.next.getContent());
+//        temp.next = new Node<>();
+//        tail = temp.next;
         return removedObject.getContent();
-    }
-
-    //removal methods
-    @Override
-    public E remove(int index){
-        if(!isValidIndex(index))
-            return null;
-
-        Node<E> removed = head;
-        if(index == 0) {
-            head = head.next;
-            return head.getContent();
-        }
-
-        int count = 0;
-        while(count != index-1){
-            removed = removed.next;
-            count++;
-        }
-        if(removed.next == tail) {
-            tail = removed;
-            addNode();
-        }else
-            removed.next = removed.next.next;
-        return removed.getContent();
     }
 
     @Override
@@ -296,23 +313,6 @@ public class LinkedList<E> implements List<E>{
     @Override
     public Stream<E> parallelStream() {
         return List.super.parallelStream();
-    }
-
-    //    TODO
-    // I feel like this is overly complicated
-    @Override
-    public boolean remove(Object element){
-        if(isEmpty())
-            return false;
-
-        Node<E> temp = head;
-        int index = 1;
-        for(; temp.next != null && !temp.next.getContent().equals(element) && isValidIndex(index); temp = temp.next) index++;
-        if(isValidIndex(index))
-            temp.next = temp.next.next;
-        else
-            removeLast();
-        return true;
     }
 
     @Override
@@ -476,7 +476,7 @@ public class LinkedList<E> implements List<E>{
         Node<E> node = head;
         StringBuilder string = new StringBuilder();
         while(node != null && node.getContent() != null){
-            string.append(node.getContent().toString()).append("\n");
+            string.append(node).append("\n");
             node = node.next;
         }
         return string.toString();
