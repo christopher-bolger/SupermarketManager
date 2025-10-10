@@ -140,7 +140,7 @@ public class LinkedList<E> implements List<E>{
     @Override
     //test complete
     public boolean remove(Object element){
-        if(isEmpty())
+        if(!contains(element))
             return false; //saving time & memory
 
         Node<E> temp = head, prev = null;
@@ -152,8 +152,6 @@ public class LinkedList<E> implements List<E>{
         //if prev is null it's the first object
         //if temp.next == null then it's the last object
         //otherwise there will be a reference to .next.next
-        if(temp == null)
-            return false;
         if(prev == null)
             return removeFirst().equals(element); //should never be false
         if(temp.next == null)
@@ -164,14 +162,15 @@ public class LinkedList<E> implements List<E>{
     }
 
     @Override
+    //test completed
     public E remove(int index){
-        if(isEmpty())
+        if(!isValidIndex(index))
             return null;
+
         Node<E> temp = new Node<>();
         temp.setContent(get(index));
-        if(temp.getContent() == null)
-            return null;
-        return remove(index);
+
+        return remove(get(index)) ? temp.getContent() : null;
     }
 
     @Override
@@ -194,23 +193,14 @@ public class LinkedList<E> implements List<E>{
         if(isEmpty())
             return null;
 
-        Node<E> removedObject = new Node<>();
+        Node<E> removedObject = new Node<>(), temp = head;
         removedObject.setContent(tail.getContent());
-//        if(size() == 1) {
-//            clear();
-//            return removedObject.getContent();
-//        }
-//
-        Node<E> temp = head;
-        while(temp.next != null && temp.next != tail){
+
+        while(temp.next != tail){
             temp = temp.next;
         }
         temp.next = new Node<>();
         tail = temp.next;
-//
-//        removedObject.setContent(head.next.getContent());
-//        temp.next = new Node<>();
-//        tail = temp.next;
         return removedObject.getContent();
     }
 
@@ -384,11 +374,13 @@ public class LinkedList<E> implements List<E>{
 
     //misc methods
     private boolean isValidIndex(int index){
+        if(isEmpty())
+            return false;
         return index > -1 && index < size();
     }
 
     private void addNode(){
-        tail.next = new Node<E>();
+        tail.next = new Node<>();
         tail = tail.next;
     }
 
@@ -417,8 +409,8 @@ public class LinkedList<E> implements List<E>{
     public boolean contains(Object o) {
         if(isEmpty())
             return false;
-        Node<E> temp;
-        for(temp = head; temp != null && temp.getContent().equals(o); temp = temp.next);
+        Node<E> temp = head;
+        for(; temp != null && !temp.getContent().equals(o); temp = temp.next);
         return temp != null && temp.getContent().equals(o);
     }
 
@@ -475,7 +467,8 @@ public class LinkedList<E> implements List<E>{
 
         Node<E> node = head;
         StringBuilder string = new StringBuilder();
-        while(node != null && node.getContent() != null){
+        while(node != null){
+            System.out.println(node);
             string.append(node).append("\n");
             node = node.next;
         }

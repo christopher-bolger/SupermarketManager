@@ -146,15 +146,24 @@ class LinkedListTest {
             assertTrue(listWithOneElement.isEmpty()); // verifying removal
             assertTrue(listWithElements.remove(listWithElements.getFirst())); // "Hi"
             assertTrue(listWithElements.remove(listWithElements.getLast())); // "Morning"
+            assertFalse(listWithElements.remove("Not in list")); //invalid call
             assertEquals(2, listWithElements.size()); // was 4, removed 2 = 2
             String whatsLeft = listWithElements.toString();
             assertTrue(whatsLeft.contains("Howdy"));
             assertTrue(whatsLeft.contains("Hello"));
+            assertFalse(whatsLeft.contains("Morning"));
+            assertFalse(whatsLeft.contains("Hi"));
         }
 
         @Test
         void testRemoveIndex(){
-
+            assertNull(emptyList.remove(0)); //empty list; should return null
+            assertEquals(listWithOneElement.getFirst(), listWithOneElement.remove(0));
+            assertTrue(listWithOneElement.isEmpty());
+            assertEquals(listWithElements.getLast(), listWithElements.remove(listWithElements.size()-1));
+            assertFalse(listWithElements.toString().contains("Morning")); //veryifying removal
+            assertEquals(3, listWithElements.size());
+            assertNull(listWithElements.remove(listWithElements.size())); //invalid index
         }
 
         @Test
