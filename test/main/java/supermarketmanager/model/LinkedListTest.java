@@ -3,7 +3,6 @@ package main.java.supermarketmanager.model;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -46,6 +45,8 @@ class LinkedListTest {
     void testSet(){
         assertNull(emptyList.set(0, "HII"));
         assertEquals("Evening", listWithElements.set(3, "Evening"));
+        listWithOneElement.set(0, null); //will not be set
+        assertNotNull(listWithOneElement.getFirst()); // should still be "Single"
         assertNull(listWithElements.get("Morning")); // the object that was replaced
     }
 
@@ -88,6 +89,26 @@ class LinkedListTest {
 
     @Nested
     class testAdd{
+        @Test
+        void testAddFirst(){
+            emptyList.addFirst("Hi");
+            assertEquals("Hi", listWithElements.getFirst());
+            emptyList.addFirst("Howdy");
+            assertEquals("Howdy", emptyList.getFirst());
+            listWithElements.addFirst("First");
+            assertEquals("First", listWithElements.getFirst());
+        }
+
+        @Test
+        void testAddLast(){
+            emptyList.addLast("Hi");
+            assertEquals("Hi", emptyList.getLast());
+            emptyList.addLast("Howdy");
+            assertEquals("Howdy", emptyList.getLast());
+            listWithElements.addLast("Last");
+            assertEquals("Last", listWithElements.getLast());
+        }
+
         @Test
         void testAdd(){
             assertTrue(emptyList.add("HI"));
@@ -203,7 +224,10 @@ class LinkedListTest {
         assertTrue(listWithElements.retainAll(list));
         assertFalse(listWithElements.contains("Morning"));
         assertFalse(listWithElements.contains("Howdy"));
-        assertTrue(listWithOneElement.containsAll(list));
+        assertTrue(listWithElements.containsAll(list));
+
+        assertTrue(listWithOneElement.retainAll(list)); // if no elements are in common, then the list will be cleared
+        assertTrue(listWithOneElement.isEmpty());
     }
 
 //    @Test
