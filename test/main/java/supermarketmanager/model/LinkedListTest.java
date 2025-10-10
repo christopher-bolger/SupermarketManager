@@ -193,6 +193,19 @@ class LinkedListTest {
         }
     }
 
+    @Test
+    void testRetainAll(){
+        LinkedList<String> list = new LinkedList<>();
+        list.add("Hi");
+        list.add("Hello");
+
+        assertFalse(emptyList.retainAll(new LinkedList<>())); //only returns false of the main list is empty
+        assertTrue(listWithElements.retainAll(list));
+        assertFalse(listWithElements.contains("Morning"));
+        assertFalse(listWithElements.contains("Howdy"));
+        assertTrue(listWithOneElement.containsAll(list));
+    }
+
 //    @Test
 //    void testGet(){
 //        assertEquals("Morning", listWithElements.get(listWithElements.size()-1));
