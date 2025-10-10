@@ -70,7 +70,10 @@ public class LinkedList<E> implements List<E>{
     public void addFirst(E e) {
         if(e == null)
             return;
-        head = new Node<>(e, head);
+        if(head.getContent() == null)
+            head.setContent(e);
+        else
+            head = new Node<>(e, head);
     }
 
     @Override
@@ -218,18 +221,63 @@ public class LinkedList<E> implements List<E>{
     }
 
     @Override
-    //test complete
-    public List<E> reversed() {
+    // do I need to check if this.containsAll(c)?
+    // since it's an optioanl operation, I shouldn't really need to?
+    // just if the element is contained within this then i'll remove it, if not i'll ignore it
+    public boolean removeAll(Collection<?> c) {
         if(isEmpty())
-            return List.of();
+            return false;
 
-        LinkedList<E> reversedOrder = new LinkedList<>();
-        int index = size()-1;
+        for(Object o : c)
+            remove(o);
+        return true;
+    }
+
+    @Override
+    public boolean removeIf(Predicate<? super E> filter) {
+        return List.super.removeIf(filter);
+    }
+
+    @Override
+    //TODO
+    // needs more thinking
+    // How do I compare theses lists efficiently?
+    // I don't want to use a nested while loop because that's a lore more calls than is necessary
+    public boolean retainAll(Collection<?> c) {
+        if(isEmpty())
+            return false;
+
+        //this feels fucky
         Node<E> temp = head;
-        while(index > -1){
+        while(temp != null){
+            boolean contained = false;
+            for(Object o : c){
+                if (temp.getContent().equals(o)) {
+                    contained = true;
+                    break;
+                }
+            }
+            if(contained) {
+                Node<E> nodeToRemove = new Node<>();
+                nodeToRemove.setContent(temp.getContent());
+                temp = temp.next;
+                remove(nodeToRemove.getContent());
+            }else temp = temp.next;
+        }
+        return true;
+    }
+
+    @Override
+    //test completed
+    public List<E> reversed() {
+        LinkedList<E> reversedOrder = new LinkedList<>();
+        if(isEmpty())
+            return reversedOrder;
+
+        Node<E> temp = head;
+        while(temp != null){
             reversedOrder.addFirst(temp.getContent());
             temp = temp.next;
-            index--;
         }
         return reversedOrder;
     }
@@ -346,26 +394,6 @@ public class LinkedList<E> implements List<E>{
             index++;
         }
         return true;
-    }
-
-    @Override
-    //TODO
-    // do I need to check if this.containsAll(c)?
-    public boolean removeAll(Collection<?> c) {
-        if(isEmpty() || c.isEmpty())
-            return false;
-
-        return true;
-    }
-
-    @Override
-    public boolean removeIf(Predicate<? super E> filter) {
-        return List.super.removeIf(filter);
-    }
-
-    @Override
-    public boolean retainAll(Collection<?> c) {
-        return false;
     }
 
     @Override
