@@ -1,10 +1,5 @@
 package main.java.supermarketmanager.model;
 
-import java.util.Iterator;
-import java.util.Objects;
-import java.util.Spliterator;
-import java.util.function.Consumer;
-
 public class Node<E>{
     private E content;
     public Node<E> next;
