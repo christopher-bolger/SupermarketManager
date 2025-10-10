@@ -76,6 +76,14 @@ class LinkedListTest {
         LinkedList<String> reversed = (LinkedList<String>) listWithElements.reversed();
         assertEquals(reversed.getFirst(), listWithElements.getLast());
         assertEquals(reversed.getLast(), listWithElements.getFirst());
+
+        reversed = (LinkedList<String>) listWithOneElement.reversed();
+        assertEquals(reversed.getFirst(), listWithOneElement.getLast());
+        assertEquals(reversed.getLast(), listWithOneElement.getFirst());
+
+        reversed = (LinkedList<String>) emptyList.reversed();
+        assertTrue(reversed.isEmpty());
+        assertEquals(reversed.getFirst(), emptyList.getFirst());
     }
 
     @Nested
@@ -139,11 +147,6 @@ class LinkedListTest {
 
     @Nested
     class testRemove{
-//        @Test
-//        void testRemoveElementSomethingFucky(){
-//            assertNotNull(listWithElements.removeLast()); // "Morning"
-//            assertFalse(listWithElements.remove("Not in list")); //invalid call
-//        }
         @Test
         void testRemoveLast(){
             assertNull(emptyList.removeLast());
@@ -169,7 +172,7 @@ class LinkedListTest {
             assertTrue(listWithOneElement.isEmpty()); // verifying removal
             assertTrue(listWithElements.remove(listWithElements.getFirst())); // "Hi"
             assertTrue(listWithElements.remove(listWithElements.getLast())); // "Morning"
-            assertFalse(listWithElements.remove("Not in list")); //invalid call
+            assertFalse(listWithElements.remove("Not in list")); //invalid call - doesn't exist in the list
             assertEquals(2, listWithElements.size()); // was 4, removed 2 = 2
             String whatsLeft = listWithElements.toString();
             assertTrue(whatsLeft.contains("Howdy"));
