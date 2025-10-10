@@ -8,10 +8,6 @@ import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
 //Questions:
-// Contracts?
-// Adding node behaviour? Should I always have one extra or can I try keep the list to its actual size?
-// Explanation for iterator methods
-// Iterator implementations needed for removeFirst & removeLast?
 // spliterator???
 // stream??
 // list.super()?
@@ -20,12 +16,13 @@ import java.util.stream.Stream;
 // replaceAll unaryOperator?
 // toArray
 // Why do some pass objects and others allow for E?
+//NodeIterator <final>
 
 public class LinkedList<E> implements List<E>{
     private Node<E> head, tail;
 
     public LinkedList() {
-        head = new Node<E>();
+        head = new Node<>();
         tail = head;
     }
 
@@ -35,13 +32,11 @@ public class LinkedList<E> implements List<E>{
     public boolean add(E element) {
         if(element == null)
             return false;
-        if(tail.getContent() == null)
-            tail.setContent(element);
-        else{
-            addNode();
-            tail.setContent(element);
-        }
-        return true;
+
+        if(isEmpty())
+            return head.setContent(element); //or tail - both point to the same thing in an empty list
+        addNode();
+        return tail.setContent(element);
     }
 
     @Override
@@ -67,6 +62,7 @@ public class LinkedList<E> implements List<E>{
     }
 
     @Override
+    //test completed
     public void addFirst(E e) {
         if(e == null)
             return;
@@ -77,6 +73,7 @@ public class LinkedList<E> implements List<E>{
     }
 
     @Override
+    //test completed
     public void addLast(E e) {
         add(e);
     }
@@ -87,8 +84,7 @@ public class LinkedList<E> implements List<E>{
         if(isEmpty())
             return null;
        Node<E> temp = head;
-       for(;temp!=null && !temp.getContent().equals(element);
-           temp=temp.next);
+       for(;temp != null && !temp.getContent().equals(element); temp = temp.next);
 
        return temp == null ? null : temp.getContent();
     }
@@ -106,13 +102,12 @@ public class LinkedList<E> implements List<E>{
             count++;
         }
         return node.getContent();
-
     }
 
     @Override
     //test finished
     public E set(int index, E element) {
-        if(!isValidIndex(index))
+        if(!isValidIndex(index) || element == null)
             return null;
 
         Node<E> temp = head;
@@ -138,30 +133,18 @@ public class LinkedList<E> implements List<E>{
     }
 
     //removal methods
-    //    TODO
-    // I feel like this is overly complicated
     @Override
     //test complete
     public boolean remove(Object element){
         if(!contains(element))
             return false; //saving time & memory
 
-//        Node<E> temp = head;
-//        Node<E> prev = null;
-//        for(; temp != null && !temp.getContent().equals(element); temp = temp.next) prev = temp;
-
-        Node<E> temp = head;
-        Node<E> prev = null;
+        Node<E> temp = head, prev = null;
         while(temp != null && !temp.getContent().equals(element)){
             prev = temp;
             temp = temp.next;
         }
-        //Surely there's a better way to do this
-        //But I think these are edge cases?
-        //if temp is null item isn't found
-        //if prev is null it's the first object
-        //if temp.next == null then it's the last object
-        //otherwise there will be a reference to .next.next
+
         if(prev == null)
             return removeFirst().equals(element); //should never be false
         if(temp.next == null)
@@ -239,31 +222,17 @@ public class LinkedList<E> implements List<E>{
     }
 
     @Override
-    //TODO
-    // needs more thinking
-    // How do I compare theses lists efficiently?
-    // I don't want to use a nested while loop because that's a lore more calls than is necessary
     public boolean retainAll(Collection<?> c) {
         if(isEmpty())
             return false;
 
-        //this feels fucky
-        Node<E> temp = head;
-        while(temp != null){
-            boolean contained = false;
-            for(Object o : c){
-                if (temp.getContent().equals(o)) {
-                    contained = true;
-                    break;
-                }
-            }
-            if(contained) {
-                Node<E> nodeToRemove = new Node<>();
-                nodeToRemove.setContent(temp.getContent());
-                temp = temp.next;
-                remove(nodeToRemove.getContent());
-            }else temp = temp.next;
-        }
+        LinkedList<E> newList = new LinkedList();
+        for(Object o : c)
+            if(contains(o))
+                newList.add((E) o);
+
+        clear();
+        addAll(newList);
         return true;
     }
 
