@@ -139,6 +139,29 @@ class LinkedListTest {
 
     @Nested
     class testRemove{
+//        @Test
+//        void testRemoveElementSomethingFucky(){
+//            assertNotNull(listWithElements.removeLast()); // "Morning"
+//            assertFalse(listWithElements.remove("Not in list")); //invalid call
+//        }
+        @Test
+        void testRemoveLast(){
+            assertNull(emptyList.removeLast());
+            assertNotNull(listWithOneElement.removeLast());
+            assertEquals(0, listWithOneElement.size());
+            assertNotNull(listWithElements.removeLast());
+            assertEquals(3, listWithElements.size());
+            assertFalse(listWithElements.contains("Morning"));
+        }
+
+        @Test
+        void testRemoveFirst(){
+            assertNull(emptyList.removeFirst());
+            assertEquals(listWithElements.getFirst(), listWithElements.removeFirst());
+            assertEquals(listWithOneElement.getFirst(), listWithOneElement.removeFirst());
+            assertTrue(listWithOneElement.isEmpty());
+        }
+
         @Test
         void testRemoveElement(){
             assertFalse(emptyList.remove("Hi")); // doesn't exist
@@ -164,19 +187,6 @@ class LinkedListTest {
             assertFalse(listWithElements.toString().contains("Morning")); //veryifying removal
             assertEquals(3, listWithElements.size());
             assertNull(listWithElements.remove(listWithElements.size())); //invalid index
-        }
-
-        @Test
-        void testRemoveLast(){
-
-        }
-
-        @Test
-        void testRemoveFirst(){
-            assertNull(emptyList.removeFirst());
-            assertEquals(listWithElements.getFirst(), listWithElements.removeFirst());
-            assertEquals(listWithOneElement.getFirst(), listWithOneElement.removeFirst());
-            assertTrue(listWithOneElement.isEmpty());
         }
     }
 
