@@ -15,7 +15,7 @@ public class NodeIterator<K> implements Iterator<K> {
 
     @Override
     public boolean hasNext() {
-        return position.next != null;
+        return position != null;
     }
 
     @Override
