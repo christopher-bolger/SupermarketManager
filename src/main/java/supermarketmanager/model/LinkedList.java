@@ -182,6 +182,7 @@ public class LinkedList<E> implements List<E>{
     }
 
     @Override
+    //test completed
     public E removeLast() {
         if(isEmpty())
             return null;
@@ -204,16 +205,18 @@ public class LinkedList<E> implements List<E>{
     }
 
     @Override
-    // do I need to check if this.containsAll(c)?
+    // do I need to check if containsAll(c)?
     // since it's an optioanl operation, I shouldn't really need to?
     // just if the element is contained within this then i'll remove it, if not i'll ignore it
+    //test completed
     public boolean removeAll(Collection<?> c) {
         if(isEmpty())
             return false;
 
+        int size = size();
         for(Object o : c)
             remove(o);
-        return true;
+        return size < size();
     }
 
     @Override
@@ -222,6 +225,7 @@ public class LinkedList<E> implements List<E>{
     }
 
     @Override
+    //test completed
     public boolean retainAll(Collection<?> c) {
         if(isEmpty())
             return false;
@@ -289,7 +293,7 @@ public class LinkedList<E> implements List<E>{
 
     @Override
     public ListIterator<E> listIterator() {
-        return null;
+        return (ListIterator<E>) head;
     }
 
     @Override
@@ -300,7 +304,7 @@ public class LinkedList<E> implements List<E>{
     @Override
     //test incomplete
     public List<E> subList(int fromIndex, int toIndex) {
-        if(isEmpty() || !isValidIndex(fromIndex) || !isValidIndex(toIndex))
+        if(isEmpty() || !isValidIndex(fromIndex) || !isValidIndex(toIndex-1))
             return List.of();
 
         int index = 0;
@@ -310,8 +314,8 @@ public class LinkedList<E> implements List<E>{
             index++;
         }
 
-        List<E> returnList = new LinkedList<E>();
-        while(index != toIndex+1){
+        List<E> returnList = new LinkedList<>();
+        while(temp != null && index < toIndex){
             E object = temp.getContent();
             returnList.add(object);
             temp = temp.next;
@@ -417,11 +421,14 @@ public class LinkedList<E> implements List<E>{
 
     @Override
     public boolean contains(Object o) {
-        if(isEmpty())
+        if(isEmpty()) //probably silly to have this here because the gains are so small but its saving memory (I think)
             return false;
+
         Node<E> temp = head;
-        for(; temp != null && !temp.getContent().equals(o); temp = temp.next);
-        return temp != null && temp.getContent().equals(o);
+        for(; temp != null; temp = temp.next)
+            if(temp.getContent().equals(o))
+                return true;
+        return false;
     }
 
     @Override
@@ -477,13 +484,11 @@ public class LinkedList<E> implements List<E>{
 
         Node<E> node = head;
         StringBuilder string = new StringBuilder();
-        while(node != null){
-            if(node != tail)
-                string.append(node).append("\n");
-            else
-                string.append(node);
+        while(node != tail){
+            string.append(node).append("\n");
             node = node.next;
         }
+        string.append(tail);
         return string.toString();
     }
 }
