@@ -26,7 +26,7 @@ class LinkedListTest {
 
     @org.junit.jupiter.api.AfterEach
     void tearDown() {
-        emptyList = listWithElements = null;
+        emptyList = listWithElements = listWithOneElement = null;
     }
 
     @Test
@@ -68,8 +68,23 @@ class LinkedListTest {
 
     @Test
     void testSubList(){
-        List<String> testList = emptyList.subList(0,0);
+        List<String> testList = emptyList.subList(0,0);// valid range, but empty list
         assertEquals(0, testList.size());
+
+        testList = listWithOneElement.subList(0,1); //valid range
+        assertEquals(listWithOneElement.toString(), testList.toString()); //testing string because I think if I compare the objects it'll be false because a new list is returned
+
+        testList = listWithOneElement.subList(1,2); // outside range, empty list returned
+        assertTrue(testList.isEmpty());
+
+        testList = listWithElements.subList(0, listWithElements.size()); //whole list
+        assertEquals(listWithElements.toString(), testList.toString());
+
+        testList = listWithElements.subList(1,2); // one item
+        assertEquals(listWithElements.get(1), testList.toString());
+
+        testList = listWithElements.subList(3,0); //impossible range
+        assertTrue(testList.isEmpty()); //it's inefficient but adding another true/false to the if statement felt like too much
     }
 
     @Test
@@ -212,23 +227,51 @@ class LinkedListTest {
             assertEquals(3, listWithElements.size());
             assertNull(listWithElements.remove(listWithElements.size())); //invalid index
         }
+
+        @Test
+        void testRetainAll(){
+            LinkedList<String> list = new LinkedList<>();
+            list.add("Hi");
+            list.add("Hello");
+
+            assertFalse(emptyList.retainAll(new LinkedList<>())); //only returns false of the main list is empty
+
+            assertTrue(listWithElements.retainAll(list));
+            assertTrue(listWithElements.containsAll(list));
+            assertFalse(listWithElements.contains("Morning")); // removed elements
+            assertFalse(listWithElements.contains("Howdy"));
+
+            assertTrue(listWithOneElement.retainAll(list)); // if no elements are in common, then the list will be cleared
+            assertTrue(listWithOneElement.isEmpty());
+        }
+
+        @Test
+        void testRemoveAll(){
+            LinkedList<String> list = new LinkedList<>();
+            list.add("Hi");
+            list.add("Hello");
+
+            assertFalse(emptyList.removeAll(new LinkedList<>()));
+
+            //TODO
+            // do this for retainAll()?
+            assertFalse(listWithElements.removeAll(list)); //returns false if the size of the list doesn't change
+            assertFalse(listWithElements.containsAll(list));
+            assertTrue(listWithElements.contains("Morning")); // removed elements
+            assertTrue(listWithElements.contains("Howdy"));
+
+            LinkedList<String> listToCompare = new LinkedList<>();
+            for(String string : listWithElements)
+                listToCompare.add(string);
+            list.clear();
+            list.add("Something");
+            list.add("Not in the list");
+            assertFalse(listWithElements.removeAll(list));
+            assertEquals(listToCompare.toString(), listWithElements.toString()); //list should remain unchanged
+        }
     }
 
-    @Test
-    void testRetainAll(){
-        LinkedList<String> list = new LinkedList<>();
-        list.add("Hi");
-        list.add("Hello");
 
-        assertFalse(emptyList.retainAll(new LinkedList<>())); //only returns false of the main list is empty
-        assertTrue(listWithElements.retainAll(list));
-        assertFalse(listWithElements.contains("Morning"));
-        assertFalse(listWithElements.contains("Howdy"));
-        assertTrue(listWithElements.containsAll(list));
-
-        assertTrue(listWithOneElement.retainAll(list)); // if no elements are in common, then the list will be cleared
-        assertTrue(listWithOneElement.isEmpty());
-    }
 
 //    @Test
 //    void testGet(){
