@@ -107,6 +107,8 @@ public class LinkedList<E> implements List<E>{
     @Override
     //test finished
     public E set(int index, E element) {
+        //TODO
+        // This should be && not ||, if LHS true it won't check RHS?
         if(!isValidIndex(index) || element == null)
             return null;
 
@@ -160,10 +162,10 @@ public class LinkedList<E> implements List<E>{
         if(!isValidIndex(index))
             return null;
 
-        Node<E> temp = new Node<>();
-        temp.setContent(get(index));
+        Node<E> getItem = new Node<>();
+        getItem.setContent(get(index));
 
-        return remove(get(index)) ? temp.getContent() : null;
+        return remove(getItem.getContent()) ? getItem.getContent() : null;
     }
 
     @Override
@@ -174,7 +176,7 @@ public class LinkedList<E> implements List<E>{
 
         Node<E> removedObject = new Node<>();
         removedObject.setContent(head.getContent());
-        if(size() == 1)
+        if(head == tail)
             clear();
         else
             head = head.next;
@@ -195,6 +197,10 @@ public class LinkedList<E> implements List<E>{
             return removedObject.getContent();
         }
 
+        //TODO
+        // Maybe make an internal private method for get
+        // Only for use when I know it's safe to do so
+        // Will reduce footprint & increase readability
         while(temp.next != tail){
             temp = temp.next;
         }
@@ -480,7 +486,7 @@ public class LinkedList<E> implements List<E>{
 
     public String toString(){
         if(isEmpty())
-            return null;
+            return "";
 
         Node<E> node = head;
         StringBuilder string = new StringBuilder();
