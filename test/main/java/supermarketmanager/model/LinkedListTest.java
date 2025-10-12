@@ -30,6 +30,49 @@ class LinkedListTest {
     }
 
     @Test
+    void testContainsAll(){
+        LinkedList<String> list = new LinkedList<>();
+        list.addAll(listWithElements);
+        assertTrue(list.containsAll(listWithElements));
+
+        list.clear();
+        list.addAll(listWithOneElement);
+        assertTrue(list.containsAll(listWithOneElement));
+        list.add("Not in the list");
+        assertTrue(list.containsAll(listWithOneElement));
+        assertFalse(listWithOneElement.containsAll(list));
+
+        list.clear();
+        list.addAll(listWithElements);
+        assertTrue(list.containsAll(listWithElements));
+        assertTrue(listWithElements.containsAll(list));
+        list.add("Not in the list");
+        assertTrue(list.containsAll(listWithElements));
+        assertFalse(listWithOneElement.containsAll(list));
+    }
+
+    @Test
+    void testIsEmpty(){
+        assertTrue(emptyList.isEmpty());
+        assertFalse(listWithElements.isEmpty());
+        assertFalse(listWithOneElement.isEmpty());
+        assertTrue(new LinkedList<String>().isEmpty());
+    }
+
+    @Test
+    void testContains(){
+        assertFalse(emptyList.contains("Howdy"));
+        assertFalse(listWithElements.contains(null));
+        assertFalse(listWithElements.contains(listWithElements));
+        assertTrue(listWithOneElement.contains("Single"));
+
+        LinkedList<String> list = new LinkedList<>();
+        list.addAll(listWithElements);
+        for(String s : list)
+            assertTrue(list.contains(s));
+    }
+
+    @Test
     void testSize() {
         assertEquals(0, emptyList.size());
         assertTrue(emptyList.add("HI"));
@@ -55,6 +98,7 @@ class LinkedListTest {
         assertEquals(-1, emptyList.indexOf("Something"));
         assertEquals(0, listWithOneElement.indexOf("Single"));
         assertEquals(3, listWithElements.indexOf("Morning"));
+        assertEquals(-1, listWithOneElement.indexOf("Evening")); //not in the list
     }
 
     @Test
@@ -145,6 +189,35 @@ class LinkedListTest {
             assertEquals("Howdy", listWithElements.get(2)); // was in index 1, was pushed to index 2
         }
 
+        @Test
+        void testAddAll(){
+            LinkedList<String> list = new LinkedList<>();
+            list.add("Something new");
+            list.add(null); //won't be added - list will be of size() = 2
+            list.add("Something else thats new");
+
+            emptyList.addAll(null);
+            assertTrue(emptyList.isEmpty());
+
+            assertFalse(listWithOneElement.addAll(new LinkedList<>())); // returns false if the size hasn't changed
+
+            assertTrue(emptyList.addAll(list)); //can add to an empty list
+            assertEquals(2, emptyList.size());
+
+            assertTrue(listWithOneElement.addAll(list));
+            assertEquals(3, listWithOneElement.size());
+
+            assertTrue(listWithOneElement.contains(list.getFirst()));
+            assertTrue(listWithOneElement.contains(list.getLast()));
+
+            assertTrue(listWithOneElement.addAll(list)); //can add the same thing twice
+            assertEquals(5, listWithOneElement.size());
+        }
+
+        @Test
+        void testAddAllToIndex(){
+
+        }
     }
 
     @Nested
@@ -203,6 +276,7 @@ class LinkedListTest {
 
         @Test
         void testRemoveElement(){
+            assertFalse(listWithElements.remove(null));
             assertFalse(emptyList.remove("Hi")); // doesn't exist
             assertTrue(listWithOneElement.remove("Single"));
             assertTrue(listWithOneElement.isEmpty()); // verifying removal
