@@ -1,4 +1,4 @@
-package main.java.supermarketmanager.model;
+package main.java.supermarketmanager.model.linkedlist;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -11,10 +11,8 @@ import java.util.stream.Stream;
 // spliterator???
 // stream??
 // list.super()?
-// addLast just add?
 // Handle collection passed to method?
 // replaceAll unaryOperator?
-// toArray
 // Why do some pass objects and others allow for E?
 //NodeIterator <final>
 
