@@ -45,9 +45,18 @@ public class LinkedList<E> implements List<E>{
         if(!(isValidIndex(index) && element != null))
             return;
 
+        if(index == 0) {
+            addFirst(element);
+            return;
+        }
+        if(index == size()-1){
+            addLast(element);
+            return;
+        }
+
         Node<E> node = head;
         int count = 0;
-        while(count != index-1){
+        while(count < index-1){
             node = node.next;
             count++;
         }
@@ -74,6 +83,7 @@ public class LinkedList<E> implements List<E>{
     }
 
     @Override
+    //test completed
     public boolean addAll(Collection<? extends E> c) {
         if(c == null)
             return false;
@@ -85,15 +95,16 @@ public class LinkedList<E> implements List<E>{
     }
 
     @Override
+    //test completed
     public boolean addAll(int index, Collection<? extends E> c) {
         if(!(isValidIndex(index) && c != null))
             return false;
 
+        int size = size();
         for(E o : c) {
-            add(index, o);
-            index++;
+            add(index++, o);
         }
-        return true;
+        return size < size();
     }
 
     //get element methods
@@ -460,6 +471,7 @@ public class LinkedList<E> implements List<E>{
     }
 
     @Override
+    //test completed
     public Object[] toArray() {
         Object[] array = new Object[size()];
         Node<E> temp = head;
