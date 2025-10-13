@@ -4,22 +4,32 @@ import main.java.supermarketmanager.model.linkedlist.LinkedList;
 
 import java.util.Collection;
 
-public abstract class MarketStructure {
+public abstract class MarketStructure<E> {
     private String name = "";
-    private LinkedList<? extends MarketStructure> list = new LinkedList<>();
+    private LinkedList<E> list;
+    private int[] dimensions = new int[2];
 
-    public MarketStructure(String name) {
-        if(name != null && !name.isEmpty())
-            if(name.length() > 30)
+    public MarketStructure(String name, int[] dimensions) {
+        if(name != null && !name.isEmpty()) {
+            if (name.length() > 30)
                 this.name = name.substring(0, 30);
             else
                 this.name = name;
+        }
+        if(dimensions.length != 2){
+            dimensions[0] = 1;
+            dimensions[1] = 1;
+        }else{
+            this.dimensions[0] = dimensions[0];
+            this.dimensions[1] = dimensions[1];
+        }
+        list = new LinkedList<>();
     }
 
     public void setName(String name){
         if(name != null && !name.isEmpty())
-            if(name.length() > 31)
-                this.name = name.substring(0, 31);
+            if(name.length() > 30)
+                this.name = name.substring(0, 30);
             else
                 this.name = name;
     }
@@ -28,32 +38,47 @@ public abstract class MarketStructure {
         return name;
     }
 
-    public LinkedList<? extends MarketStructure> getList() {
+    public LinkedList<E> getList() {
         return list;
     }
 
-    public void setList(Collection<MarketStructure> list) {
+    public void setList(Collection<E> list) {
         if(list != null)
-            this.list = (LinkedList<MarketStructure>) list;
+            this.list = (LinkedList<E>) list;
     }
 
-    public boolean addItem(MarketStructure item){
+    public void setDimensions(int[] dimensions) {
+        if(dimensions.length == 2){
+            this.dimensions[0] = dimensions[0];
+            this.dimensions[1] = dimensions[1];
+        }
+    }
+
+    public int[] getDimensions() {
+        return dimensions;
+    }
+
+    public boolean add(E item){
         return list.add(item);
     }
 
-    public void addItem(MarketStructure item, int index){
+    public void add(E item, int index){
         list.add(index, item);
     }
 
-    public boolean addAll(Collection<? extends MarketStructure> items){
+    public E set(E item, int index){
+        return list.set(index, item);
+    }
+
+    public boolean addAll(Collection<E> items){
         return list.addAll(items);
     }
 
-    public boolean removeItem(MarketStructure item){
+    public boolean remove(E item){
         return list.remove(item);
     }
 
-    public boolean removeAll(Collection<? extends MarketStructure> item){
+    public boolean removeAll(Collection<E> item){
         return list.removeAll(item);
     }
 }

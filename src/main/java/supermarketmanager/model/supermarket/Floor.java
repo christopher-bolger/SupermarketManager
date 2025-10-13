@@ -1,17 +1,14 @@
 package main.java.supermarketmanager.model.supermarket;
 
 
-public class Floor extends MarketStructure{
+public class Floor extends MarketStructure<Aisle>{
     private final int[] dimensions = new int[2];
 
     public Floor(String name, int[] dimensions) {
-        super(name);
-        if(dimensions.length != 2){
-            dimensions[0] = 1;
-            dimensions[1] = 1;
-        }else{
-            this.dimensions[0] = dimensions[0];
-            this.dimensions[1] = dimensions[1];
-        }
+        super(name, dimensions);
+    }
+
+    public String toString(){
+        return super.toString() + "\nFloor Dimensions: " + dimensions[0] + ", " + dimensions[1] + ".";
     }
 }
