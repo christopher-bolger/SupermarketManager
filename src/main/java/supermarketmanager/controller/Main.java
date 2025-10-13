@@ -1,6 +1,6 @@
 package main.java.supermarketmanager.controller;
 
-import main.java.supermarketmanager.model.LinkedList;
+import main.java.supermarketmanager.model.linkedlist.LinkedList;
 
 public class Main {
     public static void main(String[] args) {
