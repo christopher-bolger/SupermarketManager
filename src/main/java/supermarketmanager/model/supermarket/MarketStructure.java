@@ -49,8 +49,10 @@ public abstract class MarketStructure<E> {
 
     public void setDimensions(int[] dimensions) {
         if(dimensions.length == 2){
-            this.dimensions[0] = dimensions[0];
-            this.dimensions[1] = dimensions[1];
+            if(dimensions[0] > 0 && dimensions[1] > 0) {
+                this.dimensions[0] = dimensions[0];
+                this.dimensions[1] = dimensions[1];
+            }
         }
     }
 
