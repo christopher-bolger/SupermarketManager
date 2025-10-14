@@ -17,7 +17,8 @@ public class Aisle extends MarketStructure<Shelf>{
 
     public void setAisleSize(int[] newSize, int[] maxSize){
         if(aisleSize.length == 2
-        && (maxSize[0] < aisleSize[0] || maxSize[1] < aisleSize[1])){
+        && maxSize[0] > aisleSize[0]
+        && maxSize[1] > aisleSize[1]){
             aisleSize[0] = newSize[0];
             aisleSize[1] = newSize[1];
         }
@@ -25,5 +26,15 @@ public class Aisle extends MarketStructure<Shelf>{
 
     public int[] getAisleSize(){
         return aisleSize;
+    }
+
+    @Override
+    public String objectDetails() {
+        return "";
+    }
+
+    @Override
+    public String toString() {
+        return "";
     }
 }

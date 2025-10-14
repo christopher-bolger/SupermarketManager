@@ -81,4 +81,26 @@ public abstract class MarketStructure<E> {
     public boolean removeAll(Collection<E> item){
         return list.removeAll(item);
     }
+
+    public abstract String objectDetails();
+
+    public abstract String toString();
+
+    public String details(){
+        if(list.isEmpty())
+            return "";
+
+        StringBuilder string = new StringBuilder();
+        string.append("Name: ").append(name).append("\t")
+                .append("Size: ").append(dimensions[0]).append(", ").append(dimensions[1]).append("\n");
+        int size = list.size()-1, index = 0;
+        for(E o : list){
+            if(index == size)
+                string.append(o);
+            else
+                string.append(o).append("\n");
+            index++;
+        }
+        return string.toString();
+    }
 }
