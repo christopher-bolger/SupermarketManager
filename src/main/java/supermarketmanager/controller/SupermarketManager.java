@@ -1,5 +1,5 @@
 package main.java.supermarketmanager.controller;
 
-public class SupermarketManager {
+public class SupermarketManager{
 
 }
