@@ -30,11 +30,11 @@ public class Aisle extends MarketStructure<Shelf>{
 
     @Override
     public String objectDetails() {
-        return "";
+        return "Aisle Size: " + aisleSize[0] + ", " + aisleSize[1] + "\n";
     }
 
     @Override
     public String toString() {
-        return "";
+        return objectDetails() + super.details();
     }
 }

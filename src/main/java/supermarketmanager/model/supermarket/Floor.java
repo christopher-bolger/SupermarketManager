@@ -18,7 +18,7 @@ public class Floor extends MarketStructure<Aisle>{
     }
 
     public String objectDetails(){
-        return "Floor: " + floor;
+        return "Floor: " + floor + "\n";
     }
 
     public String toString(){

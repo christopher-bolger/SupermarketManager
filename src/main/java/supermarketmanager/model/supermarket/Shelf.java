@@ -22,11 +22,11 @@ public class Shelf extends MarketStructure<GoodItem>{
 
     @Override
     public String objectDetails() {
-        return "";
+        return "Shelf Number: " + shelfNumber + "\n";
     }
 
     @Override
     public String toString() {
-        return "";
+        return objectDetails() + super.details();
     }
 }
