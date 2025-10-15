@@ -1,0 +1,40 @@
+<object-stream>
+  <main.java.supermarketmanager.controller.SupermarketManager>
+    <name>SuperDuperMarket</name>
+    <list>
+      <head>
+        <content class="main.java.supermarketmanager.model.supermarket.Floor">
+          <name>Household</name>
+          <list>
+            <head/>
+            <tail reference="../head"/>
+          </list>
+          <dimensions>
+            <int>20</int>
+            <int>20</int>
+          </dimensions>
+          <floor>0</floor>
+        </content>
+        <next>
+          <content class="main.java.supermarketmanager.model.supermarket.Floor">
+            <name>Fruit &amp; Veg</name>
+            <list>
+              <head/>
+              <tail reference="../head"/>
+            </list>
+            <dimensions>
+              <int>22</int>
+              <int>22</int>
+            </dimensions>
+            <floor>0</floor>
+          </content>
+        </next>
+      </head>
+      <tail reference="../head/next"/>
+    </list>
+    <dimensions>
+      <int>100</int>
+      <int>100</int>
+    </dimensions>
+  </main.java.supermarketmanager.controller.SupermarketManager>
+</object-stream>
