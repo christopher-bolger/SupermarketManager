@@ -121,6 +121,10 @@ public class GoodItem {
         }
     }
 
+    public double totalValue(){
+        return price*quantity;
+    }
+
     public String getStorageType() {
         return GoodItem.storageTypes[storageType];
     }
@@ -134,6 +138,7 @@ public class GoodItem {
                 "Description: " + description + "\n" +
                 "Price: " + price + "\n" +
                 "Quantity: " + quantity + "\n" +
+                "Total Value: " + totalValue() + "\n" +
                 "Weight: " + weight + getWeightType() + "\n" +
                 "Storage Type: " + getStorageType() + "\n" +
                 "Photo URL: " + photoURL + "\n";
