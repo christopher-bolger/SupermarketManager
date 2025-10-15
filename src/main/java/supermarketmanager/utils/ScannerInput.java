@@ -38,6 +38,30 @@ public class ScannerInput {
     }
 
     /**
+     * Read an int from the user.  If the entered data isn't actually an int,
+     * the user is prompted again to enter the int.
+     *
+     * @param prompt  The information printed to the console for the user to read
+     * @return The number read from the user and verified as an int.
+     */
+    public static int readNextInt(int greaterThan, String prompt) {
+        do {
+            var scanner = new Scanner(System.in);
+            try {
+                System.out.print(prompt);
+                int num = scanner.nextInt();
+                if(num > greaterThan)
+                    return Integer.parseInt(scanner.next());
+                else
+                    System.out.println("Must be greater than " + greaterThan + ".");
+            }
+            catch (NumberFormatException e) {
+                System.err.println("\tEnter a number please.");
+            }
+        }  while (true);
+    }
+
+    /**
      * Read a double from the user.  If the entered data isn't actually a double,
      * the user is prompted again to enter the double.
      *
