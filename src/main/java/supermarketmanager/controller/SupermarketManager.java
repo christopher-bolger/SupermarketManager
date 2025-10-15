@@ -4,8 +4,7 @@ import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 
 import main.java.supermarketmanager.model.linkedlist.LinkedList;
-import main.java.supermarketmanager.model.supermarket.Floor;
-import main.java.supermarketmanager.model.supermarket.MarketStructure;
+import main.java.supermarketmanager.model.supermarket.*;
 
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -21,6 +20,16 @@ public class SupermarketManager extends MarketStructure<Floor> {
     @Override
     public String objectDetails() {
         return "";
+    }
+
+    public boolean checkFloorName(String name){
+        if(super.getList().isEmpty())
+            return true;
+
+        for(Floor floor : getList())
+            if(floor.getName().equalsIgnoreCase(name))
+                return false;
+        return true;
     }
 
     public String toString(){
@@ -45,10 +54,9 @@ public class SupermarketManager extends MarketStructure<Floor> {
         os.close();
     }
 
-
     public void load() throws Exception {
         //list of classes that you wish to include in the serialisation, separated by a comma
-        Class<?>[] classes = new Class[]{ SupermarketManager.class};
+        Class<?>[] classes = new Class[]{ SupermarketManager.class, Floor.class, Aisle.class, Shelf.class, GoodItem.class};
 
         //setting up the xstream object with default security and the above classes
         XStream xstream = new XStream(new DomDriver());
@@ -57,7 +65,10 @@ public class SupermarketManager extends MarketStructure<Floor> {
 
         //doing the actual serialisation to an XML file
         ObjectInputStream in = xstream.createObjectInputStream(new FileReader("market.xml"));
-        setList((LinkedList<Floor>) in.readObject());
+        SupermarketManager loaded = (SupermarketManager) in.readObject();
+        super.setName(loaded.getName());
+        super.setDimensions(loaded.getDimensions());
+        super.setList(loaded.getList());
         in.close();
     }
 }
