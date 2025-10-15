@@ -67,22 +67,35 @@ public class Driver {
                 """);
     }
 
-    public void addFloor(){
-        showFloors();
-
-        boolean allowed = false;
-        String name = "";
+    public String getName(){
+        boolean allowed;
+        String name;
         do {
             name = ScannerInput.readNextLine("Enter the name of your Floor Area: ");
-            if(manager.checkFloorName(name))
-                allowed = true;
+            allowed = manager.checkFloorName(name);
             if(!allowed)
                 System.out.println("Invalid Floor Name! Please try again!");
         }while(!allowed);
+        return name;
+    }
 
+    public int[] getDimensions(MarketStructure itemToCheckAgainst){
+        boolean allowed;
         int[] dimensions = new int[2];
-        dimensions[0] = ScannerInput.readNextInt(0, "Enter the x dimension: ");
-        dimensions[1] = ScannerInput.readNextInt(0,"Enter the y dimension: ");
+        do {
+            dimensions[0] = ScannerInput.readNextInt(0, "Enter the x dimension: ");
+            dimensions[1] = ScannerInput.readNextInt(0, "Enter the y dimension: ");
+            allowed = manager.checkDimensions(itemToCheckAgainst, dimensions);
+            if(!allowed)
+                System.out.println("Invalid Dimension! Please try again!");
+        }while(!allowed);
+        return dimensions;
+    }
+
+    public void addFloor(){
+        showFloors();
+        String name = getName();
+        int[] dimensions = getDimensions(manager);
         int floorNumber = ScannerInput.readNextInt("Enter the floor level: ");
         manager.add(new Floor(name, dimensions, floorNumber));
     }
@@ -127,7 +140,7 @@ public class Driver {
     }
 
     public void load() throws Exception {
-        manager.load();
+        manager.load(ScannerInput.readNextLine("File name: "));
         menu();
     }
 
