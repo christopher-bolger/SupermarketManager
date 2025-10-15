@@ -41,6 +41,7 @@ public class ScannerInput {
      * Read an int from the user.  If the entered data isn't actually an int,
      * the user is prompted again to enter the int.
      *
+     * @param greaterThan the inputted number must be greater than this
      * @param prompt  The information printed to the console for the user to read
      * @return The number read from the user and verified as an int.
      */
@@ -51,7 +52,7 @@ public class ScannerInput {
                 System.out.print(prompt);
                 int num = scanner.nextInt();
                 if(num > greaterThan)
-                    return Integer.parseInt(scanner.next());
+                    return num;
                 else
                     System.out.println("Must be greater than " + greaterThan + ".");
             }
