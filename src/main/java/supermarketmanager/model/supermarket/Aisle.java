@@ -3,10 +3,9 @@ package main.java.supermarketmanager.model.supermarket;
 public class Aisle extends MarketStructure<Shelf>{
     int[] aisleSize = new int[2];
 
-    public Aisle(String name, int[] dimensions, int[] maxSize) {
+    public Aisle(String name, int[] dimensions) {
         super(name, dimensions);
-        if(aisleSize.length != 2
-        && (maxSize[0] < aisleSize[0] || maxSize[1] < aisleSize[1])){
+        if(aisleSize.length != 2){
             this.aisleSize[0] = 1;
             this.aisleSize[1] = 1;
         }else{

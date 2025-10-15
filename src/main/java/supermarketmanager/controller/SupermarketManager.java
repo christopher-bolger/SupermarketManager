@@ -31,23 +31,26 @@ public class SupermarketManager extends MarketStructure<Floor> {
         return true;
     }
 
+    //lots of raw usage here, I asked AI and to be honest I could try and be type safe by putting this into
+    //marketManager and making sure the E extends marketmanager, but then I wouldn't be able to put GoodItem into shelf
+    // so since its just me using this I know im not going to try and measure the dimensions of a good item
+    //maybe i'll think of another way but this will do for now
     public boolean checkDimensions(MarketStructure parentItem ,int[] dimensionsToCheck){
         int[] dimensions = parentItem.getDimensions();
         if(dimensions.length != 2 || dimensionsToCheck.length != 2)
             return false;
         if(super.getList().isEmpty()) {
-            if (dimensions[0] < dimensionsToCheck[0] && dimensions[1] < dimensionsToCheck[1])
-                return true;
+            return dimensions[0] > dimensionsToCheck[0] && dimensions[1] > dimensionsToCheck[1];
         }else{
             int totalArea = dimensions[0] * dimensions[1];
-            for(Floor floor : getList()) {
-                totalArea -= floor.getDimensions()[0] * floor.getDimensions()[1];
+            for(Object obj : parentItem.getList()) {
+                MarketStructure child = (MarketStructure) obj;
+                totalArea -= child.getDimensions()[0] * child.getDimensions()[1];
                 if(totalArea < 0)
                     return false;
             }
             return true;
         }
-        return false; //I don't think it should ever reach here, but it's giving me an error if I don't have it
     }
 
     public String toString(){

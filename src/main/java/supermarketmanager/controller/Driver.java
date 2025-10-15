@@ -85,7 +85,7 @@ public class Driver {
         do {
             dimensions[0] = ScannerInput.readNextInt(0, "Enter the x dimension: ");
             dimensions[1] = ScannerInput.readNextInt(0, "Enter the y dimension: ");
-            allowed = manager.checkDimensions(itemToCheckAgainst, dimensions);
+            allowed = manager.checkDimensions(manager, dimensions);
             if(!allowed)
                 System.out.println("Invalid Dimension! Please try again!");
         }while(!allowed);
