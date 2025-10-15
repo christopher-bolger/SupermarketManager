@@ -89,12 +89,11 @@ public abstract class MarketStructure<E> {
     public abstract String toString();
 
     public String details(){
-        if(list.isEmpty())
-            return "";
-
         StringBuilder string = new StringBuilder();
         string.append("Name: ").append(name).append("\t")
                 .append("Size: ").append(dimensions[0]).append(", ").append(dimensions[1]).append("\n");
+        if(list.isEmpty())
+            return string.toString();
         int size = list.size()-1, index = 0;
         for(E o : list){
             if(index == size)
