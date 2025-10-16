@@ -104,4 +104,8 @@ public abstract class MarketStructure<E> {
         }
         return string.toString();
     }
+
+    public Object get(int index) {
+        return list.get(index);
+    }
 }

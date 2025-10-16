@@ -53,17 +53,41 @@ public class SupermarketManager extends MarketStructure<Floor> {
         }
     }
 
+//    public String showAllListInfo(String type, List<?> items){
+//        StringBuilder string = new StringBuilder();
+//        string.append("Floors: ").append("\n");
+//        if(super.getList().isEmpty()) {
+//            string.append("No floors!");
+//            return string.toString();
+//        }
+//
+//        int index = 0;
+//        for(Floor floor : super.getList()) {
+//            string.append("Index: ").append(index).append(":")
+//                    .append(" Level: ").append(floor.getFloor())
+//                    .append("\tName: ").append(floor.getName());
+//            index++;
+//        }
+//        return string.toString();
+//    }
+//
+//    public String showAllAisles
+
     public String toString(){
         if(getList().isEmpty())
             return "";
 
-        int size = getList().size()-1, index = 0;
+        int index = 0;
+        int floorLevel, lastFloorLevel = -Integer.MAX_VALUE;
         StringBuilder string = new StringBuilder();
         for(Floor floor : getList()){
-            if(index == size)
-                string.append(floor.toString());
-            else
-                string.append(floor.toString()).append("\n");
+            floorLevel = floor.getFloor();
+            if(floorLevel != lastFloorLevel)
+                string.append(floor.objectDetails());
+            string.append("Index: ").append(index).append("\t");
+            string.append(floor);
+            lastFloorLevel = floorLevel;
+            index++;
         }
         return string.toString();
     }
@@ -81,7 +105,7 @@ public class SupermarketManager extends MarketStructure<Floor> {
 
         //setting up the xstream object with default security and the above classes
         XStream xstream = new XStream(new DomDriver());
-        XStream.setupDefaultSecurity(xstream);
+        //XStream.setupDefaultSecurity(xstream);
         xstream.allowTypes(classes);
 
         //doing the actual serialisation to an XML file

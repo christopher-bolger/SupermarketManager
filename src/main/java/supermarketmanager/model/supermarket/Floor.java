@@ -22,6 +22,6 @@ public class Floor extends MarketStructure<Aisle>{
     }
 
     public String toString(){
-        return objectDetails() + super.details();
+        return super.details();
     }
 }

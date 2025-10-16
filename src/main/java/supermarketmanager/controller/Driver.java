@@ -38,11 +38,13 @@ public class Driver {
                 case 1 -> save();
                 case 2 -> load();
                 case 3 -> addFloor();
-                //            case 4 -> addAisle();
+                case 4 -> addAisle();
                 //            case 5 -> addShelf();
                 //            case 6 -> addGoodItem();
-                case 7 -> showFloorInformation(getIndex());
+                case 7 -> showFloors();
+                case 8 -> showFloorInformation(getIndex());
             }
+            ScannerInput.readNextLine("Press enter to continue....");
             option = showMenu();
         }
         System.exit(0);
@@ -100,6 +102,10 @@ public class Driver {
         manager.add(new Floor(name, dimensions, floorNumber));
     }
 
+    public void addAisle(){
+        System.out.println("Which floor would you like to add the Aisle too? Index: ");
+    }
+
     public LinkedList<Floor> getFloors(){
         return manager.getList();
     }
@@ -110,28 +116,22 @@ public class Driver {
     }
 
     public void showFloors(){
-        List<Floor> floors = getFloors();
-        if(floors.isEmpty())
-            return;
-        System.out.println("Floors: ");
-        int index = 0;
-        for(Floor floor : floors){
-            System.out.println("Index: " + index + ":" + " Level: " + floor.getFloor() + "\tName: " + floor.getName());
-            index++;
-        }
+        System.out.println(manager.toString());
     }
 
     public void showFloorInformation(int index){
-        List<Floor> floors = getFloors();
-        if(floors.isEmpty()) {
+        if(manager.getList().isEmpty()) {
             System.out.println("No Floors, add one first!");
             return;
         }
-        Floor floor = floors.get(index);
-        if(floor == null)
-            System.out.println("Invalid index");
-        else
-            System.out.println(floors.get(index).toString());
+        Floor floor = null;
+        do {
+            floor = (Floor) manager.get(index);
+            if (floor == null)
+                System.out.println("Invalid index, please try again!");
+            else
+                System.out.println(floor);
+        }while(floor == null);
     }
 
     public boolean loadData() {
