@@ -5,8 +5,6 @@ import main.java.supermarketmanager.model.supermarket.Floor;
 import main.java.supermarketmanager.model.supermarket.MarketStructure;
 import main.java.supermarketmanager.utils.ScannerInput;
 
-import java.util.List;
-
 public class Driver {
     private SupermarketManager manager;
     public static void main(String[] args) throws Exception {
