@@ -84,6 +84,10 @@ public abstract class MarketStructure<E> {
         return list.removeAll(item);
     }
 
+    public boolean checkIndex(int index){
+        return list.get(index) != null;
+    }
+
     public abstract String objectDetails();
 
     public abstract String toString();
@@ -107,5 +111,9 @@ public abstract class MarketStructure<E> {
 
     public Object get(int index) {
         return list.get(index);
+    }
+
+    public boolean isEmpty() {
+        return list.isEmpty();
     }
 }

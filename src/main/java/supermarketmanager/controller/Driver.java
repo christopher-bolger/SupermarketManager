@@ -1,6 +1,7 @@
 package main.java.supermarketmanager.controller;
 
 import main.java.supermarketmanager.model.linkedlist.LinkedList;
+import main.java.supermarketmanager.model.supermarket.Aisle;
 import main.java.supermarketmanager.model.supermarket.Floor;
 import main.java.supermarketmanager.model.supermarket.MarketStructure;
 import main.java.supermarketmanager.utils.ScannerInput;
@@ -40,7 +41,7 @@ public class Driver {
                 //            case 5 -> addShelf();
                 //            case 6 -> addGoodItem();
                 case 7 -> showFloors();
-                case 8 -> showFloorInformation(getIndex());
+                case 8 -> showFloorInformation(getIndex(manager));
             }
             ScannerInput.readNextLine("Press enter to continue....");
             option = showMenu();
@@ -85,7 +86,7 @@ public class Driver {
         do {
             dimensions[0] = ScannerInput.readNextInt(0, "Enter the x dimension: ");
             dimensions[1] = ScannerInput.readNextInt(0, "Enter the y dimension: ");
-            allowed = manager.checkDimensions(manager, dimensions);
+            allowed = manager.checkDimensions(itemToCheckAgainst, dimensions);
             if(!allowed)
                 System.out.println("Invalid Dimension! Please try again!");
         }while(!allowed);
@@ -101,16 +102,46 @@ public class Driver {
     }
 
     public void addAisle(){
+        showFloors();
         System.out.println("Which floor would you like to add the Aisle too? Index: ");
+        int index = getIndex(manager);
+        Floor floorToUpdate = (Floor) manager.get(index);
+        String name = getAisleName();
+        int[] dimensions = getDimensions(floorToUpdate);
+        boolean added = floorToUpdate.add(new Aisle(name, dimensions));
+        if(added)
+            System.out.println("Successfully added the Aisle!");
+        else
+            System.out.println("Failed to add the Aisle!");
     }
 
     public LinkedList<Floor> getFloors(){
         return manager.getList();
     }
 
-    public int getIndex(){
-        showFloors();
-        return ScannerInput.readNextInt(-1, "Which index would you like to select?");
+    public String getAisleName(){
+        boolean valid;
+        String name;
+        do{
+            name = ScannerInput.readNextLine("Enter the name of your Aisle (must be unique): ");
+            valid = manager.checkAisleName(name);
+            if(!valid)
+                System.out.println("Invalid Aisle name! Please try again!");
+        }while(!valid);
+        return name;
+    }
+
+    public int getIndex(MarketStructure itemToCheckIndexIn){
+        System.out.println(itemToCheckIndexIn.toString());
+        int index;
+        boolean allowed;
+        do{
+            index = ScannerInput.readNextInt(-1, "Which index would you like to select?");
+            allowed = itemToCheckIndexIn.checkIndex(index);
+            if(!allowed)
+                System.out.println("Invalid Index! Please try again!");
+        }while(!itemToCheckIndexIn.checkIndex(index));
+        return index;
     }
 
     public void showFloors(){

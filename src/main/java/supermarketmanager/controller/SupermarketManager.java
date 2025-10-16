@@ -53,6 +53,22 @@ public class SupermarketManager extends MarketStructure<Floor> {
         }
     }
 
+    public boolean checkAisleName(String name) {
+        if(getList().isEmpty())
+            return true;
+        for(Floor floor : getList())
+            if(!floor.isEmpty())
+                for(Aisle aisle : floor.getList())
+                    if(!aisle.isEmpty())
+                        if(aisle.getName().equalsIgnoreCase(name))
+                            return false;
+        return true;
+    }
+
+    public boolean checkIndex(MarketStructure parent, int index){
+        return parent.checkIndex(index);
+    }
+
 //    public String showAllListInfo(String type, List<?> items){
 //        StringBuilder string = new StringBuilder();
 //        string.append("Floors: ").append("\n");
