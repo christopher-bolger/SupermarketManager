@@ -39,8 +39,8 @@ public class SupermarketManager extends MarketStructure<Floor> {
         int[] dimensions = parentItem.getDimensions();
         if(dimensions.length != 2 || dimensionsToCheck.length != 2)
             return false;
-        if(super.getList().isEmpty()) {
-            return dimensions[0] > dimensionsToCheck[0] && dimensions[1] > dimensionsToCheck[1];
+        if(parentItem.isEmpty()) {
+            return dimensions[0] >= dimensionsToCheck[0] && dimensions[1] >= dimensionsToCheck[1];
         }else{
             int totalArea = dimensions[0] * dimensions[1];
             for(Object obj : parentItem.getList()) {
@@ -49,7 +49,9 @@ public class SupermarketManager extends MarketStructure<Floor> {
                 if(totalArea < 0)
                     return false;
             }
-            return true;
+            boolean canFit = totalArea >= dimensionsToCheck[0]*dimensionsToCheck[1];
+            boolean isWithinDimensions = dimensions[0] >= dimensionsToCheck[0] && dimensions[1] >= dimensionsToCheck[1];
+            return canFit && isWithinDimensions;
         }
     }
 
@@ -59,9 +61,8 @@ public class SupermarketManager extends MarketStructure<Floor> {
         for(Floor floor : getList())
             if(!floor.isEmpty())
                 for(Aisle aisle : floor.getList())
-                    if(!aisle.isEmpty())
-                        if(aisle.getName().equalsIgnoreCase(name))
-                            return false;
+                    if(aisle.getName().trim().equalsIgnoreCase(name.trim()))
+                        return false;
         return true;
     }
 
@@ -89,6 +90,11 @@ public class SupermarketManager extends MarketStructure<Floor> {
 //
 //    public String showAllAisles
 
+    public String getListDetails(){
+        if(getList().isEmpty())
+            return "";
+        return "";
+    }
     public String toString(){
         if(getList().isEmpty())
             return "";

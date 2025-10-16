@@ -102,7 +102,6 @@ public class Driver {
     }
 
     public void addAisle(){
-        showFloors();
         System.out.println("Which floor would you like to add the Aisle too? Index: ");
         int index = getIndex(manager);
         Floor floorToUpdate = (Floor) manager.get(index);
