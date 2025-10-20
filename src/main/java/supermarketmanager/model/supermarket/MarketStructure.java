@@ -88,22 +88,24 @@ public abstract class MarketStructure<E> {
         return list.get(index) != null;
     }
 
-    public abstract String objectDetails();
-
-    public abstract String toString();
+    public String toString(){
+        return details();
+    }
 
     public String details(){
         StringBuilder string = new StringBuilder();
         string.append("Name: ").append(name).append("\t")
                 .append("Size: ").append(dimensions[0]).append(", ").append(dimensions[1]).append("\n");
+        return string.toString();
+    }
+
+    public String getListDetails(){
+        StringBuilder string = new StringBuilder();
         if(list.isEmpty())
             return string.toString();
-        int size = list.size()-1, index = 0;
+        int index = 0, size = list.size()-1;
         for(E o : list){
-            if(index == size)
-                string.append(o);
-            else
-                string.append(o).append("\n");
+            string.append("Index: ").append(index).append("\t").append(o);
             index++;
         }
         return string.toString();

@@ -7,18 +7,14 @@ import main.java.supermarketmanager.model.linkedlist.LinkedList;
 import main.java.supermarketmanager.model.supermarket.*;
 
 import java.io.*;
+import java.util.Collection;
 import java.util.List;
 
 public class SupermarketManager extends MarketStructure<Floor> {
     File file;
-    public SupermarketManager(String name, int[] dimensions){
+    public SupermarketManager(String name, int[] dimensions, File file){
         super(name, dimensions);
-        file = new File(name);
-    }
-
-    @Override
-    public String objectDetails() {
-        return "";
+        this.file = file;
     }
 
     public boolean checkFloorName(String name){
@@ -70,6 +66,14 @@ public class SupermarketManager extends MarketStructure<Floor> {
         return parent.checkIndex(index);
     }
 
+    public void setFile(File file){
+        this.file = file;
+    }
+
+    public File getFile(){
+        return file;
+    }
+
 //    public String showAllListInfo(String type, List<?> items){
 //        StringBuilder string = new StringBuilder();
 //        string.append("Floors: ").append("\n");
@@ -90,33 +94,9 @@ public class SupermarketManager extends MarketStructure<Floor> {
 //
 //    public String showAllAisles
 
-    public String getListDetails(){
-        if(getList().isEmpty())
-            return "";
-        return "";
-    }
-    public String toString(){
-        if(getList().isEmpty())
-            return "";
-
-        int index = 0;
-        int floorLevel, lastFloorLevel = -Integer.MAX_VALUE;
-        StringBuilder string = new StringBuilder();
-        for(Floor floor : getList()){
-            floorLevel = floor.getFloor();
-            if(floorLevel != lastFloorLevel)
-                string.append(floor.objectDetails());
-            string.append("Index: ").append(index).append("\t");
-            string.append(floor);
-            lastFloorLevel = floorLevel;
-            index++;
-        }
-        return string.toString();
-    }
-
     public void save() throws Exception {
         var xstream = new XStream(new DomDriver());
-        ObjectOutputStream os = xstream.createObjectOutputStream(new FileWriter(file));
+        ObjectOutputStream os = xstream.createObjectOutputStream(new FileWriter(file + ".xml"));
         os.writeObject(this);
         os.close();
     }
@@ -135,6 +115,7 @@ public class SupermarketManager extends MarketStructure<Floor> {
         SupermarketManager loaded = (SupermarketManager) in.readObject();
         in.close();
         super.setName(loaded.getName());
+        setFile(loaded.getFile());
         super.setDimensions(loaded.getDimensions());
         super.setList(loaded.getList());
     }
