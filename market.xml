@@ -6,12 +6,29 @@
         <content class="main.java.supermarketmanager.model.supermarket.Floor">
           <name>Household</name>
           <list>
-            <head/>
+            <head>
+              <content class="main.java.supermarketmanager.model.supermarket.Aisle">
+                <name>Cleaning</name>
+                <list>
+                  <head/>
+                  <tail reference="../head"/>
+                </list>
+                <dimensions>
+                  <int>10</int>
+                  <int>15</int>
+                </dimensions>
+                <aisleSize>
+                  <int>10</int>
+                  <int>15</int>
+                </aisleSize>
+                <storageType>0</storageType>
+              </content>
+            </head>
             <tail reference="../head"/>
           </list>
           <dimensions>
-            <int>20</int>
-            <int>20</int>
+            <int>30</int>
+            <int>30</int>
           </dimensions>
           <floor>0</floor>
         </content>
@@ -19,22 +36,84 @@
           <content class="main.java.supermarketmanager.model.supermarket.Floor">
             <name>Fruit &amp; Veg</name>
             <list>
-              <head/>
+              <head>
+                <content class="main.java.supermarketmanager.model.supermarket.Aisle">
+                  <name>Fruit</name>
+                  <list>
+                    <head>
+                      <content class="main.java.supermarketmanager.model.supermarket.Shelf">
+                        <name>Seasonal</name>
+                        <list>
+                          <head/>
+                          <tail reference="../head"/>
+                        </list>
+                        <dimensions>
+                          <int>15</int>
+                          <int>2</int>
+                        </dimensions>
+                        <shelfNumber>1</shelfNumber>
+                      </content>
+                    </head>
+                    <tail reference="../head"/>
+                  </list>
+                  <dimensions>
+                    <int>15</int>
+                    <int>10</int>
+                  </dimensions>
+                  <aisleSize>
+                    <int>15</int>
+                    <int>10</int>
+                  </aisleSize>
+                  <storageType>1</storageType>
+                </content>
+              </head>
               <tail reference="../head"/>
             </list>
             <dimensions>
-              <int>22</int>
-              <int>22</int>
+              <int>25</int>
+              <int>25</int>
             </dimensions>
             <floor>0</floor>
           </content>
+          <next>
+            <content class="main.java.supermarketmanager.model.supermarket.Floor">
+              <name>DIY</name>
+              <list>
+                <head>
+                  <content class="main.java.supermarketmanager.model.supermarket.Aisle">
+                    <name>Hand Tools</name>
+                    <list>
+                      <head/>
+                      <tail reference="../head"/>
+                    </list>
+                    <dimensions>
+                      <int>10</int>
+                      <int>20</int>
+                    </dimensions>
+                    <aisleSize>
+                      <int>10</int>
+                      <int>20</int>
+                    </aisleSize>
+                    <storageType>0</storageType>
+                  </content>
+                </head>
+                <tail reference="../head"/>
+              </list>
+              <dimensions>
+                <int>30</int>
+                <int>40</int>
+              </dimensions>
+              <floor>1</floor>
+            </content>
+          </next>
         </next>
       </head>
-      <tail reference="../head/next"/>
+      <tail reference="../head/next/next"/>
     </list>
     <dimensions>
-      <int>100</int>
-      <int>100</int>
+      <int>150</int>
+      <int>150</int>
     </dimensions>
+    <file>market</file>
   </main.java.supermarketmanager.controller.SupermarketManager>
 </object-stream>
