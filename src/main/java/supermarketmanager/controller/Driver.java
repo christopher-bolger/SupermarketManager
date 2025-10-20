@@ -4,7 +4,11 @@ import main.java.supermarketmanager.model.linkedlist.LinkedList;
 import main.java.supermarketmanager.model.supermarket.Aisle;
 import main.java.supermarketmanager.model.supermarket.Floor;
 import main.java.supermarketmanager.model.supermarket.MarketStructure;
+import main.java.supermarketmanager.model.supermarket.Shelf;
 import main.java.supermarketmanager.utils.ScannerInput;
+
+import java.io.File;
+import java.util.Arrays;
 
 public class Driver {
     private SupermarketManager manager;
@@ -19,12 +23,13 @@ public class Driver {
             int[] dimensions = new int[2];
             dimensions[0] = ScannerInput.readNextInt(0, "Enter x dimension of your market: ");
             dimensions[1] = ScannerInput.readNextInt(0, "Enter y dimension of your market: ");
-            manager = new SupermarketManager(name, dimensions);
+            File file = new File(ScannerInput.readNextLine("Enter the name of the file for saving: "));
+            manager = new SupermarketManager(name, dimensions, file);
         }else{
             int[] dimensions = new int[2];
             dimensions[0] = 1;
             dimensions[1] = 1;
-            manager = new SupermarketManager("Name", dimensions);
+            manager = new SupermarketManager("Name", dimensions, new File("LOADING-SAVING IS WRONG"));
             load();
         }
         menu();
@@ -38,10 +43,11 @@ public class Driver {
                 case 2 -> load();
                 case 3 -> addFloor();
                 case 4 -> addAisle();
-                //            case 5 -> addShelf();
+                case 5 -> addShelf();
                 //            case 6 -> addGoodItem();
                 case 7 -> showFloors();
                 case 8 -> showFloorInformation(getIndex(manager));
+                case 9 -> showAisleInformation();
             }
             ScannerInput.readNextLine("Press enter to continue....");
             option = showMenu();
@@ -63,7 +69,8 @@ public class Driver {
                 6) Add a GoodItem
                 ------------------------------
                 7) Show all Floors
-                8) Show Floor information
+                8) Show Floor Aisles
+                9) Show Aisle Shelves
                 ------------------------------
                 """);
     }
@@ -98,7 +105,11 @@ public class Driver {
         String name = getName();
         int[] dimensions = getDimensions(manager);
         int floorNumber = ScannerInput.readNextInt("Enter the floor level: ");
-        manager.add(new Floor(name, dimensions, floorNumber));
+        boolean added = manager.add(new Floor(name, dimensions, floorNumber));
+        if(added)
+            System.out.println("Floor Added!");
+        else
+            System.out.println("Floor Not Added!");
     }
 
     public void addAisle(){
@@ -107,7 +118,8 @@ public class Driver {
         Floor floorToUpdate = (Floor) manager.get(index);
         String name = getAisleName();
         int[] dimensions = getDimensions(floorToUpdate);
-        boolean added = floorToUpdate.add(new Aisle(name, dimensions));
+        int storageType = ScannerInput.readNextInt(-1,"Enter the storage type (Index):" + "\n" + Arrays.toString(Aisle.storageTypes));
+        boolean added = floorToUpdate.add(new Aisle(name, dimensions, storageType));
         if(added)
             System.out.println("Successfully added the Aisle!");
         else
@@ -130,8 +142,21 @@ public class Driver {
         return name;
     }
 
+    public void addShelf(){
+        Floor floor = (Floor) manager.get(getIndex(manager));
+        Aisle aisle = (Aisle) floor.get(getIndex(floor));
+        String shelfName = ScannerInput.readNextLine("Enter the name of your Shelf: ");
+        int[] dimensions = getDimensions(floor);
+        int shelfNumber = ScannerInput.readNextInt(0, "Enter the shelf number: ");
+        boolean added = aisle.add(new Shelf(shelfName, dimensions, shelfNumber));
+        if(added)
+            System.out.println("Successfully added the Shelf!");
+        else
+            System.out.println("Failed to add the Shelf!");
+    }
+
     public int getIndex(MarketStructure itemToCheckIndexIn){
-        System.out.println(itemToCheckIndexIn.toString());
+        System.out.println(itemToCheckIndexIn.getListDetails());
         int index;
         boolean allowed;
         do{
@@ -144,7 +169,7 @@ public class Driver {
     }
 
     public void showFloors(){
-        System.out.println(manager.toString());
+        System.out.println(manager.getListDetails());
     }
 
     public void showFloorInformation(int index){
@@ -158,8 +183,14 @@ public class Driver {
             if (floor == null)
                 System.out.println("Invalid index, please try again!");
             else
-                System.out.println(floor);
+                System.out.println(floor.details() + "\n" + floor.getListDetails());
         }while(floor == null);
+    }
+
+    public void showAisleInformation(){
+        Floor floor = (Floor) manager.get(getIndex(manager));
+        Aisle aisle = (Aisle) floor.get(getIndex(floor));
+        System.out.println(aisle.details() + "\n" + aisle.getListDetails());
     }
 
     public boolean loadData() {
