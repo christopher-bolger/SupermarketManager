@@ -2,8 +2,10 @@ package main.java.supermarketmanager.model.supermarket;
 
 public class Aisle extends MarketStructure<Shelf>{
     int[] aisleSize = new int[2];
+    public static String[] storageTypes = {"Unrefrigerated", "Refrigerated", "Frozen"};
+    int storageType = 0;
 
-    public Aisle(String name, int[] dimensions) {
+    public Aisle(String name, int[] dimensions, int storageType) {
         super(name, dimensions);
         if(aisleSize.length != 2){
             this.aisleSize[0] = 1;
@@ -12,6 +14,8 @@ public class Aisle extends MarketStructure<Shelf>{
             this.aisleSize[0] = dimensions[0];
             this.aisleSize[1] = dimensions[1];
         }
+        if(storageType > 0 && storageType < storageTypes.length)
+            this.storageType = storageType;
     }
 
     public void setAisleSize(int[] newSize, int[] maxSize){
@@ -25,15 +29,5 @@ public class Aisle extends MarketStructure<Shelf>{
 
     public int[] getAisleSize(){
         return aisleSize;
-    }
-
-    @Override
-    public String objectDetails() {
-        return "Aisle Size: " + aisleSize[0] + ", " + aisleSize[1] + "\n";
-    }
-
-    @Override
-    public String toString() {
-        return objectDetails() + super.details();
     }
 }
