@@ -19,14 +19,4 @@ public class Shelf extends MarketStructure<GoodItem>{
         if(shelfNumber <= 0)
             this.shelfNumber = 0;
     }
-
-    @Override
-    public String objectDetails() {
-        return "Shelf Number: " + shelfNumber + "\n";
-    }
-
-    @Override
-    public String toString() {
-        return objectDetails() + super.details();
-    }
 }
