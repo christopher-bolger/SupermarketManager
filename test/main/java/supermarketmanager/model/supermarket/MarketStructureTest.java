@@ -65,6 +65,9 @@ class MarketStructureTest {
         assertEquals(2, returnedList.size());
         assertTrue(returnedList.contains(aisle1));
         assertTrue(returnedList.contains(aisle2));
+        list.remove(aisle1);
+        returnedList = floor1.getList();
+        assertEquals(2, returnedList.size()); //verifying that internal list is NOT directly referencing passed list
     }
 
     @Test

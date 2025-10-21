@@ -43,8 +43,10 @@ public abstract class MarketStructure<E> {
     }
 
     public void setList(Collection<E> list) {
-        if(list != null)
-            this.list = (LinkedList<E>) list;
+        if(list == null || list.isEmpty())
+            return;
+        this.list.clear();
+        this.list.addAll(list);
     }
 
     public void setDimensions(int[] dimensions) {
