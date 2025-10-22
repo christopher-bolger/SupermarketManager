@@ -19,4 +19,14 @@ public class Shelf extends MarketStructure<GoodItem>{
         if(shelfNumber <= 0)
             this.shelfNumber = 0;
     }
+
+    @Override
+    public String details() {
+        StringBuilder string = new StringBuilder();
+        int[] dimensions = getDimensions();
+        string.append("Name: ").append(super.getName()).append("\t")
+                .append("Size: ").append(dimensions[0]).append(", ").append(dimensions[1]).append("\n")
+                .append("Shelf number: ").append(shelfNumber).append("\n");
+        return string.toString();
+    }
 }

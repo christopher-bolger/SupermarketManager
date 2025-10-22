@@ -30,4 +30,18 @@ public class Aisle extends MarketStructure<Shelf>{
     public int[] getAisleSize(){
         return aisleSize;
     }
+
+    public String getStorageType(){
+        return storageTypes[storageType];
+    }
+
+    @Override
+    public String details() {
+        StringBuilder string = new StringBuilder();
+        int[] dimensions = getDimensions();
+        string.append("Name: ").append(super.getName()).append("\t")
+                .append("Size: ").append(dimensions[0]).append(", ").append(dimensions[1]).append("\n")
+                .append("Storage type: ").append(getStorageType()).append("\n");
+        return string.toString();
+    }
 }

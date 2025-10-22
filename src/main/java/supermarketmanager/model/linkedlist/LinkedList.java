@@ -143,8 +143,10 @@ public class LinkedList<E> implements List<E>{
             temp = temp.next;
             count++;
         }
+        Node<E> oldContent = new Node<>();
+        oldContent.setContent(temp.getContent());
         temp.setContent(element);
-        return temp.getContent();
+        return oldContent.getContent();
     }
 
     @Override
@@ -249,7 +251,7 @@ public class LinkedList<E> implements List<E>{
         int size = size();
         for(Object o : c)
             remove(o);
-        return size < size();
+        return size > size();
     }
 
     @Override

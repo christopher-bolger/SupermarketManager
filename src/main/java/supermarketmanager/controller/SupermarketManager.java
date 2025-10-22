@@ -119,4 +119,14 @@ public class SupermarketManager extends MarketStructure<Floor> {
         super.setDimensions(loaded.getDimensions());
         super.setList(loaded.getList());
     }
+
+    @Override
+    public String details() {
+        StringBuilder string = new StringBuilder();
+        int[] dimensions = getDimensions();
+        string.append("Name: ").append(super.getName()).append("\t")
+                .append("Size: ").append(dimensions[0]).append(", ").append(dimensions[1]).append("\n")
+                .append("File name: ").append(file.toString()).append("\n");
+        return string.toString();
+    }
 }

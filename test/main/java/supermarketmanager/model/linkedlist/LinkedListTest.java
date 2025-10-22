@@ -96,7 +96,7 @@ class LinkedListTest {
     @Test
     void testSet(){
         assertNull(emptyList.set(0, "HII"));
-        assertEquals("Evening", listWithElements.set(3, "Evening"));
+        assertEquals("Morning", listWithElements.set(3, "Evening"));
         listWithOneElement.set(0, null); //will not be set
         assertNotNull(listWithOneElement.getFirst()); // should still be "Single"
         assertNull(listWithElements.get("Morning")); // the object that was replaced
@@ -388,10 +388,14 @@ class LinkedListTest {
             list.add("Hello");
 
             assertFalse(emptyList.removeAll(new LinkedList<>()));
+            LinkedList<String> otherList = new LinkedList<>();
+            otherList.add("Not in the list");
+            otherList.add("Also not in the list");
 
             //TODO
             // do this for retainAll()?
-            assertFalse(listWithElements.removeAll(list)); //returns false if the size of the list doesn't change
+            assertTrue(listWithElements.removeAll(list));
+            assertFalse(listWithElements.removeAll(otherList)); //returns false if the size of the list doesn't change
             assertFalse(listWithElements.containsAll(list));
             assertTrue(listWithElements.contains("Morning")); // removed elements
             assertTrue(listWithElements.contains("Howdy"));

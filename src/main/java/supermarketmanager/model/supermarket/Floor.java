@@ -16,4 +16,13 @@ public class Floor extends MarketStructure<Aisle>{
     public int getFloor() {
         return floor;
     }
+
+    @Override
+    public String details() {
+        StringBuilder string = new StringBuilder();
+        int[] dimensions = getDimensions();
+        string.append("Name: ").append(super.getName()).append("\t")
+                .append("Size: ").append(dimensions[0]).append(", ").append(dimensions[1]).append("\n");
+        return string.toString();
+    }
 }
