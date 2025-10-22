@@ -21,8 +21,9 @@ public class Floor extends MarketStructure<Aisle>{
     public String details() {
         StringBuilder string = new StringBuilder();
         int[] dimensions = getDimensions();
-        string.append("Name: ").append(super.getName()).append("\t")
-                .append("Size: ").append(dimensions[0]).append(", ").append(dimensions[1]).append("\n");
+        string.append("Floor: ").append(floor).append("\t")
+            .append("Name: ").append(super.getName()).append("\t")
+            .append("Size: ").append(dimensions[0]).append(", ").append(dimensions[1]).append("\n");
         return string.toString();
     }
 }

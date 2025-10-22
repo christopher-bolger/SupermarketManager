@@ -169,7 +169,7 @@ public class Driver {
     }
 
     public void showFloors(){
-        System.out.println(manager.getListDetails());
+        System.out.println(manager.details() + "\n" + manager.getListDetails());
     }
 
     public void showFloorInformation(int index){

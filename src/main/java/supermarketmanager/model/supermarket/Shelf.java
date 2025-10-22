@@ -25,7 +25,7 @@ public class Shelf extends MarketStructure<GoodItem>{
         StringBuilder string = new StringBuilder();
         int[] dimensions = getDimensions();
         string.append("Name: ").append(super.getName()).append("\t")
-                .append("Size: ").append(dimensions[0]).append(", ").append(dimensions[1]).append("\n")
+                .append("Size: ").append(dimensions[0]).append(", ").append(dimensions[1]).append("\t")
                 .append("Shelf number: ").append(shelfNumber).append("\n");
         return string.toString();
     }

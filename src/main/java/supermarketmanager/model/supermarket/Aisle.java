@@ -40,7 +40,7 @@ public class Aisle extends MarketStructure<Shelf>{
         StringBuilder string = new StringBuilder();
         int[] dimensions = getDimensions();
         string.append("Name: ").append(super.getName()).append("\t")
-                .append("Size: ").append(dimensions[0]).append(", ").append(dimensions[1]).append("\n")
+                .append("Size: ").append(dimensions[0]).append(", ").append(dimensions[1]).append("\t")
                 .append("Storage type: ").append(getStorageType()).append("\n");
         return string.toString();
     }
