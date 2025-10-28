@@ -3,6 +3,7 @@ package main.java.supermarketmanager.model.supermarket;
 import main.java.supermarketmanager.model.linkedlist.LinkedList;
 
 import java.util.Collection;
+import java.util.Locale;
 
 public abstract class MarketStructure<E> {
     private String name = "";
@@ -55,6 +56,20 @@ public abstract class MarketStructure<E> {
                 this.dimensions[0] = dimensions[0];
                 this.dimensions[1] = dimensions[1];
             }
+        }
+    }
+
+    public Collection<E> find(String toFind){
+        if(isEmpty())
+            return null;
+        else{
+            Collection<E> list = new LinkedList<>();
+            for(Object o : list){
+                if(o.toString().toLowerCase().contains(toFind.toLowerCase())) {
+                    list.add((E) o);
+                }
+            }
+            return list.isEmpty() ? null : list;
         }
     }
 
