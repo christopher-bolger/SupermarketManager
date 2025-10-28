@@ -1,14 +1,13 @@
 package main.java.supermarketmanager.controller;
 
 import main.java.supermarketmanager.model.linkedlist.LinkedList;
-import main.java.supermarketmanager.model.supermarket.Aisle;
-import main.java.supermarketmanager.model.supermarket.Floor;
-import main.java.supermarketmanager.model.supermarket.MarketStructure;
-import main.java.supermarketmanager.model.supermarket.Shelf;
+import main.java.supermarketmanager.model.supermarket.*;
 import main.java.supermarketmanager.utils.ScannerInput;
 
 import java.io.File;
+import java.sql.SQLOutput;
 import java.util.Arrays;
+import java.util.Collection;
 
 public class Driver {
     private SupermarketManager manager;
@@ -44,10 +43,15 @@ public class Driver {
                 case 3 -> addFloor();
                 case 4 -> addAisle();
                 case 5 -> addShelf();
-                //            case 6 -> addGoodItem();
+                case 6 -> addGoodItem();
                 case 7 -> showFloors();
                 case 8 -> showFloorInformation(getIndex(manager));
                 case 9 -> showAisleInformation();
+                case 10 -> showShelfInformation();
+                case 11 -> searchFloor();
+//                case 12 -> searchAisle();
+//                case 13 -> searchShelf();
+//                case 14 -> searchGoodItem();
             }
             ScannerInput.readNextLine("Press enter to continue....");
             option = showMenu();
@@ -71,6 +75,12 @@ public class Driver {
                 7) Show all Floors
                 8) Show Floor Aisles
                 9) Show Aisle Shelves
+                10) Show Shelf GoodItems
+                ------------------------------
+                11) Search for Floor Area
+                12) Search for Aisle
+                13) Search for Shelf
+                14) Search for GoodItem
                 ------------------------------
                 """);
     }
@@ -155,6 +165,25 @@ public class Driver {
             System.out.println("Failed to add the Shelf!");
     }
 
+    public void addGoodItem(){
+        Floor floor = (Floor) manager.get(getIndex(manager));
+        Aisle aisle = (Aisle) floor.get(getIndex(floor));
+        Shelf shelf = (Shelf) aisle.get(getIndex(floor));
+        String goodItemName = ScannerInput.readNextLine("Enter the name of your GoodItem: ");
+        String description = ScannerInput.readNextLine("Enter the description of your GoodItem: ");
+        String photoURL = ScannerInput.readNextLine("Enter the photo URL of your good item: ");
+        double price = ScannerInput.readNextDouble("Enter the price of your GoodItem: ");
+        double weight = ScannerInput.readNextDouble("Enter the weight of your GoodItem: ");
+        int weightIndex = ScannerInput.readNextInt("Enter the index of the weight category - " + Arrays.toString(GoodItem.weightTypes) + ":");
+        int storageType = ScannerInput.readNextInt("Enter the storage type (index) of your GoodItem - " + Arrays.toString(GoodItem.weightTypes) + ":");
+        int quantity = ScannerInput.readNextInt("Enter the quantity of your GoodItem: ");
+        boolean added = shelf.add(new GoodItem(goodItemName, description, price, quantity, weight, weightIndex, storageType, photoURL));
+        if(added)
+            System.out.println("Successfully added the GoodItem!");
+        else
+            System.out.println("Failed to add the GoodItem!");
+    }
+
     public int getIndex(MarketStructure itemToCheckIndexIn){
         System.out.println(itemToCheckIndexIn.getListDetails());
         int index;
@@ -191,6 +220,37 @@ public class Driver {
         Floor floor = (Floor) manager.get(getIndex(manager));
         Aisle aisle = (Aisle) floor.get(getIndex(floor));
         System.out.println(aisle.details() + "\n" + aisle.getListDetails());
+    }
+
+    public void showShelfInformation(){
+        Floor floor = (Floor) manager.get(getIndex(manager));
+        Aisle aisle = (Aisle) floor.get(getIndex(floor));
+        Shelf shelf = (Shelf) aisle.get(getIndex(floor));
+        System.out.println(shelf.details() + "\n" + shelf.getListDetails());
+    }
+
+    public void searchFloor(){
+        if(manager.isEmpty())
+            System.out.println("No Floors, add one first!");
+        else {
+            LinkedList<Floor> list = new LinkedList<>();
+            list.addAll(manager.find(ScannerInput.readNextLine("Enter a property of the floor you are looking for: ")));
+            if(list.isEmpty())
+                System.out.println("No Floors found with that property!");
+            else if (list.size() == 1)
+                System.out.println(list.getFirst());
+            else {
+                System.out.println("Multiple Floors found with that property!");
+                int index;
+                boolean valid;
+                do{
+                    System.out.println(list);
+                    index = ScannerInput.readNextInt(-1, "Which index would you like to select?");
+                    valid = index < list.size();
+                }while(!valid);
+                System.out.println(list.get(index));
+            }
+        }
     }
 
     public boolean loadData() {
