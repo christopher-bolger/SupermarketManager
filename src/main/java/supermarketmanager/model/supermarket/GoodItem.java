@@ -1,6 +1,7 @@
 package main.java.supermarketmanager.model.supermarket;
 
 import java.text.DecimalFormat;
+import java.util.Objects;
 
 public class GoodItem {
     //figured it's easier to set these here, if you wanted to use imperial you'd only need to change this array
@@ -119,6 +120,18 @@ public class GoodItem {
             if(photoURL.contains("http") && (photoURL.contains(".jpg") || photoURL.contains(".png") || photoURL.contains(".gif") || photoURL.contains(".jpeg")))
                 this.photoURL = photoURL;
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof GoodItem goodItem)) return false;
+        return name.toLowerCase().contains(goodItem.name.toLowerCase()) && description.toLowerCase().contains(goodItem.description.toLowerCase());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, description);
     }
 
     public double totalValue(){
