@@ -73,10 +73,6 @@ public class SupermarketManager extends MarketStructure<Floor> {
         };
     }
 
-    public boolean addObject(Floor item){
-        return addFloor(item);
-    }
-
     private boolean addFloor(Floor item){
         return getList().add(item);
     }
@@ -105,14 +101,14 @@ public class SupermarketManager extends MarketStructure<Floor> {
     }
 
     //this is kinda unsightly but really not that complex
-    public Collection<Object> find(Object original){
-        if(original == null)
+    public Collection<Object> find(Object toFind){
+        if(toFind == null)
             return null;
         Collection<Object> list = new LinkedList<>();
-        switch(original){
+        switch(toFind){
             case Floor floor : {
                 for(Floor f : getList()){
-                    if(f.toString().contains(floor.getName()))
+                    if(f.equals(floor))
                         list.add(f);
                 }
                 break;
@@ -120,7 +116,7 @@ public class SupermarketManager extends MarketStructure<Floor> {
             case Aisle aisle : {
                 for(Floor f : getList()){
                     for(Aisle a : f.getList()){
-                        if(a.toString().contains(aisle.getName()))
+                        if(a.equals(aisle))
                             list.add(a);
                     }
                 }
@@ -130,7 +126,7 @@ public class SupermarketManager extends MarketStructure<Floor> {
                 for(Floor f : getList()){
                     for(Aisle a : f.getList()){
                         for(Shelf s : a.getList()){
-                            if(s.toString().contains(shelf.getName()))
+                            if(s.equals(shelf))
                                 list.add(s);
                         }
                     }
@@ -142,7 +138,7 @@ public class SupermarketManager extends MarketStructure<Floor> {
                     for(Aisle a : f.getList()){
                         for(Shelf s : a.getList()){
                             for(GoodItem g : s.getList()){
-                                if(g.toString().contains(goodItem.getName()) && g.toString().contains(goodItem.getDescription()))
+                                if(g.equals(goodItem))
                                     list.add(g);
                             }
                         }
@@ -167,6 +163,23 @@ public class SupermarketManager extends MarketStructure<Floor> {
 
     public File getFile(){
         return file;
+    }
+
+    @Override
+    public boolean replace(Floor itemToReplace, Floor item) {
+        if(list.contains(itemToReplace))
+            return list.set(list.indexOf(itemToReplace), item) == itemToReplace;
+        return false;
+    }
+
+    @Override
+    public String details() {
+        StringBuilder string = new StringBuilder();
+        int[] dimensions = getDimensions();
+        string.append("Name: ").append(super.getName()).append("\t")
+                .append("Size: ").append(dimensions[0]).append(", ").append(dimensions[1]).append("\n")
+                .append("File name: ").append(file.toString()).append("\n");
+        return string.toString();
     }
 
 //    public String showAllListInfo(String type, List<?> items){
@@ -213,22 +226,5 @@ public class SupermarketManager extends MarketStructure<Floor> {
         setFile(loaded.getFile());
         super.setDimensions(loaded.getDimensions());
         super.setList(loaded.getList());
-    }
-
-    @Override
-    public boolean replace(Floor itemToReplace, Floor item) {
-        if(list.contains(itemToReplace))
-            return list.set(list.indexOf(itemToReplace), item) == itemToReplace;
-        return false;
-    }
-
-    @Override
-    public String details() {
-        StringBuilder string = new StringBuilder();
-        int[] dimensions = getDimensions();
-        string.append("Name: ").append(super.getName()).append("\t")
-                .append("Size: ").append(dimensions[0]).append(", ").append(dimensions[1]).append("\n")
-                .append("File name: ").append(file.toString()).append("\n");
-        return string.toString();
     }
 }
