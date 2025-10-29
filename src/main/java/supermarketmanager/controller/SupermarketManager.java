@@ -8,23 +8,12 @@ import main.java.supermarketmanager.model.supermarket.*;
 
 import java.io.*;
 import java.util.Collection;
-import java.util.List;
 
 public class SupermarketManager extends MarketStructure<Floor> {
     File file;
     public SupermarketManager(String name, int[] dimensions, File file){
         super(name, dimensions);
         this.file = file;
-    }
-
-    public boolean checkFloorName(String name){
-        if(super.getList().isEmpty())
-            return true;
-
-        for(Floor floor : getList())
-            if(floor.getName().equalsIgnoreCase(name))
-                return false;
-        return true;
     }
 
     //lots of raw usage here, I asked AI and to be honest I could try and be type safe by putting this into
@@ -51,6 +40,16 @@ public class SupermarketManager extends MarketStructure<Floor> {
         }
     }
 
+    public boolean checkFloorName(String name){
+        if(super.getList().isEmpty())
+            return true;
+
+        for(Floor floor : getList())
+            if(floor.getName().equalsIgnoreCase(name))
+                return false;
+        return true;
+    }
+
     public boolean checkAisleName(String name) {
         if(getList().isEmpty())
             return true;
@@ -62,7 +61,103 @@ public class SupermarketManager extends MarketStructure<Floor> {
         return true;
     }
 
-    public boolean checkIndex(MarketStructure parent, int index){
+    public boolean addObject(Object item, MarketStructure<?> parentItem){
+        if(item == null || parentItem == null)
+            return false;
+        return switch(item){
+            case Floor floor -> addFloor(floor);
+            case Aisle aisle -> addAisle(aisle, (Floor) parentItem);
+            case Shelf shelf -> addShelf(shelf, (Aisle) parentItem);
+            case GoodItem goodItem -> addGoodItem(goodItem, (Shelf) parentItem);
+            default -> false;
+        };
+    }
+
+    public boolean addObject(Floor item){
+        return addFloor(item);
+    }
+
+    private boolean addFloor(Floor item){
+        return getList().add(item);
+    }
+
+    private boolean addAisle(Aisle item, Floor parentFloor){
+        boolean accepted = checkAisleName(item.getName());
+        if(accepted)
+            return parentFloor.add(item);
+        return false;
+    }
+
+    private boolean addShelf(Shelf item, Aisle parentAisle){
+        return parentAisle.add(item);
+    }
+
+    private boolean addGoodItem(GoodItem item, Shelf parentShelf){
+        LinkedList<Object> foundItems = (LinkedList<Object>) find((Object) item);
+        if(foundItems != null && foundItems.isEmpty())
+            return parentShelf.add(item);
+        else if(foundItems == null)
+            return false;
+        else if(foundItems.size() == 1)
+            return parentShelf.replace((GoodItem) foundItems.getFirst(), item);
+        else
+            return false; //should never be more than one of the same type
+    }
+
+    //this is kinda unsightly but really not that complex
+    public Collection<Object> find(Object original){
+        if(original == null)
+            return null;
+        Collection<Object> list = new LinkedList<>();
+        switch(original){
+            case Floor floor : {
+                for(Floor f : getList()){
+                    if(f.toString().contains(floor.getName()))
+                        list.add(f);
+                }
+                break;
+            }
+            case Aisle aisle : {
+                for(Floor f : getList()){
+                    for(Aisle a : f.getList()){
+                        if(a.toString().contains(aisle.getName()))
+                            list.add(a);
+                    }
+                }
+                break;
+            }
+            case Shelf shelf : {
+                for(Floor f : getList()){
+                    for(Aisle a : f.getList()){
+                        for(Shelf s : a.getList()){
+                            if(s.toString().contains(shelf.getName()))
+                                list.add(s);
+                        }
+                    }
+                }
+                break;
+            }
+            case GoodItem goodItem : {
+                for(Floor f : getList()){
+                    for(Aisle a : f.getList()){
+                        for(Shelf s : a.getList()){
+                            for(GoodItem g : s.getList()){
+                                if(g.toString().contains(goodItem.getName()) && g.toString().contains(goodItem.getDescription()))
+                                    list.add(g);
+                            }
+                        }
+                    }
+                }
+                break;
+            }
+            default: break;
+        }
+        if(list.isEmpty())
+            return null;
+        return list;
+    }
+
+    public boolean checkIndex(MarketStructure<Object> parent, int index){
         return parent.checkIndex(index);
     }
 
@@ -118,6 +213,13 @@ public class SupermarketManager extends MarketStructure<Floor> {
         setFile(loaded.getFile());
         super.setDimensions(loaded.getDimensions());
         super.setList(loaded.getList());
+    }
+
+    @Override
+    public boolean replace(Floor itemToReplace, Floor item) {
+        if(list.contains(itemToReplace))
+            return list.set(list.indexOf(itemToReplace), item) == itemToReplace;
+        return false;
     }
 
     @Override
