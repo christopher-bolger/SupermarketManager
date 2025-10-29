@@ -18,6 +18,13 @@ public class Floor extends MarketStructure<Aisle>{
     }
 
     @Override
+    public boolean replace(Aisle itemToReplace, Aisle item) {
+        if(list.contains(itemToReplace))
+            return list.set(list.indexOf(itemToReplace), item) == itemToReplace;
+        return false;
+    }
+
+    @Override
     public String details() {
         StringBuilder string = new StringBuilder();
         int[] dimensions = getDimensions();

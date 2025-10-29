@@ -3,11 +3,14 @@ package main.java.supermarketmanager.model.supermarket;
 import main.java.supermarketmanager.model.linkedlist.LinkedList;
 
 import java.util.Collection;
-import java.util.Locale;
 
+//TODO
+// .equals method for each class:
+// Anything that extends marketStructure should rely on name only
+// GoodItem should rely on name & description
 public abstract class MarketStructure<E> {
     private String name = "";
-    private LinkedList<E> list;
+    protected LinkedList<E> list;
     private int[] dimensions = new int[2];
 
     public MarketStructure(String name, int[] dimensions) {
@@ -59,26 +62,12 @@ public abstract class MarketStructure<E> {
         }
     }
 
-    public Collection<E> find(String toFind){
-        if(isEmpty())
-            return null;
-        else{
-            Collection<E> list = new LinkedList<>();
-            for(Object o : list){
-                if(o.toString().toLowerCase().contains(toFind.toLowerCase())) {
-                    list.add((E) o);
-                }
-            }
-            return list.isEmpty() ? null : list;
-        }
-    }
-
     public int[] getDimensions() {
         return dimensions;
     }
 
     public boolean add(E item){
-        return list.add(item);
+        return item != null && list.add(item);
     }
 
     public void add(E item, int index){
@@ -124,6 +113,8 @@ public abstract class MarketStructure<E> {
     public String toString(){
         return details();
     }
+
+    public abstract boolean replace(E itemToReplace, E item);
 
     public abstract String details();
 

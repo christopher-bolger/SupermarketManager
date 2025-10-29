@@ -21,6 +21,15 @@ public class Shelf extends MarketStructure<GoodItem>{
     }
 
     @Override
+    public boolean replace(GoodItem itemToReplace, GoodItem item) {
+        if(list.contains(itemToReplace)) {
+            item.setQuantity(itemToReplace.getQuantity() + item.getQuantity());
+            return list.set(list.indexOf(itemToReplace), item) == itemToReplace;
+        }
+        return false;
+    }
+
+    @Override
     public String details() {
         StringBuilder string = new StringBuilder();
         int[] dimensions = getDimensions();
