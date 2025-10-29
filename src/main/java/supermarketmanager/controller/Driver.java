@@ -177,7 +177,8 @@ public class Driver {
         int weightIndex = ScannerInput.readNextInt("Enter the index of the weight category - " + Arrays.toString(GoodItem.weightTypes) + ":");
         int storageType = ScannerInput.readNextInt("Enter the storage type (index) of your GoodItem - " + Arrays.toString(GoodItem.weightTypes) + ":");
         int quantity = ScannerInput.readNextInt("Enter the quantity of your GoodItem: ");
-        boolean added = shelf.add(new GoodItem(goodItemName, description, price, quantity, weight, weightIndex, storageType, photoURL));
+        GoodItem newItem = new GoodItem(goodItemName, description, price, quantity, weight, weightIndex, storageType, photoURL);
+        boolean added = manager.addObject(newItem, shelf);
         if(added)
             System.out.println("Successfully added the GoodItem!");
         else
@@ -233,9 +234,9 @@ public class Driver {
         if(manager.isEmpty())
             System.out.println("No Floors, add one first!");
         else {
-            LinkedList<Floor> list = new LinkedList<>();
-            list.addAll(manager.find(ScannerInput.readNextLine("Enter a property of the floor you are looking for: ")));
-            if(list.isEmpty())
+            String nameToFind = ScannerInput.readNextLine("Enter the name of the floor you are looking for: ");
+            LinkedList<Object> list = (LinkedList<Object>) manager.find(new Floor(nameToFind, new int[] {1,1}, 0)); //only searching for name
+            if(list == null || list.isEmpty())
                 System.out.println("No Floors found with that property!");
             else if (list.size() == 1)
                 System.out.println(list.getFirst());
