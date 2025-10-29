@@ -3,11 +3,8 @@ package main.java.supermarketmanager.model.supermarket;
 import main.java.supermarketmanager.model.linkedlist.LinkedList;
 
 import java.util.Collection;
+import java.util.Objects;
 
-//TODO
-// .equals method for each class:
-// Anything that extends marketStructure should rely on name only
-// GoodItem should rely on name & description
 public abstract class MarketStructure<E> {
     private String name = "";
     protected LinkedList<E> list;
@@ -112,6 +109,19 @@ public abstract class MarketStructure<E> {
 
     public String toString(){
         return details();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MarketStructure<?> that = (MarketStructure<?>) o;
+        return name.toLowerCase().contains(that.name.toLowerCase());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(name);
     }
 
     public abstract boolean replace(E itemToReplace, E item);
