@@ -40,6 +40,8 @@ public abstract class MarketStructure<E> {
     }
 
     public LinkedList<E> getList() {
+        if(list.isEmpty())
+            return null;
         return list;
     }
 

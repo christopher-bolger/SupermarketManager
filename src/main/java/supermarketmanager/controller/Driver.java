@@ -5,9 +5,7 @@ import main.java.supermarketmanager.model.supermarket.*;
 import main.java.supermarketmanager.utils.ScannerInput;
 
 import java.io.File;
-import java.sql.SQLOutput;
 import java.util.Arrays;
-import java.util.Collection;
 
 public class Driver {
     private SupermarketManager manager;
@@ -126,6 +124,7 @@ public class Driver {
         System.out.println("Which floor would you like to add the Aisle too? Index: ");
         int index = getIndex(manager);
         Floor floorToUpdate = (Floor) manager.get(index);
+        showFloorInformation(index);
         String name = getAisleName();
         int[] dimensions = getDimensions(floorToUpdate);
         int storageType = ScannerInput.readNextInt(-1,"Enter the storage type (Index):" + "\n" + Arrays.toString(Aisle.storageTypes));
@@ -168,14 +167,14 @@ public class Driver {
     public void addGoodItem(){
         Floor floor = (Floor) manager.get(getIndex(manager));
         Aisle aisle = (Aisle) floor.get(getIndex(floor));
-        Shelf shelf = (Shelf) aisle.get(getIndex(floor));
+        Shelf shelf = (Shelf) aisle.get(getIndex(aisle));
         String goodItemName = ScannerInput.readNextLine("Enter the name of your GoodItem: ");
         String description = ScannerInput.readNextLine("Enter the description of your GoodItem: ");
         String photoURL = ScannerInput.readNextLine("Enter the photo URL of your good item: ");
         double price = ScannerInput.readNextDouble("Enter the price of your GoodItem: ");
         double weight = ScannerInput.readNextDouble("Enter the weight of your GoodItem: ");
         int weightIndex = ScannerInput.readNextInt("Enter the index of the weight category - " + Arrays.toString(GoodItem.weightTypes) + ":");
-        int storageType = ScannerInput.readNextInt("Enter the storage type (index) of your GoodItem - " + Arrays.toString(GoodItem.weightTypes) + ":");
+        int storageType = ScannerInput.readNextInt("Enter the storage type (index) of your GoodItem - " + Arrays.toString(GoodItem.storageTypes) + ":");
         int quantity = ScannerInput.readNextInt("Enter the quantity of your GoodItem: ");
         GoodItem newItem = new GoodItem(goodItemName, description, price, quantity, weight, weightIndex, storageType, photoURL);
         boolean added = manager.addObject(newItem, shelf);

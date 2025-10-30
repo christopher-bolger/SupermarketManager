@@ -89,11 +89,9 @@ public class SupermarketManager extends MarketStructure<Floor> {
     }
 
     private boolean addGoodItem(GoodItem item, Shelf parentShelf){
-        LinkedList<Object> foundItems = (LinkedList<Object>) find((Object) item);
-        if(foundItems != null && foundItems.isEmpty())
+        LinkedList<Object> foundItems = (LinkedList<Object>) find(item);
+        if(foundItems == null || foundItems.isEmpty())
             return parentShelf.add(item);
-        else if(foundItems == null)
-            return false;
         else if(foundItems.size() == 1)
             return parentShelf.replace((GoodItem) foundItems.getFirst(), item);
         else
@@ -101,6 +99,9 @@ public class SupermarketManager extends MarketStructure<Floor> {
     }
 
     //this is kinda unsightly but really not that complex
+    //TODO
+    // need to check if the list is empty before going into the next for loop
+    // surely there's a better way because that's a lot of indentation.
     public Collection<Object> find(Object toFind){
         if(toFind == null)
             return null;
@@ -115,8 +116,8 @@ public class SupermarketManager extends MarketStructure<Floor> {
             }
             case Aisle aisle : {
                 for(Floor f : getList()){
-                    for(Aisle a : f.getList()){
-                        if(a.equals(aisle))
+                    for (Aisle a : f.getList()) {
+                        if (a.equals(aisle))
                             list.add(a);
                     }
                 }
@@ -125,8 +126,8 @@ public class SupermarketManager extends MarketStructure<Floor> {
             case Shelf shelf : {
                 for(Floor f : getList()){
                     for(Aisle a : f.getList()){
-                        for(Shelf s : a.getList()){
-                            if(s.equals(shelf))
+                        for (Shelf s : a.getList()) {
+                            if (s.equals(shelf))
                                 list.add(s);
                         }
                     }
@@ -137,8 +138,8 @@ public class SupermarketManager extends MarketStructure<Floor> {
                 for(Floor f : getList()){
                     for(Aisle a : f.getList()){
                         for(Shelf s : a.getList()){
-                            for(GoodItem g : s.getList()){
-                                if(g.equals(goodItem))
+                            for (GoodItem g : s.getList()) {
+                                if (g.equals(goodItem))
                                     list.add(g);
                             }
                         }
