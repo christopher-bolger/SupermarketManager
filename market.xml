@@ -10,8 +10,45 @@
               <content class="main.java.supermarketmanager.model.supermarket.Aisle">
                 <name>Cleaning</name>
                 <list>
-                  <head/>
-                  <tail reference="../head"/>
+                  <head>
+                    <content class="main.java.supermarketmanager.model.supermarket.Shelf">
+                      <name>Liquid</name>
+                      <list>
+                        <head>
+                          <content class="main.java.supermarketmanager.model.supermarket.GoodItem">
+                            <name>Fairy Washing up Liquid</name>
+                            <description>Non bio &amp; antibacterial</description>
+                            <price>3.49</price>
+                            <weight>400.0</weight>
+                            <quantity>30</quantity>
+                            <weightType>3</weightType>
+                            <storageType>0</storageType>
+                          </content>
+                        </head>
+                        <tail reference="../head"/>
+                      </list>
+                      <dimensions>
+                        <int>10</int>
+                        <int>2</int>
+                      </dimensions>
+                      <shelfNumber>1</shelfNumber>
+                    </content>
+                    <next>
+                      <content class="main.java.supermarketmanager.model.supermarket.Shelf">
+                        <name>Solid</name>
+                        <list>
+                          <head/>
+                          <tail reference="../head"/>
+                        </list>
+                        <dimensions>
+                          <int>10</int>
+                          <int>2</int>
+                        </dimensions>
+                        <shelfNumber>2</shelfNumber>
+                      </content>
+                    </next>
+                  </head>
+                  <tail reference="../head/next"/>
                 </list>
                 <dimensions>
                   <int>10</int>
@@ -83,7 +120,31 @@
                   <content class="main.java.supermarketmanager.model.supermarket.Aisle">
                     <name>Hand Tools</name>
                     <list>
-                      <head/>
+                      <head>
+                        <content class="main.java.supermarketmanager.model.supermarket.Shelf">
+                          <name>Cutters</name>
+                          <list>
+                            <head>
+                              <content class="main.java.supermarketmanager.model.supermarket.GoodItem">
+                                <name>Clippers</name>
+                                <description>Garden clippers (small)</description>
+                                <photoURL>https://assets.manufactum.de/p/064/064436/64436_01.jpg/small-garden-shears.jpg?profile=pdsmain_1500</photoURL>
+                                <price>15.49</price>
+                                <weight>300.0</weight>
+                                <quantity>32</quantity>
+                                <weightType>1</weightType>
+                                <storageType>0</storageType>
+                              </content>
+                            </head>
+                            <tail reference="../head"/>
+                          </list>
+                          <dimensions>
+                            <int>10</int>
+                            <int>4</int>
+                          </dimensions>
+                          <shelfNumber>1</shelfNumber>
+                        </content>
+                      </head>
                       <tail reference="../head"/>
                     </list>
                     <dimensions>
