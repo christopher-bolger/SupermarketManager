@@ -103,48 +103,44 @@ public class SupermarketManager extends MarketStructure<Floor> {
     // need to check if the list is empty before going into the next for loop
     // surely there's a better way because that's a lot of indentation.
     public Collection<Object> find(Object toFind){
-        if(toFind == null)
+        if(toFind == null || isEmpty())
             return null;
         Collection<Object> list = new LinkedList<>();
         switch(toFind){
             case Floor floor : {
-                for(Floor f : getList()){
+                for(Floor f : getList())
                     if(f.equals(floor))
                         list.add(f);
-                }
                 break;
             }
             case Aisle aisle : {
-                for(Floor f : getList()){
-                    for (Aisle a : f.getList()) {
-                        if (a.equals(aisle))
-                            list.add(a);
-                    }
-                }
+                for(Floor f : getList())
+                    if (!f.isEmpty())
+                        for (Aisle a : f.getList())
+                            if (a.equals(aisle))
+                                list.add(a);
                 break;
             }
             case Shelf shelf : {
-                for(Floor f : getList()){
-                    for(Aisle a : f.getList()){
-                        for (Shelf s : a.getList()) {
-                            if (s.equals(shelf))
-                                list.add(s);
-                        }
-                    }
-                }
+                for(Floor f : getList())
+                    if(!f.isEmpty())
+                        for(Aisle a : f.getList())
+                            if(!a.isEmpty())
+                                for (Shelf s : a.getList())
+                                    if (s.equals(shelf))
+                                        list.add(s);
                 break;
             }
             case GoodItem goodItem : {
-                for(Floor f : getList()){
-                    for(Aisle a : f.getList()){
-                        for(Shelf s : a.getList()){
-                            for (GoodItem g : s.getList()) {
-                                if (g.equals(goodItem))
-                                    list.add(g);
-                            }
-                        }
-                    }
-                }
+                for(Floor f : getList())
+                    if(!f.isEmpty())
+                        for(Aisle a : f.getList())
+                            if(!a.isEmpty())
+                                for(Shelf s : a.getList())
+                                    if(!s.isEmpty())
+                                        for (GoodItem g : s.getList())
+                                            if (g.equals(goodItem))
+                                                list.add(g);
                 break;
             }
             default: break;
