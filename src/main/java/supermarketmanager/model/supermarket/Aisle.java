@@ -18,6 +18,12 @@ public class Aisle extends MarketStructure<Shelf>{
             this.storageType = storageType;
     }
 
+    public Aisle(String name){
+        super(name, new int[] {1,1});
+        storageType = 0;
+        aisleSize[0] = aisleSize[1] = 1;
+    }
+
     public void setAisleSize(int[] newSize, int[] maxSize){
         if(aisleSize.length == 2
         && maxSize[0] > aisleSize[0]
@@ -33,6 +39,10 @@ public class Aisle extends MarketStructure<Shelf>{
 
     public String getStorageType(){
         return storageTypes[storageType];
+    }
+
+    public int getStorageTypeIndex(){
+        return storageType;
     }
 
     @Override

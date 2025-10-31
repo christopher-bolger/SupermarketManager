@@ -30,7 +30,7 @@ public class GoodItem {
 
         if(photoURL != null && !photoURL.isEmpty()){
             photoURL = photoURL.trim().toLowerCase();
-            if(photoURL.contains("www")
+            if(photoURL.contains("http")
             && (photoURL.contains(".jpg") || photoURL.contains(".png") || photoURL.contains(".gif") || photoURL.contains(".jpeg")))
                 this.photoURL = photoURL;
         }else this.photoURL = "no_product_photo";
@@ -53,6 +53,27 @@ public class GoodItem {
 
         if(weightType > -1 && weightType < weightTypes.length)
             this.weightType = weightType;
+    }
+
+    public GoodItem(String name, String description) {
+        if(name != null && !name.isEmpty())
+            if(name.length() < 31)
+                this.name = name;
+            else
+                this.name = name.substring(0, 31);
+        else this.name = "no_product_name";
+
+        if(description != null && !description.isEmpty()) {
+            description = description.trim();
+            if (description.length() < 101)
+                this.description = description;
+            else
+                this.description = description.substring(0, 101);
+        }else this.description = "no_product_description";
+
+        photoURL = "no_product_photo";
+        price = weight = 1;
+        quantity = weightType = storageType = 0;
     }
 
     public String getName() {
@@ -140,6 +161,11 @@ public class GoodItem {
 
     public String getStorageType() {
         return GoodItem.storageTypes[storageType];
+    }
+
+    public void setStorageType(int index){
+        if(index > -1 && index < storageTypes.length)
+            storageType = index;
     }
 
     public String getWeightType() {

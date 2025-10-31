@@ -9,6 +9,11 @@ public class Floor extends MarketStructure<Aisle>{
         this.floor = floor;
     }
 
+    public Floor(String name){
+        super(name, new int[] {1,1});
+        floor = 0;
+    }
+
     public void setFloor(int floor) {
         this.floor = floor;
     }
