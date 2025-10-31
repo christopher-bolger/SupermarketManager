@@ -11,6 +11,11 @@ public class Shelf extends MarketStructure<GoodItem>{
             this.shelfNumber = -1;
     }
 
+    public Shelf(String name){
+        super(name, new int[] {1,1});
+        shelfNumber = 0;
+    }
+
     public int getShelfNumber() {
         return shelfNumber;
     }
