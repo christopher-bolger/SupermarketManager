@@ -6,10 +6,15 @@ import main.java.supermarketmanager.utils.ScannerInput;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.Objects;
 
+//TODO
+// switch arrays under storageType and weightType to linkedLists
 public class Driver {
     private SupermarketManager manager;
     public static void main(String[] args) throws Exception {
+        String input = ScannerInput.readNextLine("URL ");
+        System.out.println(input);
         new Driver().start();
     }
 
@@ -42,14 +47,15 @@ public class Driver {
                 case 4 -> addAisle();
                 case 5 -> addShelf();
                 case 6 -> addGoodItem();
-                case 7 -> showFloors();
-                case 8 -> showFloorInformation(getIndex(manager));
-                case 9 -> showAisleInformation();
-                case 10 -> showShelfInformation();
-                case 11 -> searchFloor();
-//                case 12 -> searchAisle();
-//                case 13 -> searchShelf();
-//                case 14 -> searchGoodItem();
+                case 7 -> autoAddGoodItem();
+                case 8 -> showFloors();
+                case 9 -> showFloorInformation(getIndex(manager));
+                case 10 -> showAisleInformation();
+                case 11 -> showShelfInformation();
+                case 12 -> searchFloor();
+                case 13 -> searchAisle();
+                case 14 -> searchShelf();
+                case 15 -> searchGoodItem();
             }
             ScannerInput.readNextLine("Press enter to continue....");
             option = showMenu();
@@ -69,16 +75,17 @@ public class Driver {
                 4) Add an Aisle
                 5) Add a Shelf
                 6) Add a GoodItem
+                7) Auto-add a GoodItem
                 ------------------------------
-                7) Show all Floors
-                8) Show Floor Aisles
-                9) Show Aisle Shelves
-                10) Show Shelf GoodItems
+                8) Show all Floors
+                9) Show Floor Aisles
+                10) Show Aisle Shelves
+                11) Show Shelf GoodItems
                 ------------------------------
-                11) Search for Floor Area
-                12) Search for Aisle
-                13) Search for Shelf
-                14) Search for GoodItem
+                12) Search for Floor Area
+                13) Search for Aisle
+                14) Search for Shelf
+                15) Search for GoodItem
                 ------------------------------
                 """);
     }
@@ -164,24 +171,52 @@ public class Driver {
             System.out.println("Failed to add the Shelf!");
     }
 
-    public void addGoodItem(){
-        Floor floor = (Floor) manager.get(getIndex(manager));
-        Aisle aisle = (Aisle) floor.get(getIndex(floor));
-        Shelf shelf = (Shelf) aisle.get(getIndex(aisle));
+    public GoodItem generateGoodItem(){
         String goodItemName = ScannerInput.readNextLine("Enter the name of your GoodItem: ");
         String description = ScannerInput.readNextLine("Enter the description of your GoodItem: ");
         String photoURL = ScannerInput.readNextLine("Enter the photo URL of your good item: ");
         double price = ScannerInput.readNextDouble("Enter the price of your GoodItem: ");
         double weight = ScannerInput.readNextDouble("Enter the weight of your GoodItem: ");
         int weightIndex = ScannerInput.readNextInt("Enter the index of the weight category - " + Arrays.toString(GoodItem.weightTypes) + ":");
-        int storageType = ScannerInput.readNextInt("Enter the storage type (index) of your GoodItem - " + Arrays.toString(GoodItem.storageTypes) + ":");
         int quantity = ScannerInput.readNextInt("Enter the quantity of your GoodItem: ");
-        GoodItem newItem = new GoodItem(goodItemName, description, price, quantity, weight, weightIndex, storageType, photoURL);
+        return new GoodItem(goodItemName, description, price, quantity, weight, weightIndex, 0, photoURL);
+    }
+
+    public void addGoodItem(){
+        Floor floor = (Floor) manager.get(getIndex(manager));
+        Aisle aisle = (Aisle) floor.get(getIndex(floor));
+        Shelf shelf = (Shelf) aisle.get(getIndex(aisle));
+        GoodItem newItem = generateGoodItem();
+        newItem.setStorageType(aisle.getStorageTypeIndex());
         boolean added = manager.addObject(newItem, shelf);
         if(added)
             System.out.println("Successfully added the GoodItem!");
         else
             System.out.println("Failed to add the GoodItem!");
+    }
+
+    //TODO
+    // this shouldn't use the search function, it should have a separate function
+    // that tokenizes the name/description and shows those.
+    // although I could just tokenize the name and search all the tokens
+    public void autoAddGoodItem(){
+        GoodItem newItem = generateGoodItem();
+        LinkedList<Object> list = (LinkedList<Object>) manager.find(newItem);
+        if(list == null || list.isEmpty())
+            System.out.println("No suitable locations found!");
+        else if(list.size() == 1) {
+            Shelf parent = manager.findParent(list.getFirst());
+            Aisle aisle = manager.findParent(parent);
+            newItem.setStorageType(aisle.getStorageTypeIndex());
+            boolean added = parent.add(newItem);
+            if(added)
+                System.out.println("Successfully added the GoodItem!");
+            else
+                System.out.println("Failed to add the GoodItem!");
+        }else{
+            System.out.println("Multiple good items that are similar exist already!");
+        }
+
     }
 
     public int getIndex(MarketStructure itemToCheckIndexIn){
@@ -229,18 +264,25 @@ public class Driver {
         System.out.println(shelf.details() + "\n" + shelf.getListDetails());
     }
 
-    public void searchFloor(){
-        if(manager.isEmpty())
-            System.out.println("No Floors, add one first!");
-        else {
-            String nameToFind = ScannerInput.readNextLine("Enter the name of the floor you are looking for: ");
-            LinkedList<Object> list = (LinkedList<Object>) manager.find(new Floor(nameToFind, new int[] {1,1}, 0)); //only searching for name
+    public void search(String type, String... property){
+        if(Objects.equals(type, "floor") || Objects.equals(type, "aisle") || Objects.equals(type, "shelf") || Objects.equals(type, "goodItem")){
+            String nameToFind = property[0], description = "";
+            if(Objects.equals(type, "goodItem"))
+                description = property[1];
+            Object toSearch;
+            switch(type){
+                case "aisle" -> toSearch = new Aisle(nameToFind);
+                case "shelf" -> toSearch = new Shelf(nameToFind);
+                case "goodItem" -> toSearch = new GoodItem(nameToFind, description);
+                default -> toSearch = new Floor(nameToFind);
+            }
+            LinkedList<Object> list = (LinkedList<Object>) manager.find(toSearch);
             if(list == null || list.isEmpty())
-                System.out.println("No Floors found with that property!");
+                System.out.println("No " + type + "s found with that property!");
             else if (list.size() == 1)
                 System.out.println(list.getFirst());
             else {
-                System.out.println("Multiple Floors found with that property!");
+                System.out.println("Multiple " + type + "s found with that property!");
                 int index;
                 boolean valid;
                 do{
@@ -251,6 +293,43 @@ public class Driver {
                 System.out.println(list.get(index));
             }
         }
+    }
+
+    public void searchFloor(){
+        if(manager.isEmpty())
+            System.out.println("No Floors, add one first!");
+        else {
+            String property = ScannerInput.readNextLine("Enter the name (or part of the name) of the floor you're looking for: ");
+            search("floor", property);
+        }
+    }
+
+    public void searchAisle(){
+        if(manager.isEmpty()) {
+            System.out.println("No Floors, add one first!");
+            return;
+        }
+        String property = ScannerInput.readNextLine("Enter the name (or part of the name) of the aisle you're looking for: ");
+        search("aisle", property);
+    }
+
+    public void searchShelf(){
+        if(manager.isEmpty()) {
+            System.out.println("No Floors, add one first!");
+            return;
+        }
+        String property = ScannerInput.readNextLine("Enter the name (or part of the name) of the shelf you're looking for: ");
+        search("shelf", property);
+    }
+
+    public void searchGoodItem(){
+        if(manager.isEmpty()) {
+            System.out.println("No Floors, add one first!");
+            return;
+        }
+        String property = ScannerInput.readNextLine("Enter the name (or part of the name) of the product you're looking for: ");
+        String description = ScannerInput.readNextLine("Enter the description (or part of) of the product you are looking for: ");
+        search("shelf", property, description);
     }
 
     public boolean loadData() {
