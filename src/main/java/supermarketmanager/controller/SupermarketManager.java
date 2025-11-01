@@ -98,6 +98,47 @@ public class SupermarketManager extends MarketStructure<Floor> {
             return false; //should never be more than one of the same type
     }
 
+    //I really don't like this
+    public MarketStructure findParent(Object child){
+        if(child instanceof Floor || child instanceof Aisle || child instanceof Shelf || child instanceof GoodItem)
+            switch(child){
+                case Floor floor : {
+                    if(!isEmpty() && contains(floor))
+                        return this;
+                    break;
+                }
+                case Aisle aisle : {
+                    for(Floor floor : getList())
+                        if(!floor.isEmpty())
+                            if(floor.contains(aisle))
+                                return floor;
+                    break;
+                }
+                case Shelf shelf : {
+                    for(Floor floor : getList())
+                        if(!floor.isEmpty())
+                            for(Aisle aisle : floor.getList())
+                                if(!aisle.isEmpty())
+                                    if(aisle.contains(shelf))
+                                        return aisle;
+                    break;
+                }
+                case GoodItem goodItem : {
+                    for(Floor floor : getList())
+                        if(!floor.isEmpty())
+                            for(Aisle aisle : floor.getList())
+                                if(!aisle.isEmpty())
+                                    for(Shelf s : aisle.getList())
+                                        if(!s.isEmpty())
+                                            if(s.contains(goodItem))
+                                                return s;
+                    break;
+                }
+                default : break;
+            }
+        return null;
+    }
+
     //this is kinda unsightly but really not that complex
     //TODO
     // need to check if the list is empty before going into the next for loop
