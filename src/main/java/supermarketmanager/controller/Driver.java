@@ -196,24 +196,52 @@ public class Driver {
     }
 
     //TODO
-    // this shouldn't use the search function, it should have a separate function
-    // that tokenizes the name/description and shows those.
-    // although I could just tokenize the name and search all the tokens
+    // this should be in supermarketManager
     public void autoAddGoodItem(){
         GoodItem newItem = generateGoodItem();
         LinkedList<Object> list = (LinkedList<Object>) manager.find(newItem);
         if(list == null || list.isEmpty())
             System.out.println("No suitable locations found!");
         else if(list.size() == 1) {
-            Shelf parent = manager.findParent(list.getFirst());
-            Aisle aisle = manager.findParent(parent);
+            Shelf parent = (Shelf) manager.findParent(list.getFirst());
+            Aisle aisle = (Aisle) manager.findParent(parent);
             newItem.setStorageType(aisle.getStorageTypeIndex());
             boolean added = parent.add(newItem);
-            if(added)
+            if(added) {
                 System.out.println("Successfully added the GoodItem!");
-            else
+                System.out.println("Added " + newItem.getName() + " to shelf " + parent.getName() + " in aisle " + aisle.getName() + ".");
+            }else
                 System.out.println("Failed to add the GoodItem!");
         }else{
+            String[] tokenizedName = newItem.getName().split(" ");
+            String[] tokenizedDescription = newItem.getDescription().split(" ");
+            int[] score = new int[list.size()];
+            for(int i = 0; i < list.size(); i++) {
+                String[] comparedName = ((GoodItem) list.get(i)).getName().split(" ");
+                String[] comparedDescription = ((GoodItem) list.get(i)).getDescription().split(" ");
+                for (String s : comparedName)
+                    for (String string : tokenizedName)
+                        if (s.contains(string))
+                            score[i]++;
+                for (String s : comparedDescription)
+                    for (String string : tokenizedDescription)
+                        if (s.contains(string))
+                            score[i]++;
+            }
+            int highestScore = -Integer.MAX_VALUE;
+            int highestIndex = 0;
+            for(int i = 0; i < list.size(); i++) {
+                if(score[i] > highestScore)
+                    highestIndex = i;
+            }
+            Shelf parent = (Shelf) manager.findParent(list.get(highestIndex));
+            Aisle aisle = (Aisle) manager.findParent(parent);
+            boolean added = parent.add(newItem);
+            if(added) {
+                System.out.println("Successfully added the GoodItem!");
+                System.out.println("Added " + newItem.getName() + " to shelf " + parent.getName() + " in aisle " + aisle.getName() + ".");
+            }else
+                System.out.println("Failed to add the GoodItem!");
             System.out.println("Multiple good items that are similar exist already!");
         }
 
