@@ -1,6 +1,6 @@
-package main.java.supermarketmanager.model.supermarket;
+package supermarketmanager.model.supermarket;
 
-import main.java.supermarketmanager.model.linkedlist.LinkedList;
+import supermarketmanager.model.linkedlist.LinkedList;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

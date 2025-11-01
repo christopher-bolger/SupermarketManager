@@ -1,4 +1,4 @@
-package main.java.supermarketmanager.model.supermarket;
+package supermarketmanager.model.supermarket;
 
 
 public class Floor extends MarketStructure<Aisle>{

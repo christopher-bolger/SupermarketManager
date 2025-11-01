@@ -1,4 +1,4 @@
-package main.java.supermarketmanager.model.supermarket;
+package supermarketmanager.model.supermarket;
 
 public class Aisle extends MarketStructure<Shelf>{
     int[] aisleSize = new int[2];

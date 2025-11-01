@@ -1,4 +1,4 @@
-package main.java.supermarketmanager.model.linkedlist;
+package supermarketmanager.model.linkedlist;
 
 public class Node<E>{
     private E content;

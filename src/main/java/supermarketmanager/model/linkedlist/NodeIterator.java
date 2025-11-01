@@ -1,4 +1,4 @@
-package main.java.supermarketmanager.model.linkedlist;
+package supermarketmanager.model.linkedlist;
 
 import java.util.Iterator;
 import java.util.function.Consumer;

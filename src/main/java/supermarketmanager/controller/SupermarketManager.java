@@ -1,10 +1,10 @@
-package main.java.supermarketmanager.controller;
+package supermarketmanager.controller;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 
-import main.java.supermarketmanager.model.linkedlist.LinkedList;
-import main.java.supermarketmanager.model.supermarket.*;
+import supermarketmanager.model.linkedlist.LinkedList;
+import supermarketmanager.model.supermarket.*;
 
 import java.io.*;
 import java.util.Collection;

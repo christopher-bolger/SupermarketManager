@@ -1,4 +1,4 @@
-package main.java.supermarketmanager.model.supermarket;
+package supermarketmanager.model.supermarket;
 
 import java.text.DecimalFormat;
 import java.util.Objects;

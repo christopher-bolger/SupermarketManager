@@ -1,12 +1,11 @@
-package main.java.supermarketmanager.controller;
+package supermarketmanager.controller;
 
-import main.java.supermarketmanager.model.linkedlist.LinkedList;
-import main.java.supermarketmanager.model.supermarket.*;
-import main.java.supermarketmanager.utils.ScannerInput;
+import supermarketmanager.model.linkedlist.LinkedList;
+import supermarketmanager.model.supermarket.*;
+import supermarketmanager.utils.ScannerInput;
 
 import java.io.File;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Objects;
 
 //TODO

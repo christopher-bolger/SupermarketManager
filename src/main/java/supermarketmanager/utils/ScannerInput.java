@@ -1,4 +1,4 @@
-package main.java.supermarketmanager.utils;
+package supermarketmanager.utils;
 
 import java.util.Scanner;
 

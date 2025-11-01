@@ -1,6 +1,6 @@
-package main.java.supermarketmanager.model.supermarket;
+package supermarketmanager.model.supermarket;
 
-import main.java.supermarketmanager.model.linkedlist.LinkedList;
+import supermarketmanager.model.linkedlist.LinkedList;
 
 import java.util.Collection;
 import java.util.Objects;
