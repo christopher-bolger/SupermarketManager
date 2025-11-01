@@ -24,8 +24,20 @@
                             <weightType>3</weightType>
                             <storageType>0</storageType>
                           </content>
+                          <next>
+                            <content class="main.java.supermarketmanager.model.supermarket.GoodItem">
+                              <name>Washing up liquid</name>
+                              <description>antibacterial</description>
+                              <photoURL>https://bidfoodcateringsupplies.co.uk/cdn/shop/files/05336_7_700x.jpg?v=1749472829</photoURL>
+                              <price>15.99</price>
+                              <weight>5.0</weight>
+                              <quantity>10</quantity>
+                              <weightType>2</weightType>
+                              <storageType>0</storageType>
+                            </content>
+                          </next>
                         </head>
-                        <tail reference="../head"/>
+                        <tail reference="../head/next"/>
                       </list>
                       <dimensions>
                         <int>10</int>
@@ -135,8 +147,20 @@
                                 <weightType>1</weightType>
                                 <storageType>0</storageType>
                               </content>
+                              <next>
+                                <content class="main.java.supermarketmanager.model.supermarket.GoodItem">
+                                  <name>Garden Hoe</name>
+                                  <description>Hand held garden tool</description>
+                                  <photoURL>https://www.gardentoolcompany.com/cdn/shop/files/nejiri-gama-hand-hoex1_fda5ef4e-0654-49ee-bdd3-74b691b5ff89.jpg?v=1716317414&amp;width=1024</photoURL>
+                                  <price>16.99</price>
+                                  <weight>320.0</weight>
+                                  <quantity>20</quantity>
+                                  <weightType>1</weightType>
+                                  <storageType>0</storageType>
+                                </content>
+                              </next>
                             </head>
-                            <tail reference="../head"/>
+                            <tail reference="../head/next"/>
                           </list>
                           <dimensions>
                             <int>10</int>
@@ -166,10 +190,65 @@
               </dimensions>
               <floor>1</floor>
             </content>
+            <next>
+              <content class="main.java.supermarketmanager.model.supermarket.Floor">
+                <name>Frozen</name>
+                <list>
+                  <head>
+                    <content class="main.java.supermarketmanager.model.supermarket.Aisle">
+                      <name>Frozen Fish</name>
+                      <list>
+                        <head>
+                          <content class="main.java.supermarketmanager.model.supermarket.Shelf">
+                            <name>Breaded</name>
+                            <list>
+                              <head>
+                                <content class="main.java.supermarketmanager.model.supermarket.GoodItem">
+                                  <name>Breaded fillets of salmon</name>
+                                  <description>Locally sources and freshly frozen</description>
+                                  <photoURL>https://www.joyousapron.com/wp-content/uploads/2022/01/panko-crusted-salmon-pic-09.jpg</photoURL>
+                                  <price>7.99</price>
+                                  <weight>400.0</weight>
+                                  <quantity>20</quantity>
+                                  <weightType>1</weightType>
+                                  <storageType>2</storageType>
+                                </content>
+                              </head>
+                              <tail reference="../head"/>
+                            </list>
+                            <dimensions>
+                              <int>40</int>
+                              <int>2</int>
+                            </dimensions>
+                            <shelfNumber>1</shelfNumber>
+                          </content>
+                        </head>
+                        <tail reference="../head"/>
+                      </list>
+                      <dimensions>
+                        <int>40</int>
+                        <int>10</int>
+                      </dimensions>
+                      <aisleSize>
+                        <int>40</int>
+                        <int>10</int>
+                      </aisleSize>
+                      <storageType>2</storageType>
+                    </content>
+                  </head>
+                  <tail reference="../head"/>
+                </list>
+                <dimensions>
+                  <int>40</int>
+                  <int>40</int>
+                </dimensions>
+                <floor>0</floor>
+              </content>
+            </next>
           </next>
         </next>
       </head>
-      <tail reference="../head/next/next"/>
+      <tail reference="../head/next/next/next"/>
     </list>
     <dimensions>
       <int>150</int>

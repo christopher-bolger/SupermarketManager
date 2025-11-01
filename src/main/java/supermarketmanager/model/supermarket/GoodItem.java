@@ -147,7 +147,7 @@ public class GoodItem {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof GoodItem goodItem)) return false;
-        return name.toLowerCase().contains(goodItem.name.toLowerCase()) && description.toLowerCase().contains(goodItem.description.toLowerCase());
+        return name.equalsIgnoreCase(goodItem.name) && description.equalsIgnoreCase(goodItem.description);
     }
 
     @Override

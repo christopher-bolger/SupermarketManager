@@ -6,6 +6,7 @@ import main.java.supermarketmanager.utils.ScannerInput;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Objects;
 
 //TODO
@@ -13,8 +14,6 @@ import java.util.Objects;
 public class Driver {
     private SupermarketManager manager;
     public static void main(String[] args) throws Exception {
-        String input = ScannerInput.readNextLine("URL ");
-        System.out.println(input);
         new Driver().start();
     }
 
@@ -195,56 +194,23 @@ public class Driver {
             System.out.println("Failed to add the GoodItem!");
     }
 
-    //TODO
-    // this should be in supermarketManager
     public void autoAddGoodItem(){
         GoodItem newItem = generateGoodItem();
-        LinkedList<Object> list = (LinkedList<Object>) manager.find(newItem);
-        if(list == null || list.isEmpty())
+        newItem.setStorageType(ScannerInput.readNextInt("Enter the index of the storage type: " + Arrays.toString(GoodItem.storageTypes)));
+        LinkedList<Object> foundItem = (LinkedList<Object>) manager.find(newItem);
+        if(foundItem != null && !foundItem.isEmpty())
+            manager.addObject(newItem, manager.findParent(foundItem.getFirst()));
+        Shelf shelf = manager.findSuitableLocation(newItem);
+        if(shelf == null)
             System.out.println("No suitable locations found!");
-        else if(list.size() == 1) {
-            Shelf parent = (Shelf) manager.findParent(list.getFirst());
-            Aisle aisle = (Aisle) manager.findParent(parent);
-            newItem.setStorageType(aisle.getStorageTypeIndex());
-            boolean added = parent.add(newItem);
+        else{
+            Aisle aisle = (Aisle) manager.findParent(shelf);
+            boolean added = shelf.add(newItem);
             if(added) {
-                System.out.println("Successfully added the GoodItem!");
-                System.out.println("Added " + newItem.getName() + " to shelf " + parent.getName() + " in aisle " + aisle.getName() + ".");
+                System.out.println("Successfully added " + newItem.getName() + " to shelf " + shelf.getName() + " in aisle " + aisle.getName() + ".");
             }else
                 System.out.println("Failed to add the GoodItem!");
-        }else{
-            String[] tokenizedName = newItem.getName().split(" ");
-            String[] tokenizedDescription = newItem.getDescription().split(" ");
-            int[] score = new int[list.size()];
-            for(int i = 0; i < list.size(); i++) {
-                String[] comparedName = ((GoodItem) list.get(i)).getName().split(" ");
-                String[] comparedDescription = ((GoodItem) list.get(i)).getDescription().split(" ");
-                for (String s : comparedName)
-                    for (String string : tokenizedName)
-                        if (s.contains(string))
-                            score[i]++;
-                for (String s : comparedDescription)
-                    for (String string : tokenizedDescription)
-                        if (s.contains(string))
-                            score[i]++;
-            }
-            int highestScore = -Integer.MAX_VALUE;
-            int highestIndex = 0;
-            for(int i = 0; i < list.size(); i++) {
-                if(score[i] > highestScore)
-                    highestIndex = i;
-            }
-            Shelf parent = (Shelf) manager.findParent(list.get(highestIndex));
-            Aisle aisle = (Aisle) manager.findParent(parent);
-            boolean added = parent.add(newItem);
-            if(added) {
-                System.out.println("Successfully added the GoodItem!");
-                System.out.println("Added " + newItem.getName() + " to shelf " + parent.getName() + " in aisle " + aisle.getName() + ".");
-            }else
-                System.out.println("Failed to add the GoodItem!");
-            System.out.println("Multiple good items that are similar exist already!");
         }
-
     }
 
     public int getIndex(MarketStructure itemToCheckIndexIn){
@@ -311,14 +277,7 @@ public class Driver {
                 System.out.println(list.getFirst());
             else {
                 System.out.println("Multiple " + type + "s found with that property!");
-                int index;
-                boolean valid;
-                do{
-                    System.out.println(list);
-                    index = ScannerInput.readNextInt(-1, "Which index would you like to select?");
-                    valid = index < list.size();
-                }while(!valid);
-                System.out.println(list.get(index));
+                System.out.println(list);
             }
         }
     }
@@ -357,7 +316,7 @@ public class Driver {
         }
         String property = ScannerInput.readNextLine("Enter the name (or part of the name) of the product you're looking for: ");
         String description = ScannerInput.readNextLine("Enter the description (or part of) of the product you are looking for: ");
-        search("shelf", property, description);
+        search("goodItem", property, description);
     }
 
     public boolean loadData() {

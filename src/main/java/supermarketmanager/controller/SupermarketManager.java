@@ -8,6 +8,7 @@ import main.java.supermarketmanager.model.supermarket.*;
 
 import java.io.*;
 import java.util.Collection;
+import java.util.Objects;
 
 public class SupermarketManager extends MarketStructure<Floor> {
     File file;
@@ -191,6 +192,102 @@ public class SupermarketManager extends MarketStructure<Floor> {
         return list;
     }
 
+    public Collection<GoodItem> getAllGoodItems(){
+        if(isEmpty())
+            return null;
+        Collection<GoodItem> returnList = new LinkedList<>();
+        for(Floor f : getList())
+            if(!f.isEmpty())
+                for(Aisle a : f.getList())
+                    if(!a.isEmpty())
+                        for(Shelf s : a.getList())
+                            if(!s.isEmpty())
+                                returnList.addAll(s.getList());
+        return returnList;
+    }
+
+    public Collection<Aisle> getAllAisles(){
+        if(isEmpty())
+            return null;
+        Collection<Aisle> returnList = new LinkedList<>();
+        for(Floor f : getList())
+            if(!f.isEmpty())
+                returnList.addAll(f.getList());
+        return returnList;
+    }
+
+    public Shelf findSuitableLocation(GoodItem toFind){
+        if(toFind == null || isEmpty())
+            return null;
+        LinkedList<GoodItem> otherItems = (LinkedList<GoodItem>) getAllGoodItems();
+        LinkedList<Shelf> shelves = null;
+        String[] splitName = toFind.getName().toLowerCase().split(" ");
+        String[] splitDescription = toFind.getDescription().toLowerCase().split(" ");
+        int[] score = new int[0];
+        boolean matchFound = false;
+
+        if(otherItems != null && !otherItems.isEmpty()) { //looking for similar good items
+            score = new int[otherItems.size()];
+            for (int i = 0; i < otherItems.size(); i++) {
+                if (Objects.equals(toFind.getStorageType(), otherItems.get(i).getStorageType())) {
+                    String[] nameToCompare = otherItems.get(i).getName().toLowerCase().split(" ");
+                    String[] descriptionToCompare = otherItems.get(i).getDescription().toLowerCase().split(" ");
+                    for (String value : nameToCompare)
+                        for (String s : splitName)
+                            if (value.equals(s))
+                                score[i]++;
+                    for (String s : descriptionToCompare)
+                        for (String string : splitDescription)
+                            if (s.equals(string))
+                                score[i]++;
+                }
+            }
+
+            for(int i : score)
+                if (i > 0) {
+                    matchFound = true;
+                    break;
+                }
+        }
+        if(!matchFound){//if that fails we look for similar shelves
+            LinkedList<Aisle> otherAisles = (LinkedList<Aisle>) getAllAisles();
+            shelves = new LinkedList<>();
+            if(otherAisles.isEmpty())
+                return null;
+            for(Aisle aisle : otherAisles)
+                if(!aisle.getList().isEmpty())
+                    if(aisle.getStorageType().equals(toFind.getStorageType()))
+                        shelves.addAll(aisle.getList());
+            score = new int[shelves.size()];
+            if(score.length == 1)
+                return shelves.getFirst();
+            for(int i = 0; i < shelves.size(); i++) {
+                for (String s : splitName)
+                    if (shelves.get(i).getName().toLowerCase().contains(s.toLowerCase()))
+                        score[i]++;
+                for(String s : splitDescription)
+                    if(shelves.get(i).getName().toLowerCase().contains(s.toLowerCase()))
+                        score[i]++;
+            }
+        }
+
+        if(score.length == 0)
+            return null;
+        int highestScore = -1;
+        int highestIndex = 0;
+        for(int i = 0; i < score.length; i++)
+            if(score[i] > highestScore) {
+                highestScore = score[i];
+                highestIndex = i;
+            }
+        if(highestScore < 1)
+            return null;
+        if(shelves == null)
+            return (Shelf) findParent(otherItems.get(highestIndex));
+        return shelves.get(highestIndex);
+
+    }
+
     public boolean checkIndex(MarketStructure<Object> parent, int index){
         return parent.checkIndex(index);
     }
@@ -219,26 +316,6 @@ public class SupermarketManager extends MarketStructure<Floor> {
                 .append("File name: ").append(file.toString()).append("\n");
         return string.toString();
     }
-
-//    public String showAllListInfo(String type, List<?> items){
-//        StringBuilder string = new StringBuilder();
-//        string.append("Floors: ").append("\n");
-//        if(super.getList().isEmpty()) {
-//            string.append("No floors!");
-//            return string.toString();
-//        }
-//
-//        int index = 0;
-//        for(Floor floor : super.getList()) {
-//            string.append("Index: ").append(index).append(":")
-//                    .append(" Level: ").append(floor.getFloor())
-//                    .append("\tName: ").append(floor.getName());
-//            index++;
-//        }
-//        return string.toString();
-//    }
-//
-//    public String showAllAisles
 
     public void save() throws Exception {
         var xstream = new XStream(new DomDriver());
