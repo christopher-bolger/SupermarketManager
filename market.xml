@@ -1,21 +1,21 @@
 <object-stream>
-  <main.java.supermarketmanager.controller.SupermarketManager>
+  <supermarketmanager.controller.SupermarketManager>
     <name>SuperDuperMarket</name>
     <list>
       <head>
-        <content class="main.java.supermarketmanager.model.supermarket.Floor">
+        <content class="supermarketmanager.model.supermarket.Floor">
           <name>Household</name>
           <list>
             <head>
-              <content class="main.java.supermarketmanager.model.supermarket.Aisle">
+              <content class="supermarketmanager.model.supermarket.Aisle">
                 <name>Cleaning</name>
                 <list>
                   <head>
-                    <content class="main.java.supermarketmanager.model.supermarket.Shelf">
+                    <content class="supermarketmanager.model.supermarket.Shelf">
                       <name>Liquid</name>
                       <list>
                         <head>
-                          <content class="main.java.supermarketmanager.model.supermarket.GoodItem">
+                          <content class="supermarketmanager.model.supermarket.GoodItem">
                             <name>Fairy Washing up Liquid</name>
                             <description>Non bio &amp; antibacterial</description>
                             <price>3.49</price>
@@ -25,7 +25,7 @@
                             <storageType>0</storageType>
                           </content>
                           <next>
-                            <content class="main.java.supermarketmanager.model.supermarket.GoodItem">
+                            <content class="supermarketmanager.model.supermarket.GoodItem">
                               <name>Washing up liquid</name>
                               <description>antibacterial</description>
                               <photoURL>https://bidfoodcateringsupplies.co.uk/cdn/shop/files/05336_7_700x.jpg?v=1749472829</photoURL>
@@ -46,7 +46,7 @@
                       <shelfNumber>1</shelfNumber>
                     </content>
                     <next>
-                      <content class="main.java.supermarketmanager.model.supermarket.Shelf">
+                      <content class="supermarketmanager.model.supermarket.Shelf">
                         <name>Solid</name>
                         <list>
                           <head/>
@@ -82,15 +82,15 @@
           <floor>0</floor>
         </content>
         <next>
-          <content class="main.java.supermarketmanager.model.supermarket.Floor">
+          <content class="supermarketmanager.model.supermarket.Floor">
             <name>Fruit &amp; Veg</name>
             <list>
               <head>
-                <content class="main.java.supermarketmanager.model.supermarket.Aisle">
+                <content class="supermarketmanager.model.supermarket.Aisle">
                   <name>Fruit</name>
                   <list>
                     <head>
-                      <content class="main.java.supermarketmanager.model.supermarket.Shelf">
+                      <content class="supermarketmanager.model.supermarket.Shelf">
                         <name>Seasonal</name>
                         <list>
                           <head/>
@@ -125,19 +125,19 @@
             <floor>0</floor>
           </content>
           <next>
-            <content class="main.java.supermarketmanager.model.supermarket.Floor">
+            <content class="supermarketmanager.model.supermarket.Floor">
               <name>DIY</name>
               <list>
                 <head>
-                  <content class="main.java.supermarketmanager.model.supermarket.Aisle">
+                  <content class="supermarketmanager.model.supermarket.Aisle">
                     <name>Hand Tools</name>
                     <list>
                       <head>
-                        <content class="main.java.supermarketmanager.model.supermarket.Shelf">
+                        <content class="supermarketmanager.model.supermarket.Shelf">
                           <name>Cutters</name>
                           <list>
                             <head>
-                              <content class="main.java.supermarketmanager.model.supermarket.GoodItem">
+                              <content class="supermarketmanager.model.supermarket.GoodItem">
                                 <name>Clippers</name>
                                 <description>Garden clippers (small)</description>
                                 <photoURL>https://assets.manufactum.de/p/064/064436/64436_01.jpg/small-garden-shears.jpg?profile=pdsmain_1500</photoURL>
@@ -148,7 +148,7 @@
                                 <storageType>0</storageType>
                               </content>
                               <next>
-                                <content class="main.java.supermarketmanager.model.supermarket.GoodItem">
+                                <content class="supermarketmanager.model.supermarket.GoodItem">
                                   <name>Garden Hoe</name>
                                   <description>Hand held garden tool</description>
                                   <photoURL>https://www.gardentoolcompany.com/cdn/shop/files/nejiri-gama-hand-hoex1_fda5ef4e-0654-49ee-bdd3-74b691b5ff89.jpg?v=1716317414&amp;width=1024</photoURL>
@@ -191,19 +191,19 @@
               <floor>1</floor>
             </content>
             <next>
-              <content class="main.java.supermarketmanager.model.supermarket.Floor">
+              <content class="supermarketmanager.model.supermarket.Floor">
                 <name>Frozen</name>
                 <list>
                   <head>
-                    <content class="main.java.supermarketmanager.model.supermarket.Aisle">
+                    <content class="supermarketmanager.model.supermarket.Aisle">
                       <name>Frozen Fish</name>
                       <list>
                         <head>
-                          <content class="main.java.supermarketmanager.model.supermarket.Shelf">
+                          <content class="supermarketmanager.model.supermarket.Shelf">
                             <name>Breaded</name>
                             <list>
                               <head>
-                                <content class="main.java.supermarketmanager.model.supermarket.GoodItem">
+                                <content class="supermarketmanager.model.supermarket.GoodItem">
                                   <name>Breaded fillets of salmon</name>
                                   <description>Locally sources and freshly frozen</description>
                                   <photoURL>https://www.joyousapron.com/wp-content/uploads/2022/01/panko-crusted-salmon-pic-09.jpg</photoURL>
@@ -255,5 +255,5 @@
       <int>150</int>
     </dimensions>
     <file>market</file>
-  </main.java.supermarketmanager.controller.SupermarketManager>
+  </supermarketmanager.controller.SupermarketManager>
 </object-stream>
