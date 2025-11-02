@@ -6,13 +6,12 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.control.TreeView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.TextFlow?>
-
 
 <AnchorPane xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="supermarketmanager.controller.MainController">
    <children>
@@ -59,12 +58,12 @@
                            <children>
                               <VBox id="leftPaneVBox" alignment="TOP_CENTER" prefHeight="565.0" prefWidth="166.0" spacing="10.0">
                                  <children>
-                                    <Button fx:id="addFloor" defaultButton="true" mnemonicParsing="false" onAction="#showAddFloor" text="Add Floor" textAlignment="CENTER" />
+                                    <Button fx:id="addFloor" mnemonicParsing="false" onAction="#showAddFloor" text="Add Floor" textAlignment="CENTER" />
                                     <Button fx:id="addAisle" disable="true" mnemonicParsing="false" onAction="#showAddAisle" text="Add Aisle" textAlignment="CENTER" />
                                     <Button fx:id="addShelf" disable="true" mnemonicParsing="false" onAction="#showAddShelf" text="Add Shelf" textAlignment="CENTER" />
                                     <Button fx:id="addGoodItem" disable="true" mnemonicParsing="false" onAction="#showAddGoodItem" text="Add GoodItem" textAlignment="CENTER" />
                                     <Button fx:id="autoAddGoodItem" disable="true" mnemonicParsing="false" onAction="#showAutoAddGoodItem" text="Auto-Add GoodItem" textAlignment="CENTER" />
-                                    <TextFlow id="errorOutput" fx:id="errorOutput" prefHeight="379.0" prefWidth="166.0" />
+                                    <TextArea fx:id="errorOutput" prefHeight="378.0" prefWidth="166.0" />
                                  </children>
                                  <opaqueInsets>
                                     <Insets />
@@ -81,11 +80,11 @@
                                 <items>
                                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                                        <children>
-                                          <TitledPane id="titledPane" animated="false" prefHeight="95.0" prefWidth="671.0" text="SuperMarket Manager">
+                                          <TitledPane id="titledPane" fx:id="superMarket" animated="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="95.0" prefWidth="671.0" text="SuperMarket Manager">
                                             <content>
                                               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                    <children>
-                                                      <TextFlow id="entityData" fx:id="entityOutput" layoutX="-1.0" layoutY="-1.0" prefHeight="71.0" prefWidth="671.0" />
+                                                      <TextArea fx:id="entityOutput" layoutX="-2.0" layoutY="-1.0" prefHeight="71.0" prefWidth="671.0" />
                                                    </children>
                                                 </AnchorPane>
                                             </content>
