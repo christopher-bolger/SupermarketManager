@@ -10,6 +10,7 @@ import java.util.Objects;
 
 //TODO
 // switch arrays under storageType and weightType to linkedLists
+// GoodItem can now update itself, so change the behaviour in shelf
 public class Driver {
     private SupermarketManager manager;
     public static void main(String[] args) throws Exception {
@@ -100,7 +101,7 @@ public class Driver {
         return name;
     }
 
-    public int[] getDimensions(MarketStructure itemToCheckAgainst){
+    public int[] getDimensions(MarketStructure<?> itemToCheckAgainst){
         boolean allowed;
         int[] dimensions = new int[2];
         do {
@@ -212,7 +213,7 @@ public class Driver {
         }
     }
 
-    public int getIndex(MarketStructure itemToCheckIndexIn){
+    public int getIndex(MarketStructure<?> itemToCheckIndexIn){
         System.out.println(itemToCheckIndexIn.getListDetails());
         int index;
         boolean allowed;
@@ -324,7 +325,7 @@ public class Driver {
     }
 
     public void load() throws Exception {
-        manager.load(ScannerInput.readNextLine("File name: "));
+        manager.load(new File("market.xml"));
         menu();
     }
 
