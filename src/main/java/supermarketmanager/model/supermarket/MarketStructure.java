@@ -113,6 +113,10 @@ public abstract class MarketStructure<E> {
         return details();
     }
 
+    public void clear() {
+        list.clear();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

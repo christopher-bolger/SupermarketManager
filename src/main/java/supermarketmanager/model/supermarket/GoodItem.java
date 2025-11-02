@@ -3,23 +3,17 @@ package supermarketmanager.model.supermarket;
 import java.text.DecimalFormat;
 import java.util.Objects;
 
-public class GoodItem {
+public class GoodItem extends MarketStructure<GoodItem>{
     //figured it's easier to set these here, if you wanted to use imperial you'd only need to change this array
     public static String[] weightTypes = {"Kg", "g", "L", "mL"};
     public static String[] storageTypes = {"Unrefrigerated", "Refrigerated", "Frozen"};
-    private String name, description, photoURL;
+    private String description, photoURL;
     private double price, weight;
     private int quantity;
     private int weightType = 0, storageType = 0;
 
     public GoodItem(String name, String description, double price, int quantity, double weight, int weightType, int storageType, String photoURL) {
-        if(name != null && !name.isEmpty())
-            if(name.length() < 31)
-                this.name = name;
-            else
-                this.name = name.substring(0, 31);
-        else this.name = "no_product_name";
-
+        super(name, new int[] {1,1});
         if(description != null && !description.isEmpty()) {
             description = description.trim();
             if (description.length() < 101)
@@ -56,12 +50,7 @@ public class GoodItem {
     }
 
     public GoodItem(String name, String description) {
-        if(name != null && !name.isEmpty())
-            if(name.length() < 31)
-                this.name = name;
-            else
-                this.name = name.substring(0, 31);
-        else this.name = "no_product_name";
+        super(name, new int[] {1,1});
 
         if(description != null && !description.isEmpty()) {
             description = description.trim();
@@ -74,18 +63,6 @@ public class GoodItem {
         photoURL = "no_product_photo";
         price = weight = 1;
         quantity = weightType = storageType = 0;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        if(name != null && !name.isEmpty())
-            if(name.length() < 31)
-                this.name = name;
-            else
-                this.name = name.substring(0, 31);
     }
 
     public String getDescription() {
@@ -147,12 +124,29 @@ public class GoodItem {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof GoodItem goodItem)) return false;
-        return name.equalsIgnoreCase(goodItem.name) && description.equalsIgnoreCase(goodItem.description);
+        return super.getName().equalsIgnoreCase(goodItem.getName()) && description.equalsIgnoreCase(goodItem.description);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, description);
+        return Objects.hash(super.getName(), description);
+    }
+
+    @Override
+    public boolean replace(GoodItem itemToReplace, GoodItem item) {
+        return false;
+    }
+
+    @Override
+    public String details() {
+        return "Product Name: " + super.getName() + "\n" +
+                "Description: " + description + "\n" +
+                "Price: " + price + "\n" +
+                "Quantity: " + quantity + "\n" +
+                "Total Value: " + totalValue() + "\n" +
+                "Weight: " + weight + getWeightType() + "\n" +
+                "Storage Type: " + getStorageType() + "\n" +
+                "Photo URL: " + photoURL + "\n";
     }
 
     public double totalValue(){
@@ -172,14 +166,7 @@ public class GoodItem {
         return GoodItem.weightTypes[weightType];
     }
 
-    public String toString(){
-        return "Product Name: " + name + "\n" +
-                "Description: " + description + "\n" +
-                "Price: " + price + "\n" +
-                "Quantity: " + quantity + "\n" +
-                "Total Value: " + totalValue() + "\n" +
-                "Weight: " + weight + getWeightType() + "\n" +
-                "Storage Type: " + getStorageType() + "\n" +
-                "Photo URL: " + photoURL + "\n";
+    public String toString() {
+        return details();
     }
 }

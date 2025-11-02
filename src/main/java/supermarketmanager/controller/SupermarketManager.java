@@ -17,11 +17,7 @@ public class SupermarketManager extends MarketStructure<Floor> {
         this.file = file;
     }
 
-    //lots of raw usage here, I asked AI and to be honest I could try and be type safe by putting this into
-    //marketManager and making sure the E extends marketmanager, but then I wouldn't be able to put GoodItem into shelf
-    // so since its just me using this I know im not going to try and measure the dimensions of a good item
-    //maybe i'll think of another way but this will do for now
-    public boolean checkDimensions(MarketStructure parentItem ,int[] dimensionsToCheck){
+    public boolean checkDimensions(MarketStructure<?> parentItem ,int[] dimensionsToCheck){
         int[] dimensions = parentItem.getDimensions();
         if(dimensions.length != 2 || dimensionsToCheck.length != 2)
             return false;
@@ -30,7 +26,7 @@ public class SupermarketManager extends MarketStructure<Floor> {
         }else{
             int totalArea = dimensions[0] * dimensions[1];
             for(Object obj : parentItem.getList()) {
-                MarketStructure child = (MarketStructure) obj;
+                MarketStructure<?> child = (MarketStructure<?>) obj;
                 totalArea -= child.getDimensions()[0] * child.getDimensions()[1];
                 if(totalArea < 0)
                     return false;
@@ -62,7 +58,7 @@ public class SupermarketManager extends MarketStructure<Floor> {
         return true;
     }
 
-    public boolean addObject(Object item, MarketStructure<?> parentItem){
+    public boolean addObject(MarketStructure<?> item, MarketStructure<?> parentItem){
         if(item == null || parentItem == null)
             return false;
         return switch(item){
@@ -100,7 +96,7 @@ public class SupermarketManager extends MarketStructure<Floor> {
     }
 
     //I really don't like this
-    public MarketStructure findParent(Object child){
+    public MarketStructure<?> findParent(Object child){
         if(child instanceof Floor || child instanceof Aisle || child instanceof Shelf || child instanceof GoodItem)
             switch(child){
                 case Floor floor : {
@@ -216,6 +212,14 @@ public class SupermarketManager extends MarketStructure<Floor> {
         return returnList;
     }
 
+    public Collection<Floor> getAllFloors(){
+        if(isEmpty())
+            return null;
+        Collection<Floor> returnList = new LinkedList<>();
+        returnList.addAll(getList());
+        return returnList;
+    }
+
     public Shelf findSuitableLocation(GoodItem toFind){
         if(toFind == null || isEmpty())
             return null;
@@ -288,7 +292,7 @@ public class SupermarketManager extends MarketStructure<Floor> {
 
     }
 
-    public boolean checkIndex(MarketStructure<Object> parent, int index){
+    public boolean checkIndex(MarketStructure<?> parent, int index){
         return parent.checkIndex(index);
     }
 
@@ -319,12 +323,12 @@ public class SupermarketManager extends MarketStructure<Floor> {
 
     public void save() throws Exception {
         var xstream = new XStream(new DomDriver());
-        ObjectOutputStream os = xstream.createObjectOutputStream(new FileWriter(file + ".xml"));
+        ObjectOutputStream os = xstream.createObjectOutputStream(new FileWriter(file));
         os.writeObject(this);
         os.close();
     }
 
-    public void load(String name) throws Exception {
+    public void load(File file) throws Exception {
         //list of classes that you wish to include in the serialisation, separated by a comma
         Class<?>[] classes = new Class[]{ SupermarketManager.class, Floor.class, Aisle.class, Shelf.class, GoodItem.class};
 
@@ -334,7 +338,7 @@ public class SupermarketManager extends MarketStructure<Floor> {
         xstream.allowTypes(classes);
 
         //doing the actual serialisation to an XML file
-        ObjectInputStream in = xstream.createObjectInputStream(new FileReader(name + ".xml"));
+        ObjectInputStream in = xstream.createObjectInputStream(new FileReader(file));
         SupermarketManager loaded = (SupermarketManager) in.readObject();
         in.close();
         super.setName(loaded.getName());
