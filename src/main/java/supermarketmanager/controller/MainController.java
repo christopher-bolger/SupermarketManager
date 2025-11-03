@@ -1,11 +1,17 @@
 package supermarketmanager.controller;
 
 import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import supermarketmanager.model.linkedlist.LinkedList;
 import supermarketmanager.model.supermarket.*;
 
@@ -64,29 +70,36 @@ public class MainController {
     public void getTreeChildren(){
         if(manager.isEmpty())
             return;
-        for(Floor floor : manager.getList()) {
-            TreeItem<MarketStructure<?>> nextItem = new TreeItem<>(floor);
-            nextItem.setExpanded(true);
-            treeRoot.getChildren().add(nextItem);
-            if(!floor.isEmpty()) {
-                for(Aisle aisle : floor.getList()) {
-                    TreeItem<MarketStructure<?>> nextAisle = new TreeItem<>(aisle);
-                    nextAisle.setExpanded(true);
-                    nextItem.getChildren().add(nextAisle);
-                    if(!aisle.isEmpty()) {
-                        for(Shelf shelf : aisle.getList()) {
-                            TreeItem<MarketStructure<?>> nextShelf = new TreeItem<>(shelf);
-                            nextAisle.getChildren().add(nextShelf);
-                            if(!shelf.isEmpty()) {
-                                for(GoodItem goodItem : shelf.getList()) {
-                                    TreeItem<MarketStructure<?>> nextGoodItem = new TreeItem<>(goodItem);
-                                    nextShelf.getChildren().add(nextGoodItem);
+        LinkedList<Integer> listOfFloorNumbers = new LinkedList<>();
+        for(Floor floor : manager.getList())
+            if(!listOfFloorNumbers.contains(floor.getFloor()))
+                listOfFloorNumbers.add(floor.getFloor());
+        for(Integer floorNumber : listOfFloorNumbers)
+            for(Floor floor : manager.getList()) {
+                if(floorNumber == floor.getFloor()) {
+                    TreeItem<MarketStructure<?>> nextItem = new TreeItem<>(floor);
+                    nextItem.setExpanded(true);
+                    treeRoot.getChildren().add(nextItem);
+                    if (!floor.isEmpty()) {
+                        for (Aisle aisle : floor.getList()) {
+                            TreeItem<MarketStructure<?>> nextAisle = new TreeItem<>(aisle);
+                            nextAisle.setExpanded(true);
+                            nextItem.getChildren().add(nextAisle);
+                            if (!aisle.isEmpty()) {
+                                for (Shelf shelf : aisle.getList()) {
+                                    TreeItem<MarketStructure<?>> nextShelf = new TreeItem<>(shelf);
+                                    nextAisle.getChildren().add(nextShelf);
+                                    if (!shelf.isEmpty()) {
+                                        for (GoodItem goodItem : shelf.getList()) {
+                                            TreeItem<MarketStructure<?>> nextGoodItem = new TreeItem<>(goodItem);
+                                            nextShelf.getChildren().add(nextGoodItem);
+                                        }
+                                    }
                                 }
                             }
                         }
                     }
                 }
-            }
         }
     }
 
@@ -130,7 +143,23 @@ public class MainController {
     public void editSelectedEntity(ActionEvent actionEvent) {
     }
 
-    public void showAddFloor(ActionEvent actionEvent) {
+    public void showAddFloor(ActionEvent actionEvent) throws IOException {
+        FXMLLoader insertLoader = new FXMLLoader(getClass().getResource("/ui/floorInsert.fxml"));
+        Node insertNode = insertLoader.load();
+        FloorInsert insertController = insertLoader.getController();
+
+        FXMLLoader skeletonLoader = new FXMLLoader(getClass().getResource("/ui/popoutSkeleton.fxml"));
+        Parent skeletonRoot = skeletonLoader.load();
+        PopoutMenu skeletonController = skeletonLoader.getController();
+
+        skeletonController.insertVBOX(insertNode); // Inject insert into center
+
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setScene(new Scene(skeletonRoot));
+        stage.showAndWait();
+
+        MarketStructure<?> result = skeletonController.getResult();
     }
 
     public void showAddAisle(ActionEvent actionEvent) {
@@ -146,10 +175,11 @@ public class MainController {
     }
 
     public void showSelectedEntity(MouseEvent mouseEvent) {
-        if(treeView.getSelectionModel().getSelectedItem().getValue() == null)
+        if(treeView.getSelectionModel().getSelectedItem() == null)
             return;
         selectedEntity = treeView.getSelectionModel().getSelectedItem().getValue();
-        entityOutput.setText(entityOutput.getText() + "\n" + selectedEntity);
+        entityOutput.appendText("\n" + selectedEntity.details());
+        entityOutput.setScrollTop(Double.MAX_VALUE);
         mouseEvent.consume();
     }
 }
