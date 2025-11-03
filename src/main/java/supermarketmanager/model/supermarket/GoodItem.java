@@ -167,6 +167,6 @@ public class GoodItem extends MarketStructure<GoodItem>{
     }
 
     public String toString() {
-        return details();
+        return "Product Name: " + super.getName() + " \t" + "Price: " + price + " \t" + "Quantity: " + quantity;
     }
 }

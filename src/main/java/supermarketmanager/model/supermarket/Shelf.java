@@ -35,12 +35,24 @@ public class Shelf extends MarketStructure<GoodItem>{
     }
 
     @Override
+    public double totalValue() {
+        double totalValue = 0;
+        if(list.isEmpty())
+            return totalValue;
+        for(GoodItem item : list) {
+            totalValue += item.totalValue();
+        }
+        return totalValue;
+    }
+
+    @Override
     public String details() {
         StringBuilder string = new StringBuilder();
         int[] dimensions = getDimensions();
-        string.append("Name: ").append(super.getName()).append("\t")
-                .append("Size: ").append(dimensions[0]).append(", ").append(dimensions[1]).append("\t")
-                .append("Shelf number: ").append(shelfNumber).append("\n");
+        string.append("Shelf: ").append(super.getName()).append(" \t")
+                .append("Size: ").append(dimensions[0]).append(", ").append(dimensions[1]).append(" \t")
+                .append("Total Value: ").append(totalValue()).append(" \t")
+                .append("Shelf number: ").append(shelfNumber);
         return string.toString();
     }
 }

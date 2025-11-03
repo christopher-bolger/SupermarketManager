@@ -30,12 +30,23 @@ public class Floor extends MarketStructure<Aisle>{
     }
 
     @Override
+    public double totalValue() {
+        double totalValue = 0;
+        if(list.isEmpty())
+            return totalValue;
+        for(Aisle aisle : list)
+            totalValue += aisle.totalValue();
+        return totalValue;
+    }
+
+    @Override
     public String details() {
         StringBuilder string = new StringBuilder();
         int[] dimensions = getDimensions();
         string.append("Floor: ").append(floor).append("\t")
-            .append("Name: ").append(super.getName()).append("\t")
-            .append("Size: ").append(dimensions[0]).append(", ").append(dimensions[1]).append("\n");
+            .append("Name: ").append(super.getName()).append(" \t")
+            .append("Total Value: ").append(totalValue()).append("\t")
+            .append("Size: ").append(dimensions[0]).append(", ").append(dimensions[1]);
         return string.toString();
     }
 }

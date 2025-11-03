@@ -132,6 +132,8 @@ public abstract class MarketStructure<E> {
 
     public abstract boolean replace(E itemToReplace, E item);
 
+    public abstract double totalValue();
+
     public abstract String details();
 
     public String getListDetails(){

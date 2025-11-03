@@ -53,12 +53,24 @@ public class Aisle extends MarketStructure<Shelf>{
     }
 
     @Override
+    public double totalValue() {
+        double totalValue = 0;
+        if(list.isEmpty())
+            return totalValue;
+        for(Shelf shelf : list){
+            totalValue += shelf.totalValue();
+        }
+        return totalValue;
+    }
+
+    @Override
     public String details() {
         StringBuilder string = new StringBuilder();
         int[] dimensions = getDimensions();
-        string.append("Name: ").append(super.getName()).append("\t")
-                .append("Size: ").append(dimensions[0]).append(", ").append(dimensions[1]).append("\t")
-                .append("Storage type: ").append(getStorageType()).append("\n");
+        string.append("Aisle: ").append(super.getName()).append(" \t")
+                .append("Size: ").append(dimensions[0]).append(", ").append(dimensions[1]).append(" \t")
+                .append("Total Value: ").append(totalValue()).append(" \t")
+                .append("Storage type: ").append(getStorageType());
         return string.toString();
     }
 }

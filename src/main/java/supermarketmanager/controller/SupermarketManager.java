@@ -81,6 +81,17 @@ public class SupermarketManager extends MarketStructure<Floor> {
         return false;
     }
 
+    @Override
+    public double totalValue(){
+        double totalValue = 0;
+        if(list.isEmpty())
+            return totalValue;
+        for(Floor floor : list){
+            totalValue += floor.totalValue();
+        }
+        return totalValue;
+    }
+
     private boolean addShelf(Shelf item, Aisle parentAisle){
         return parentAisle.add(item);
     }
