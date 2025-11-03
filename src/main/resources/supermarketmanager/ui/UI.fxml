@@ -13,9 +13,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="supermarketmanager.controller.MainController">
+<AnchorPane xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="supermarketmanager.controller.MainController">
    <children>
-      <VBox id="vbox" fx:id="mainVBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="592.0" prefWidth="849.0" stylesheets="@../stylesheet/stylesheet.css">
+      <VBox id="vbox" fx:id="mainVBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" stylesheets="@../stylesheet/stylesheet.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <MenuBar id="menuBar" fx:id="menuBar">
               <menus>
@@ -50,20 +50,24 @@
                   </Menu>
               </menus>
             </MenuBar>
-            <AnchorPane id="anchorPane" prefHeight="567.0" prefWidth="849.0">
+            <AnchorPane id="anchorPane" prefHeight="600.0" prefWidth="800.0">
                <children>
-                  <SplitPane id="splitPane" dividerPositions="0.2" prefHeight="567.0" prefWidth="849.0">
+                  <SplitPane id="splitPane" dividerPositions="0.2" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <items>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                            <children>
-                              <VBox id="leftPaneVBox" alignment="TOP_CENTER" prefHeight="565.0" prefWidth="166.0" spacing="10.0">
+                              <VBox id="leftPaneVBox" alignment="TOP_CENTER" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
                                     <Button fx:id="addFloor" mnemonicParsing="false" onAction="#showAddFloor" text="Add Floor" textAlignment="CENTER" />
                                     <Button fx:id="addAisle" disable="true" mnemonicParsing="false" onAction="#showAddAisle" text="Add Aisle" textAlignment="CENTER" />
                                     <Button fx:id="addShelf" disable="true" mnemonicParsing="false" onAction="#showAddShelf" text="Add Shelf" textAlignment="CENTER" />
                                     <Button fx:id="addGoodItem" disable="true" mnemonicParsing="false" onAction="#showAddGoodItem" text="Add GoodItem" textAlignment="CENTER" />
                                     <Button fx:id="autoAddGoodItem" disable="true" mnemonicParsing="false" onAction="#showAutoAddGoodItem" text="Auto-Add GoodItem" textAlignment="CENTER" />
-                                    <TextArea fx:id="errorOutput" prefHeight="378.0" prefWidth="166.0" />
+                                    <TextArea fx:id="errorOutput" editable="false" wrapText="true" VBox.vgrow="ALWAYS">
+                                       <VBox.margin>
+                                          <Insets top="10.0" />
+                                       </VBox.margin>
+                                    </TextArea>
                                  </children>
                                  <opaqueInsets>
                                     <Insets />
@@ -76,15 +80,15 @@
                         </AnchorPane>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                            <children>
-                              <SplitPane dividerPositions="0.17476303317535546" layoutX="-1.0" layoutY="-1.0" orientation="VERTICAL" prefHeight="565.0" prefWidth="674.0">
+                              <SplitPane dividerPositions="0.17476303317535546" layoutX="-1.0" layoutY="-1.0" orientation="VERTICAL" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                 <items>
                                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                                        <children>
-                                          <TitledPane id="titledPane" fx:id="superMarket" animated="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="95.0" prefWidth="671.0" text="SuperMarket Manager">
+                                          <TitledPane id="titledPane" fx:id="superMarket" animated="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" text="SuperMarket Manager" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                             <content>
                                               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                    <children>
-                                                      <TextArea fx:id="entityOutput" layoutX="-2.0" layoutY="-1.0" prefHeight="71.0" prefWidth="671.0" />
+                                                      <TextArea fx:id="entityOutput" editable="false" layoutX="-2.0" layoutY="-1.0" wrapText="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                                    </children>
                                                 </AnchorPane>
                                             </content>
@@ -93,7 +97,7 @@
                                     </AnchorPane>
                                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                                        <children>
-                                          <TreeView id="treeView" fx:id="treeView" layoutY="-1.0" onMouseClicked="#showSelectedEntity" prefHeight="461.0" prefWidth="671.0">
+                                          <TreeView id="treeView" fx:id="treeView" layoutY="-1.0" onMouseClicked="#showSelectedEntity" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                              <padding>
                                                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                              </padding>
