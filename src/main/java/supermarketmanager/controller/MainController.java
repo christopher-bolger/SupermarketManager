@@ -8,7 +8,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -43,6 +42,10 @@ public class MainController {
     TreeItem<MarketStructure<?>> treeRoot;
 
     public void showMenu(ActionEvent actionEvent) {
+    }
+
+    public void initialize() {
+
     }
 
     public void openExplorer(ActionEvent actionEvent) throws Exception {
@@ -144,15 +147,15 @@ public class MainController {
     }
 
     public void showAddFloor(ActionEvent actionEvent) throws IOException {
-        FXMLLoader insertLoader = new FXMLLoader(getClass().getResource("/ui/floorInsert.fxml"));
+        FXMLLoader insertLoader = new FXMLLoader(getClass().getResource("/supermarketmanager/ui/floorInsert.fxml"));
         Node insertNode = insertLoader.load();
         FloorInsert insertController = insertLoader.getController();
 
-        FXMLLoader skeletonLoader = new FXMLLoader(getClass().getResource("/ui/popoutSkeleton.fxml"));
+        FXMLLoader skeletonLoader = new FXMLLoader(getClass().getResource("/supermarketmanager/ui/popoutSkeleton.fxml"));
         Parent skeletonRoot = skeletonLoader.load();
         PopoutMenu skeletonController = skeletonLoader.getController();
 
-        skeletonController.insertVBOX(insertNode); // Inject insert into center
+        skeletonController.initialize(insertController); // Pass controller here
 
         Stage stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
@@ -160,6 +163,7 @@ public class MainController {
         stage.showAndWait();
 
         MarketStructure<?> result = skeletonController.getResult();
+        manager.add((Floor) result);
     }
 
     public void showAddAisle(ActionEvent actionEvent) {

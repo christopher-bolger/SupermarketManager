@@ -1,7 +1,8 @@
-package supermarketmanager.model.linkedlist;
+package main.java.supermarketmanager.model.linkedlist;
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import supermarketmanager.model.linkedlist.LinkedList;
 
 import java.util.List;
 

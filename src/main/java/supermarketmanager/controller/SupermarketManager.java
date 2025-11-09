@@ -223,14 +223,6 @@ public class SupermarketManager extends MarketStructure<Floor> {
         return returnList;
     }
 
-    public Collection<Floor> getAllFloors(){
-        if(isEmpty())
-            return null;
-        Collection<Floor> returnList = new LinkedList<>();
-        returnList.addAll(getList());
-        return returnList;
-    }
-
     public Shelf findSuitableLocation(GoodItem toFind){
         if(toFind == null || isEmpty())
             return null;

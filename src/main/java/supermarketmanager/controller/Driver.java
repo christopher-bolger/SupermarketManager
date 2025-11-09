@@ -11,6 +11,7 @@ import java.util.Objects;
 //TODO
 // switch arrays under storageType and weightType to linkedLists
 // GoodItem can now update itself, so change the behaviour in shelf
+// GoodItem should check description & size/weight only not name
 public class Driver {
     private SupermarketManager manager;
     public static void main(String[] args) throws Exception {

@@ -1,9 +1,12 @@
-package supermarketmanager.model.supermarket;
+package main.java.supermarketmanager.model.supermarket;
 
 import supermarketmanager.model.linkedlist.LinkedList;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import supermarketmanager.model.supermarket.Aisle;
+import supermarketmanager.model.supermarket.Floor;
+import supermarketmanager.model.supermarket.Shelf;
 
 import java.util.Collection;
 
