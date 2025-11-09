@@ -1,12 +1,11 @@
-package supermarketmanager.controller;
+package supermarketmanager.view;
 
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import supermarketmanager.model.supermarket.Floor;
+import supermarketmanager.model.javafx.Insertable;
 import supermarketmanager.model.supermarket.MarketStructure;
 
 public class PopoutMenu{
@@ -14,11 +13,11 @@ public class PopoutMenu{
     public Button saveButton;
     public Button cancelButton;
     MarketStructure<?> marketStructure;
-    AnchorPane inserted;
+    Insertable inserted;
 
 
-    public void initialize(AnchorPane insertion) {
-        borderPlane.setCenter(insertion);
+    public void initialize(Insertable insertion) {
+        borderPlane.setCenter(insertion.getRoot());
         inserted = insertion;
     }
     public void saveResults(ActionEvent actionEvent) {
@@ -32,6 +31,6 @@ public class PopoutMenu{
     }
 
     public MarketStructure<?> getResult(){
-        return inserted.returnResult();
+        return inserted.getResult();
     }
 }

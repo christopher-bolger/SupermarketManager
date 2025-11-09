@@ -1,14 +1,15 @@
-package supermarketmanager.controller;
+package supermarketmanager.view;
 
 import javafx.scene.Node;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
+import supermarketmanager.model.javafx.Insertable;
 import supermarketmanager.model.supermarket.Floor;
 import supermarketmanager.model.supermarket.MarketStructure;
 
-public class FloorInsert extends AnchorPane{
+public class FloorInsert extends Insertable {
     public AnchorPane rootAnchor;
     public Text errorOutput;
     public TextField nameInput;
@@ -64,6 +65,16 @@ public class FloorInsert extends AnchorPane{
     }
 
     public Node getRootNode() {
+        return rootAnchor;
+    }
+
+    @Override
+    public MarketStructure<?> getResult() {
+        return returnResult();
+    }
+
+    @Override
+    public AnchorPane getRoot() {
         return rootAnchor;
     }
 }

@@ -11,8 +11,11 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import supermarketmanager.model.javafx.Insertable;
 import supermarketmanager.model.linkedlist.LinkedList;
 import supermarketmanager.model.supermarket.*;
+import supermarketmanager.view.PopoutMenu;
+import supermarketmanager.view.initialPopup;
 
 import java.io.File;
 import java.io.IOException;
@@ -44,8 +47,8 @@ public class MainController {
     public void showMenu(ActionEvent actionEvent) {
     }
 
-    public void initialize() {
-
+    public void initialize() throws IOException {
+        updateTreeView();
     }
 
     public void openExplorer(ActionEvent actionEvent) throws Exception {
@@ -63,7 +66,45 @@ public class MainController {
         }
     }
 
-    public void updateTreeView(){
+    public SupermarketManager initialPopup() throws IOException {
+        FXMLLoader insertLoader = new FXMLLoader(getClass().getResource("/supermarketmanager/ui/initialPopup.fxml"));
+        Parent insertNode = insertLoader.load();
+        initialPopup insertController = insertLoader.getController();
+
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setScene(new Scene(insertNode));
+        stage.showAndWait();
+
+        MarketStructure<?> result = insertController.getResult();
+        return (SupermarketManager) result;
+    }
+
+    public void createNewManager() throws IOException {
+        FXMLLoader insertLoader = new FXMLLoader(getClass().getResource("/supermarketmanager/ui/newManager.fxml"));
+        Node insertNode = insertLoader.load();
+        Insertable insertController = insertLoader.getController();
+
+        FXMLLoader skeletonLoader = new FXMLLoader(getClass().getResource("/supermarketmanager/ui/popoutSkeleton.fxml"));
+        Parent skeletonRoot = skeletonLoader.load();
+        PopoutMenu skeletonController = skeletonLoader.getController();
+
+        skeletonController.initialize(insertController); // Pass controller here
+
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setScene(new Scene(skeletonRoot));
+        stage.showAndWait();
+
+        manager = (SupermarketManager) insertController.getResult();
+    }
+
+    public void updateTreeView() throws IOException {
+        if(manager == null) {
+            manager = initialPopup();
+            if (manager == null)
+                createNewManager();
+        }
         treeRoot = new TreeItem<>(manager);
         treeView.setRoot(treeRoot);
         treeView.setShowRoot(false);
@@ -133,7 +174,7 @@ public class MainController {
         menuBar.getScene().getWindow().setOnCloseRequest(event -> {});
     }
 
-    public void clearData(ActionEvent actionEvent) {
+    public void clearData(ActionEvent actionEvent) throws IOException {
         if(manager != null) {
             manager.clear();
             updateTreeView();
@@ -149,7 +190,7 @@ public class MainController {
     public void showAddFloor(ActionEvent actionEvent) throws IOException {
         FXMLLoader insertLoader = new FXMLLoader(getClass().getResource("/supermarketmanager/ui/floorInsert.fxml"));
         Node insertNode = insertLoader.load();
-        FloorInsert insertController = insertLoader.getController();
+        Insertable insertController = insertLoader.getController();
 
         FXMLLoader skeletonLoader = new FXMLLoader(getClass().getResource("/supermarketmanager/ui/popoutSkeleton.fxml"));
         Parent skeletonRoot = skeletonLoader.load();
@@ -162,8 +203,51 @@ public class MainController {
         stage.setScene(new Scene(skeletonRoot));
         stage.showAndWait();
 
-        MarketStructure<?> result = skeletonController.getResult();
+        MarketStructure<?> result = insertController.getResult();
         manager.add((Floor) result);
+        updateTreeView();
+    }
+
+
+//    public Button addFloor;
+//    public Button addAisle;
+//    public Button addShelf;
+//    public Button addGoodItem;
+//    public Button autoAddGoodItem;
+    public void updateButtons(){
+        if(manager != null){
+            LinkedList<Shelf> list = (LinkedList<Shelf>) manager.getAllShelves();
+            autoAddGoodItem.disableProperty().set(list == null || list.isEmpty());
+        }
+        switch (selectedEntity){
+            case Floor floor -> {
+                addFloor.disableProperty().set(false);
+                addAisle.disableProperty().set(false);
+                addShelf.disableProperty().set(true);
+                addGoodItem.disableProperty().set(true);
+            }
+            case Aisle aisle ->{
+                addFloor.disableProperty().set(false);
+                addAisle.disableProperty().set(false);
+                addShelf.disableProperty().set(false);
+                addGoodItem.disableProperty().set(true);
+            }
+            case Shelf shelf -> {
+                addFloor.disableProperty().set(false);
+                addAisle.disableProperty().set(false);
+                addShelf.disableProperty().set(false);
+                addGoodItem.disableProperty().set(false);
+            }
+            case GoodItem goodItem -> {
+                addFloor.disableProperty().set(false);
+                addAisle.disableProperty().set(false);
+                addShelf.disableProperty().set(false);
+                addGoodItem.disableProperty().set(false);
+            }
+            default -> {
+                break;
+            }
+        }
     }
 
     public void showAddAisle(ActionEvent actionEvent) {
@@ -184,6 +268,7 @@ public class MainController {
         selectedEntity = treeView.getSelectionModel().getSelectedItem().getValue();
         entityOutput.appendText("\n" + selectedEntity.details());
         entityOutput.setScrollTop(Double.MAX_VALUE);
+        updateButtons();
         mouseEvent.consume();
     }
 }

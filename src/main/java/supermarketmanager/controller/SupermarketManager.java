@@ -213,6 +213,18 @@ public class SupermarketManager extends MarketStructure<Floor> {
         return returnList;
     }
 
+    public Collection<Shelf> getAllShelves(){
+        if(isEmpty())
+            return null;
+        Collection<Shelf> returnList = new LinkedList<>();
+        for(Floor f : getList())
+            if(!f.isEmpty())
+                for(Aisle a : f.getList())
+                    if(!a.isEmpty())
+                        returnList.addAll(a.getList());
+        return returnList;
+    }
+
     public Collection<Aisle> getAllAisles(){
         if(isEmpty())
             return null;
