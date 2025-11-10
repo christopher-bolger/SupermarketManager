@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane fx:id="rootAnchor" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="supermarketmanager.view.AisleInsert">
+   <children>
+      <VBox alignment="CENTER" layoutX="273.0" layoutY="60.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <AnchorPane>
+               <children>
+                  <Text fx:id="errorOutput" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="468.53670358657837" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+               </children>
+            </AnchorPane>
+            <Region VBox.vgrow="ALWAYS" />
+            <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Name">
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                  </Text>
+                  <Region prefHeight="25.0" prefWidth="79.0" HBox.hgrow="ALWAYS" />
+                  <TextField fx:id="nameInput" onKeyTyped="#checkString" promptText="Enter the name...">
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
+                  </TextField>
+               </children>
+            </HBox>
+            <Region VBox.vgrow="ALWAYS">
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </Region>
+            <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="26.0">
+               <children>
+                  <Region prefHeight="25.0" prefWidth="80.0" HBox.hgrow="ALWAYS" />
+                  <ComboBox id="comboBox" fx:id="comboBox" prefWidth="150.0" promptText="Pick a storage type..." />
+                  <Region layoutX="10.0" layoutY="10.0" prefHeight="25.0" prefWidth="186.0" />
+               </children>
+            </HBox>
+            <Region layoutX="10.0" layoutY="51.0">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets top="10.0" />
+               </padding>
+            </Region>
+            <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Dimensions">
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                  </Text>
+                  <Region prefHeight="25.0" prefWidth="79.0" HBox.hgrow="ALWAYS" />
+                  <TextField fx:id="dimensionX" onKeyTyped="#checkNumberPositiveX" promptText="Dimension X">
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
+                  </TextField>
+                  <TextField fx:id="dimensionY" layoutX="156.0" layoutY="10.0" onKeyTyped="#checkNumberPositiveY" promptText="Dimension Y">
+                     <opaqueInsets>
+                        <Insets right="10.0" />
+                     </opaqueInsets>
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
+                  </TextField>
+               </children>
+            </HBox>
+            <Region VBox.vgrow="ALWAYS" />
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

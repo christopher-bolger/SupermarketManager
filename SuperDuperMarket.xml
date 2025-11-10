@@ -1,0 +1,328 @@
+<object-stream>
+  <supermarketmanager.controller.SupermarketManager>
+    <name>SuperDuperMarket</name>
+    <list>
+      <head>
+        <content class="supermarketmanager.model.supermarket.Floor">
+          <name>Household</name>
+          <list>
+            <head>
+              <content class="supermarketmanager.model.supermarket.Aisle">
+                <name>Cleaning</name>
+                <list>
+                  <head>
+                    <content class="supermarketmanager.model.supermarket.Shelf">
+                      <name>Liquid</name>
+                      <list>
+                        <head>
+                          <content class="supermarketmanager.model.supermarket.GoodItem">
+                            <name>Fairy Washing up Liquid</name>
+                            <description>Non bio &amp; antibacterial</description>
+                            <price>3.49</price>
+                            <weight>400.0</weight>
+                            <quantity>30</quantity>
+                            <weightType>3</weightType>
+                            <storageType>0</storageType>
+                          </content>
+                          <next>
+                            <content class="supermarketmanager.model.supermarket.GoodItem">
+                              <name>Washing up liquid</name>
+                              <description>antibacterial</description>
+                              <photoURL>https://bidfoodcateringsupplies.co.uk/cdn/shop/files/05336_7_700x.jpg?v=1749472829</photoURL>
+                              <price>15.99</price>
+                              <weight>5.0</weight>
+                              <quantity>10</quantity>
+                              <weightType>2</weightType>
+                              <storageType>0</storageType>
+                            </content>
+                          </next>
+                        </head>
+                        <tail reference="../head/next"/>
+                      </list>
+                      <dimensions>
+                        <int>10</int>
+                        <int>2</int>
+                      </dimensions>
+                      <shelfNumber>1</shelfNumber>
+                    </content>
+                    <next>
+                      <content class="supermarketmanager.model.supermarket.Shelf">
+                        <name>Solid</name>
+                        <list>
+                          <head>
+                            <content class="supermarketmanager.model.supermarket.GoodItem">
+                              <name>Dishwasher tablets</name>
+                              <list>
+                                <head/>
+                                <tail reference="../head"/>
+                              </list>
+                              <dimensions>
+                                <int>1</int>
+                                <int>1</int>
+                              </dimensions>
+                              <description>Solid dishwasher tablets for the same clean every time!</description>
+                              <photoURL>https://www.refillz.ie/wp-content/uploads/2024/05/dishwasher-tablets.jpg</photoURL>
+                              <price>14.65</price>
+                              <weight>1.2</weight>
+                              <quantity>10</quantity>
+                              <weightType>0</weightType>
+                              <storageType>0</storageType>
+                            </content>
+                          </head>
+                          <tail reference="../head"/>
+                        </list>
+                        <dimensions>
+                          <int>10</int>
+                          <int>2</int>
+                        </dimensions>
+                        <shelfNumber>2</shelfNumber>
+                      </content>
+                    </next>
+                  </head>
+                  <tail reference="../head/next"/>
+                </list>
+                <dimensions>
+                  <int>10</int>
+                  <int>15</int>
+                </dimensions>
+                <aisleSize>
+                  <int>10</int>
+                  <int>15</int>
+                </aisleSize>
+                <storageType>0</storageType>
+              </content>
+            </head>
+            <tail reference="../head"/>
+          </list>
+          <dimensions>
+            <int>30</int>
+            <int>30</int>
+          </dimensions>
+          <floor>0</floor>
+        </content>
+        <next>
+          <content class="supermarketmanager.model.supermarket.Floor">
+            <name>Fruit &amp; Veg</name>
+            <list>
+              <head>
+                <content class="supermarketmanager.model.supermarket.Aisle">
+                  <name>Fruit</name>
+                  <list>
+                    <head>
+                      <content class="supermarketmanager.model.supermarket.Shelf">
+                        <name>Seasonal</name>
+                        <list>
+                          <head/>
+                          <tail reference="../head"/>
+                        </list>
+                        <dimensions>
+                          <int>15</int>
+                          <int>2</int>
+                        </dimensions>
+                        <shelfNumber>1</shelfNumber>
+                      </content>
+                    </head>
+                    <tail reference="../head"/>
+                  </list>
+                  <dimensions>
+                    <int>15</int>
+                    <int>10</int>
+                  </dimensions>
+                  <aisleSize>
+                    <int>15</int>
+                    <int>10</int>
+                  </aisleSize>
+                  <storageType>1</storageType>
+                </content>
+                <next>
+                  <content class="supermarketmanager.model.supermarket.Aisle">
+                    <name>Frozen Fruit</name>
+                    <list>
+                      <head>
+                        <content class="supermarketmanager.model.supermarket.Shelf">
+                          <name>Strawberries</name>
+                          <list>
+                            <head>
+                              <content class="supermarketmanager.model.supermarket.GoodItem">
+                                <name>freshly frozen strawberries</name>
+                                <list>
+                                  <head/>
+                                  <tail reference="../head"/>
+                                </list>
+                                <dimensions>
+                                  <int>1</int>
+                                  <int>1</int>
+                                </dimensions>
+                                <description>Freshly frozen fruit for use all year round!</description>
+                                <photoURL>https://www.whiskaffair.com/wp-content/uploads/2020/07/how-to-freeze-strawberries-2-4.jpg</photoURL>
+                                <price>2.49</price>
+                                <weight>350.0</weight>
+                                <quantity>12</quantity>
+                                <weightType>1</weightType>
+                                <storageType>2</storageType>
+                              </content>
+                            </head>
+                            <tail reference="../head"/>
+                          </list>
+                          <dimensions>
+                            <int>10</int>
+                            <int>2</int>
+                          </dimensions>
+                          <shelfNumber>1</shelfNumber>
+                        </content>
+                      </head>
+                      <tail reference="../head"/>
+                    </list>
+                    <dimensions>
+                      <int>10</int>
+                      <int>10</int>
+                    </dimensions>
+                    <aisleSize>
+                      <int>10</int>
+                      <int>10</int>
+                    </aisleSize>
+                    <storageType>2</storageType>
+                  </content>
+                </next>
+              </head>
+              <tail reference="../head/next"/>
+            </list>
+            <dimensions>
+              <int>25</int>
+              <int>25</int>
+            </dimensions>
+            <floor>0</floor>
+          </content>
+          <next>
+            <content class="supermarketmanager.model.supermarket.Floor">
+              <name>DIY</name>
+              <list>
+                <head>
+                  <content class="supermarketmanager.model.supermarket.Aisle">
+                    <name>Hand Tools</name>
+                    <list>
+                      <head>
+                        <content class="supermarketmanager.model.supermarket.Shelf">
+                          <name>Cutters</name>
+                          <list>
+                            <head>
+                              <content class="supermarketmanager.model.supermarket.GoodItem">
+                                <name>Clippers</name>
+                                <description>Garden clippers (small)</description>
+                                <photoURL>https://assets.manufactum.de/p/064/064436/64436_01.jpg/small-garden-shears.jpg?profile=pdsmain_1500</photoURL>
+                                <price>15.49</price>
+                                <weight>300.0</weight>
+                                <quantity>32</quantity>
+                                <weightType>1</weightType>
+                                <storageType>0</storageType>
+                              </content>
+                              <next>
+                                <content class="supermarketmanager.model.supermarket.GoodItem">
+                                  <name>Garden Hoe</name>
+                                  <description>Hand held garden tool</description>
+                                  <photoURL>https://www.gardentoolcompany.com/cdn/shop/files/nejiri-gama-hand-hoex1_fda5ef4e-0654-49ee-bdd3-74b691b5ff89.jpg?v=1716317414&amp;width=1024</photoURL>
+                                  <price>16.99</price>
+                                  <weight>320.0</weight>
+                                  <quantity>20</quantity>
+                                  <weightType>1</weightType>
+                                  <storageType>0</storageType>
+                                </content>
+                              </next>
+                            </head>
+                            <tail reference="../head/next"/>
+                          </list>
+                          <dimensions>
+                            <int>10</int>
+                            <int>4</int>
+                          </dimensions>
+                          <shelfNumber>1</shelfNumber>
+                        </content>
+                      </head>
+                      <tail reference="../head"/>
+                    </list>
+                    <dimensions>
+                      <int>10</int>
+                      <int>20</int>
+                    </dimensions>
+                    <aisleSize>
+                      <int>10</int>
+                      <int>20</int>
+                    </aisleSize>
+                    <storageType>0</storageType>
+                  </content>
+                </head>
+                <tail reference="../head"/>
+              </list>
+              <dimensions>
+                <int>30</int>
+                <int>40</int>
+              </dimensions>
+              <floor>1</floor>
+            </content>
+            <next>
+              <content class="supermarketmanager.model.supermarket.Floor">
+                <name>Frozen</name>
+                <list>
+                  <head>
+                    <content class="supermarketmanager.model.supermarket.Aisle">
+                      <name>Frozen Fish</name>
+                      <list>
+                        <head>
+                          <content class="supermarketmanager.model.supermarket.Shelf">
+                            <name>Breaded</name>
+                            <list>
+                              <head>
+                                <content class="supermarketmanager.model.supermarket.GoodItem">
+                                  <name>Breaded fillets of salmon</name>
+                                  <description>Locally sources and freshly frozen</description>
+                                  <photoURL>https://www.joyousapron.com/wp-content/uploads/2022/01/panko-crusted-salmon-pic-09.jpg</photoURL>
+                                  <price>7.99</price>
+                                  <weight>400.0</weight>
+                                  <quantity>20</quantity>
+                                  <weightType>1</weightType>
+                                  <storageType>2</storageType>
+                                </content>
+                              </head>
+                              <tail reference="../head"/>
+                            </list>
+                            <dimensions>
+                              <int>40</int>
+                              <int>2</int>
+                            </dimensions>
+                            <shelfNumber>1</shelfNumber>
+                          </content>
+                        </head>
+                        <tail reference="../head"/>
+                      </list>
+                      <dimensions>
+                        <int>40</int>
+                        <int>10</int>
+                      </dimensions>
+                      <aisleSize>
+                        <int>40</int>
+                        <int>10</int>
+                      </aisleSize>
+                      <storageType>2</storageType>
+                    </content>
+                  </head>
+                  <tail reference="../head"/>
+                </list>
+                <dimensions>
+                  <int>40</int>
+                  <int>40</int>
+                </dimensions>
+                <floor>0</floor>
+              </content>
+            </next>
+          </next>
+        </next>
+      </head>
+      <tail reference="../head/next/next/next"/>
+    </list>
+    <dimensions>
+      <int>150</int>
+      <int>150</int>
+    </dimensions>
+    <file>C:\Users\bolge\Desktop\SupermarketManager\SuperDuperMarket.xml</file>
+  </supermarketmanager.controller.SupermarketManager>
+</object-stream>
