@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 import supermarketmanager.model.javafx.Insertable;
 import supermarketmanager.model.linkedlist.LinkedList;
 import supermarketmanager.model.supermarket.*;
+import supermarketmanager.view.AddGoodItemInsert;
 import supermarketmanager.view.PopoutMenu;
 import supermarketmanager.view.initialPopup;
 
@@ -21,6 +22,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class MainController {
+    public Menu editMenu;
     SupermarketManager manager;
     MarketStructure<?> selectedEntity;
     public VBox mainVBox;
@@ -106,8 +108,9 @@ public class MainController {
                 createNewManager();
         }
         treeRoot = new TreeItem<>(manager);
+        treeRoot.setExpanded(true);
         treeView.setRoot(treeRoot);
-        treeView.setShowRoot(false);
+        treeView.setShowRoot(true);
         getTreeChildren();
     }
 
@@ -181,7 +184,13 @@ public class MainController {
         }
     }
 
-    public void deleteSelectedEntity(ActionEvent actionEvent) {
+    public void deleteSelectedEntity(ActionEvent actionEvent) throws IOException {
+        if(selectedEntity == null)
+            return;
+        MarketStructure<?> parentItem = manager.findParent(selectedEntity);
+        parentItem.remove(selectedEntity);
+        updateTreeView();
+        updateButtons();
     }
 
     public void editSelectedEntity(ActionEvent actionEvent) {
@@ -220,29 +229,35 @@ public class MainController {
             autoAddGoodItem.disableProperty().set(list == null || list.isEmpty());
         }
         switch (selectedEntity){
-            case Floor floor -> {
+            case SupermarketManager manager ->{
                 addFloor.disableProperty().set(false);
+                addAisle.disableProperty().set(true);
+                addShelf.disableProperty().set(true);
+                addGoodItem.disableProperty().set(true);
+            }
+            case Floor floor -> {
+                addFloor.disableProperty().set(true);
                 addAisle.disableProperty().set(false);
                 addShelf.disableProperty().set(true);
                 addGoodItem.disableProperty().set(true);
             }
             case Aisle aisle ->{
-                addFloor.disableProperty().set(false);
-                addAisle.disableProperty().set(false);
+                addFloor.disableProperty().set(true);
+                addAisle.disableProperty().set(true);
                 addShelf.disableProperty().set(false);
                 addGoodItem.disableProperty().set(true);
             }
             case Shelf shelf -> {
-                addFloor.disableProperty().set(false);
-                addAisle.disableProperty().set(false);
-                addShelf.disableProperty().set(false);
+                addFloor.disableProperty().set(true);
+                addAisle.disableProperty().set(true);
+                addShelf.disableProperty().set(true);
                 addGoodItem.disableProperty().set(false);
             }
             case GoodItem goodItem -> {
-                addFloor.disableProperty().set(false);
-                addAisle.disableProperty().set(false);
-                addShelf.disableProperty().set(false);
-                addGoodItem.disableProperty().set(false);
+                addFloor.disableProperty().set(true);
+                addAisle.disableProperty().set(true);
+                addShelf.disableProperty().set(true);
+                addGoodItem.disableProperty().set(true);
             }
             default -> {
                 break;
@@ -250,16 +265,97 @@ public class MainController {
         }
     }
 
-    public void showAddAisle(ActionEvent actionEvent) {
+    public void showAddAisle(ActionEvent actionEvent) throws IOException {
+        FXMLLoader insertLoader = new FXMLLoader(getClass().getResource("/supermarketmanager/ui/AisleInsert.fxml"));
+        Node insertNode = insertLoader.load();
+        Insertable insertController = insertLoader.getController();
+
+        FXMLLoader skeletonLoader = new FXMLLoader(getClass().getResource("/supermarketmanager/ui/popoutSkeleton.fxml"));
+        Parent skeletonRoot = skeletonLoader.load();
+        PopoutMenu skeletonController = skeletonLoader.getController();
+
+        skeletonController.initialize(insertController); // Pass controller here
+
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setScene(new Scene(skeletonRoot));
+        stage.showAndWait();
+
+        Aisle result = (Aisle) insertController.getResult();
+        manager.addAisle(result, (Floor) selectedEntity);
+        updateTreeView();
     }
 
-    public void showAddShelf(ActionEvent actionEvent) {
+    public void showAddShelf(ActionEvent actionEvent) throws IOException {
+        FXMLLoader insertLoader = new FXMLLoader(getClass().getResource("/supermarketmanager/ui/ShelfInsert.fxml"));
+        Node insertNode = insertLoader.load();
+        Insertable insertController = insertLoader.getController();
+
+        FXMLLoader skeletonLoader = new FXMLLoader(getClass().getResource("/supermarketmanager/ui/popoutSkeleton.fxml"));
+        Parent skeletonRoot = skeletonLoader.load();
+        PopoutMenu skeletonController = skeletonLoader.getController();
+
+        skeletonController.initialize(insertController); // Pass controller here
+
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setScene(new Scene(skeletonRoot));
+        stage.showAndWait();
+
+        Shelf result = (Shelf) insertController.getResult();
+        manager.addShelf(result, (Aisle) selectedEntity);
+        updateTreeView();
     }
 
-    public void showAddGoodItem(ActionEvent actionEvent) {
+    public void showAddGoodItem(ActionEvent actionEvent) throws IOException {
+        FXMLLoader insertLoader = new FXMLLoader(getClass().getResource("/supermarketmanager/ui/addGoodItem.fxml"));
+        Node insertNode = insertLoader.load();
+        AddGoodItemInsert insertController = insertLoader.getController();
+
+        Shelf shelfToAdd = (Shelf) selectedEntity;
+        insertController.initialize((Aisle) manager.findParent(selectedEntity));
+
+        FXMLLoader skeletonLoader = new FXMLLoader(getClass().getResource("/supermarketmanager/ui/popoutSkeleton.fxml"));
+        Parent skeletonRoot = skeletonLoader.load();
+        PopoutMenu skeletonController = skeletonLoader.getController();
+
+        skeletonController.initialize(insertController);
+
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setScene(new Scene(skeletonRoot));
+        stage.showAndWait();
+
+        GoodItem result = (GoodItem) insertController.getResult();
+        shelfToAdd.add(result);
+        updateTreeView();
     }
 
-    public void showAutoAddGoodItem(ActionEvent actionEvent) {
+    public void showAutoAddGoodItem(ActionEvent actionEvent) throws IOException {
+        FXMLLoader insertLoader = new FXMLLoader(getClass().getResource("/supermarketmanager/ui/autoAddGoodItemInsert.fxml"));
+        Node insertNode = insertLoader.load();
+        Insertable insertController = insertLoader.getController();
+
+        FXMLLoader skeletonLoader = new FXMLLoader(getClass().getResource("/supermarketmanager/ui/popoutSkeleton.fxml"));
+        Parent skeletonRoot = skeletonLoader.load();
+        PopoutMenu skeletonController = skeletonLoader.getController();
+
+        skeletonController.initialize(insertController);
+
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setScene(new Scene(skeletonRoot));
+        stage.showAndWait();
+
+        GoodItem result = (GoodItem) insertController.getResult();
+        Shelf shelfToAdd = manager.findSuitableLocation(result);
+        shelfToAdd.add(result);
+        updateTreeView();
+    }
+
+    public void updateEdit(){
+        if(selectedEntity != null)
+            editMenu.setDisable(false);
     }
 
     public void showSelectedEntity(MouseEvent mouseEvent) {
@@ -269,6 +365,7 @@ public class MainController {
         entityOutput.appendText("\n" + selectedEntity.details());
         entityOutput.setScrollTop(Double.MAX_VALUE);
         updateButtons();
+        updateEdit();
         mouseEvent.consume();
     }
 }

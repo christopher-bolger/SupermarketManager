@@ -28,7 +28,7 @@
                         <MenuItem id="menuClear" fx:id="clearMenu" mnemonicParsing="false" onAction="#clearData" text="Clear" />
                   </items>
                 </Menu>
-                <Menu id="menuEditOption" disable="true" mnemonicParsing="false" text="Edit">
+                <Menu id="menuEditOption" fx:id="editMenu" disable="true" mnemonicParsing="false" text="Edit">
                   <items>
                         <MenuItem id="menuDelete" fx:id="menuDeleteSelected" mnemonicParsing="false" onAction="#deleteSelectedEntity" text="Delete Selected" />
                         <MenuItem id="menuEdit" fx:id="menuEditSelected" mnemonicParsing="false" onAction="#editSelectedEntity" text="Edit Selected" />

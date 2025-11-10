@@ -81,7 +81,7 @@ public abstract class MarketStructure<E> {
         return list.addAll(items);
     }
 
-    public boolean remove(E item){
+    public boolean remove(MarketStructure<?> item){
         return list.remove(item);
     }
 

@@ -74,7 +74,7 @@ public class SupermarketManager extends MarketStructure<Floor> {
         return getList().add(item);
     }
 
-    private boolean addAisle(Aisle item, Floor parentFloor){
+    public boolean addAisle(Aisle item, Floor parentFloor){
         boolean accepted = checkAisleName(item.getName());
         if(accepted)
             return parentFloor.add(item);
@@ -92,7 +92,7 @@ public class SupermarketManager extends MarketStructure<Floor> {
         return totalValue;
     }
 
-    private boolean addShelf(Shelf item, Aisle parentAisle){
+    public boolean addShelf(Shelf item, Aisle parentAisle){
         return parentAisle.add(item);
     }
 
@@ -239,12 +239,32 @@ public class SupermarketManager extends MarketStructure<Floor> {
         if(toFind == null || isEmpty())
             return null;
         LinkedList<GoodItem> otherItems = (LinkedList<GoodItem>) getAllGoodItems();
+        LinkedList<Aisle> otherAisles = (LinkedList<Aisle>) getAllAisles();
         LinkedList<Shelf> shelves = null;
         String[] splitName = toFind.getName().toLowerCase().split(" ");
         String[] splitDescription = toFind.getDescription().toLowerCase().split(" ");
-        int[] score = new int[0];
-        boolean matchFound = false;
+        int[] score = new int[0], shelfScore = new int[0];
 
+        if(otherAisles != null && !otherAisles.isEmpty()){
+            shelves = new LinkedList<>();
+            if(otherAisles.isEmpty())
+                return null;
+            for(Aisle aisle : otherAisles)
+                if(!aisle.getList().isEmpty())
+                    if(aisle.getStorageType().equals(toFind.getStorageType()))
+                        shelves.addAll(aisle.getList());
+            shelfScore = new int[shelves.size()];
+            for(int i = 0; i < shelves.size(); i++) {
+                for (String s : splitName)
+                    if (shelves.get(i).getName().toLowerCase().contains(s.toLowerCase()) ||
+                            findParent(shelves.get(i)).getName().toLowerCase().contains(s.toLowerCase()))
+                        shelfScore[i]++;
+                for(String s : splitDescription)
+                    if(shelves.get(i).getName().toLowerCase().contains(s.toLowerCase()) ||
+                            findParent(shelves.get(i)).getName().toLowerCase().contains(s.toLowerCase()))
+                        shelfScore[i]++;
+            }
+        }
         if(otherItems != null && !otherItems.isEmpty()) { //looking for similar good items
             score = new int[otherItems.size()];
             for (int i = 0; i < otherItems.size(); i++) {
@@ -261,50 +281,31 @@ public class SupermarketManager extends MarketStructure<Floor> {
                                 score[i]++;
                 }
             }
-
-            for(int i : score)
-                if (i > 0) {
-                    matchFound = true;
-                    break;
-                }
-        }
-        if(!matchFound){//if that fails we look for similar shelves
-            LinkedList<Aisle> otherAisles = (LinkedList<Aisle>) getAllAisles();
-            shelves = new LinkedList<>();
-            if(otherAisles.isEmpty())
-                return null;
-            for(Aisle aisle : otherAisles)
-                if(!aisle.getList().isEmpty())
-                    if(aisle.getStorageType().equals(toFind.getStorageType()))
-                        shelves.addAll(aisle.getList());
-            score = new int[shelves.size()];
-            if(score.length == 1)
-                return shelves.getFirst();
-            for(int i = 0; i < shelves.size(); i++) {
-                for (String s : splitName)
-                    if (shelves.get(i).getName().toLowerCase().contains(s.toLowerCase()))
-                        score[i]++;
-                for(String s : splitDescription)
-                    if(shelves.get(i).getName().toLowerCase().contains(s.toLowerCase()))
-                        score[i]++;
-            }
         }
 
-        if(score.length == 0)
+        if(score.length == 0 && shelfScore.length == 0)
             return null;
         int highestScore = -1;
         int highestIndex = 0;
+        int highestList = 0;
         for(int i = 0; i < score.length; i++)
             if(score[i] > highestScore) {
                 highestScore = score[i];
                 highestIndex = i;
             }
+        for(int i = 0; i < shelfScore.length; i++)
+            if(shelfScore[i] > highestScore) {
+                highestScore = shelfScore[i];
+                highestIndex = i;
+                highestList = 1;
+            }
         if(highestScore < 1)
             return null;
-        if(shelves == null)
+        if(highestList == 0){
             return (Shelf) findParent(otherItems.get(highestIndex));
-        return shelves.get(highestIndex);
-
+        }else{
+            return shelves.get(highestIndex);
+        }
     }
 
     public boolean checkIndex(MarketStructure<?> parent, int index){
@@ -332,7 +333,7 @@ public class SupermarketManager extends MarketStructure<Floor> {
         int[] dimensions = getDimensions();
         string.append("Name: ").append(super.getName()).append("\t")
                 .append("Size: ").append(dimensions[0]).append(", ").append(dimensions[1]).append("\n")
-                .append("File name: ").append(file.toString()).append("\n");
+                .append("File: ").append(file.toString()).append("\n");
         return string.toString();
     }
 

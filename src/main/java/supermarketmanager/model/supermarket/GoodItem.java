@@ -150,7 +150,8 @@ public class GoodItem extends MarketStructure<GoodItem>{
     }
 
     public double totalValue(){
-        return price*quantity;
+        DecimalFormat df = new DecimalFormat("#.##");
+        return Double.parseDouble(df.format(price * quantity));
     }
 
     public String getStorageType() {
