@@ -158,6 +158,8 @@ public class GoodItem extends MarketStructure<GoodItem>{
         return GoodItem.storageTypes[storageType];
     }
 
+    public int getStorageTypeIndex() {return storageType;}
+
     public void setStorageType(int index){
         if(index > -1 && index < storageTypes.length)
             storageType = index;

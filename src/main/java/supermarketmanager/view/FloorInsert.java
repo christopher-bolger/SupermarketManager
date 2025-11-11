@@ -77,4 +77,15 @@ public class FloorInsert extends Insertable {
     public AnchorPane getRoot() {
         return rootAnchor;
     }
+
+    @Override
+    public void edit(MarketStructure<?> itemToEdit) {
+        if(itemToEdit instanceof Floor) {
+            nameInput.setText(itemToEdit.getName());
+            floorInput.setText(Integer.toString(((Floor) itemToEdit).getFloor()));
+            int[] dimensions = ((Floor) itemToEdit).getDimensions();
+            dimensionX.setText(Integer.toString(dimensions[0]));
+            dimensionY.setText(Integer.toString(dimensions[1]));
+        }
+    }
 }

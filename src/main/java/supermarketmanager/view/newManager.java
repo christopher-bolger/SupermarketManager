@@ -26,7 +26,12 @@ public class newManager extends Insertable{
         dimensionY.disableProperty().bind(dimensionX.textProperty().isEmpty());
     }
 
+
+
     public MarketStructure<?> getResult() {
+        if(nameInput.getText().isEmpty() || dimensionX.getText().isEmpty() || dimensionY.getText().isEmpty()) {
+            return null;
+        }
         String name = nameInput.getText().toLowerCase().replaceAll(" ", "_") + ".xml";
         File file = new File(name);
         return new SupermarketManager(nameInput.getText(), new int[] {Integer.parseInt(dimensionX.getText()), Integer.parseInt(dimensionX.getText())}, file);
@@ -35,6 +40,16 @@ public class newManager extends Insertable{
     @Override
     public AnchorPane getRoot() {
         return rootAnchor;
+    }
+
+    @Override
+    public void edit(MarketStructure<?> itemToEdit) {
+        if(itemToEdit instanceof SupermarketManager) {
+            nameInput.setText(itemToEdit.getName());
+            int[] dimensions = itemToEdit.getDimensions();
+            dimensionX.setText(String.valueOf(dimensions[0]));
+            dimensionY.setText(String.valueOf(dimensions[1]));
+        }
     }
 
     public void checkString(KeyEvent keyEvent) {

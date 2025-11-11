@@ -30,6 +30,9 @@ public class AddGoodItemInsert extends Insertable {
 
     @Override
     public MarketStructure<?> getResult() {
+        if(nameInput.getText().isEmpty() || descriptionInput.getText().isEmpty() || urlInput.getText().isEmpty() || weightInput.getText().isEmpty() || priceInput.getText().isEmpty() || weightType.getValue().isEmpty()) {
+            return null;
+        }
         String name = nameInput.getText(), description = descriptionInput.getText(), photoUrl = urlInput.getText();
         int storage, weightIndex, quantity = Integer.parseInt(quantityInput.getText());
         double price = Double.parseDouble(priceInput.getText()), weight = Double.parseDouble(weightInput.getText());
@@ -48,6 +51,19 @@ public class AddGoodItemInsert extends Insertable {
     @Override
     public AnchorPane getRoot() {
         return rootAnchor;
+    }
+
+    @Override
+    public void edit(MarketStructure<?> itemToEdit) {
+        if(itemToEdit instanceof GoodItem){
+            nameInput.setText(itemToEdit.getName());
+            descriptionInput.setText(((GoodItem) itemToEdit).getDescription());
+            urlInput.setText(((GoodItem) itemToEdit).getPhotoURL());
+            weightType.getSelectionModel().select(((GoodItem) itemToEdit).getWeightType());
+            weightInput.setText(Double.toString(((GoodItem) itemToEdit).getWeight()));
+            quantityInput.setText(Integer.toString(((GoodItem) itemToEdit).getQuantity()));
+            priceInput.setText(Double.toString(((GoodItem) itemToEdit).getPrice()));
+        }
     }
 
     public void checkString(KeyEvent keyEvent) {

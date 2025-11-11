@@ -56,6 +56,11 @@ public class AutoAddGoodItemInsert extends Insertable {
         return rootAnchor;
     }
 
+    @Override
+    public void edit(MarketStructure<?> itemToEdit) {
+        return; //this is unused - when you go to edit a GoodItem it won't use this class to edit
+    }
+
     public void checkString(KeyEvent keyEvent) {
         if(nameInput.getText().isEmpty())
             errorOutput.setText(goodItemStringError);

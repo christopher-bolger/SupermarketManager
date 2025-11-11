@@ -31,6 +31,9 @@ public class AisleInsert extends Insertable {
 
     @Override
     public MarketStructure<?> getResult() {
+        if(nameInput.getText().isEmpty() || dimensionX.getText().isEmpty() || dimensionY.getText().isEmpty()) {
+            return null;
+        }
         String name = nameInput.getText();
         int[] dimensions = {Integer.parseInt(dimensionX.getText()), Integer.parseInt(dimensionY.getText())};
         int storageType = 0;
@@ -47,6 +50,17 @@ public class AisleInsert extends Insertable {
     @Override
     public AnchorPane getRoot() {
         return rootAnchor;
+    }
+
+    @Override
+    public void edit(MarketStructure<?> itemToEdit) {
+        if(itemToEdit instanceof Aisle){
+            int[] dimensions = itemToEdit.getDimensions();
+            nameInput.setText(itemToEdit.getName());
+            dimensionX.setText(String.valueOf(dimensions[0]));
+            dimensionY.setText(String.valueOf(dimensions[1]));
+            comboBox.getSelectionModel().select(((Aisle) itemToEdit).getStorageType());
+        }
     }
 
     public void checkString(KeyEvent keyEvent) {

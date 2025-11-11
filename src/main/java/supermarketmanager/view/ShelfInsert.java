@@ -22,6 +22,9 @@ public class ShelfInsert extends Insertable {
 
     @Override
     public MarketStructure<?> getResult() {
+        if(nameInput.getText().isEmpty() || shelfNumberInput.getText().isEmpty() || dimensionX.getText().isEmpty() || dimensionY.getText().isEmpty()) {
+            return null;
+        }
         String name = nameInput.getText();
         int shelfNumber = Integer.parseInt(shelfNumberInput.getText());
         int[] dimensions = { Integer.parseInt(dimensionX.getText()), Integer.parseInt(dimensionY.getText()) };
@@ -31,6 +34,17 @@ public class ShelfInsert extends Insertable {
     @Override
     public AnchorPane getRoot() {
         return rootAnchor;
+    }
+
+    @Override
+    public void edit(MarketStructure<?> itemToEdit) {
+        if(itemToEdit instanceof Shelf shelf) {
+            nameInput.setText(shelf.getName());
+            shelfNumberInput.setText(String.valueOf(shelf.getShelfNumber()));
+            int[] dimensions = shelf.getDimensions();
+            dimensionX.setText(String.valueOf(dimensions[0]));
+            dimensionY.setText(String.valueOf(dimensions[1]));
+        }
     }
 
     public void checkString(KeyEvent keyEvent) {

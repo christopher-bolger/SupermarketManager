@@ -193,7 +193,65 @@ public class MainController {
         updateButtons();
     }
 
-    public void editSelectedEntity(ActionEvent actionEvent) {
+    public void editSelectedEntity(ActionEvent actionEvent) throws IOException {
+        switch(selectedEntity){
+//            case Floor floor -> editFloor(floor);
+//            case Aisle aisle -> editAisle(aisle);
+//            case Shelf shelf -> editShelf(shelf);
+            case GoodItem goodItem -> editGoodItem(goodItem);
+            default -> editManager();
+        }
+        updateTreeView();
+    }
+
+    public void editGoodItem(GoodItem goodItem) throws IOException {
+        FXMLLoader insertLoader = new FXMLLoader(getClass().getResource("/supermarketmanager/ui/addGoodItem.fxml"));
+        Node insertNode = insertLoader.load();
+        AddGoodItemInsert insertController = insertLoader.getController();
+
+        Shelf shelfToAdd = (Shelf) manager.findParent(selectedEntity);
+        insertController.initialize((Aisle) manager.findParent(shelfToAdd));
+
+        FXMLLoader skeletonLoader = new FXMLLoader(getClass().getResource("/supermarketmanager/ui/popoutSkeleton.fxml"));
+        Parent skeletonRoot = skeletonLoader.load();
+        PopoutMenu skeletonController = skeletonLoader.getController();
+
+        skeletonController.initialize(insertController);
+        insertController.edit(goodItem);
+
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setScene(new Scene(skeletonRoot));
+        stage.showAndWait();
+
+        GoodItem result = (GoodItem) insertController.getResult();
+        if(result != null)
+            shelfToAdd.add(result);
+    }
+
+    public void editManager() throws IOException {
+        FXMLLoader insertLoader = new FXMLLoader(getClass().getResource("/supermarketmanager/ui/newManager.fxml"));
+        Node insertNode = insertLoader.load();
+        Insertable insertController = insertLoader.getController();
+
+        FXMLLoader skeletonLoader = new FXMLLoader(getClass().getResource("/supermarketmanager/ui/popoutSkeleton.fxml"));
+        Parent skeletonRoot = skeletonLoader.load();
+        PopoutMenu skeletonController = skeletonLoader.getController();
+
+        skeletonController.initialize(insertController); // Pass controller here
+        insertController.edit(manager);
+
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setScene(new Scene(skeletonRoot));
+        stage.showAndWait();
+
+        MarketStructure<?> manager = insertController.getResult();
+        LinkedList<Floor> oldList = this.manager.getList();
+        if(manager != null) {
+            this.manager = (SupermarketManager) manager;
+            this.manager.addAll(oldList);
+        }
     }
 
     public void showAddFloor(ActionEvent actionEvent) throws IOException {
@@ -213,7 +271,8 @@ public class MainController {
         stage.showAndWait();
 
         MarketStructure<?> result = insertController.getResult();
-        manager.add((Floor) result);
+        if(result != null)
+            manager.add((Floor) result);
         updateTreeView();
     }
 
@@ -282,7 +341,8 @@ public class MainController {
         stage.showAndWait();
 
         Aisle result = (Aisle) insertController.getResult();
-        manager.addAisle(result, (Floor) selectedEntity);
+        if(result != null)
+            manager.addAisle(result, (Floor) selectedEntity);
         updateTreeView();
     }
 
@@ -303,7 +363,8 @@ public class MainController {
         stage.showAndWait();
 
         Shelf result = (Shelf) insertController.getResult();
-        manager.addShelf(result, (Aisle) selectedEntity);
+        if(result != null)
+            manager.addShelf(result, (Aisle) selectedEntity);
         updateTreeView();
     }
 
@@ -327,7 +388,8 @@ public class MainController {
         stage.showAndWait();
 
         GoodItem result = (GoodItem) insertController.getResult();
-        shelfToAdd.add(result);
+        if(result != null)
+            shelfToAdd.add(result);
         updateTreeView();
     }
 
@@ -349,7 +411,8 @@ public class MainController {
 
         GoodItem result = (GoodItem) insertController.getResult();
         Shelf shelfToAdd = manager.findSuitableLocation(result);
-        shelfToAdd.add(result);
+        if(result != null && shelfToAdd != null)
+            shelfToAdd.add(result);
         updateTreeView();
     }
 
