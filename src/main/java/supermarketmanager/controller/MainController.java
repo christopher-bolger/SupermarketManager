@@ -195,13 +195,25 @@ public class MainController {
 
     public void editSelectedEntity(ActionEvent actionEvent) throws IOException {
         switch(selectedEntity){
-//            case Floor floor -> editFloor(floor);
-//            case Aisle aisle -> editAisle(aisle);
-//            case Shelf shelf -> editShelf(shelf);
+            case Floor floor -> editFloor(floor);
+            case Aisle aisle -> editAisle(aisle);
+            case Shelf shelf -> editShelf(shelf);
             case GoodItem goodItem -> editGoodItem(goodItem);
             default -> editManager();
         }
         updateTreeView();
+    }
+
+    public void editShelf(Shelf shelf){
+
+    }
+
+    public void editAisle(Aisle aisle){
+
+    }
+
+    public void editFloor(Floor floor){
+
     }
 
     public void editGoodItem(GoodItem goodItem) throws IOException {
