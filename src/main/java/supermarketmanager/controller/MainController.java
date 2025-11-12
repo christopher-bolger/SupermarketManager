@@ -14,7 +14,6 @@ import javafx.stage.Stage;
 import supermarketmanager.model.javafx.Insertable;
 import supermarketmanager.model.linkedlist.LinkedList;
 import supermarketmanager.model.supermarket.*;
-import supermarketmanager.view.AddGoodItemInsert;
 import supermarketmanager.view.PopoutMenu;
 import supermarketmanager.view.initialPopup;
 
@@ -56,6 +55,7 @@ public class MainController {
 
     public void initialize() throws IOException {
         updateTreeView();
+        treeView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     }
 
     public void openExplorer(ActionEvent actionEvent) throws Exception {
@@ -87,8 +87,8 @@ public class MainController {
         return (SupermarketManager) result;
     }
 
-    public void createNewManager() throws IOException {
-        FXMLLoader insertLoader = new FXMLLoader(getClass().getResource("/supermarketmanager/ui/newManager.fxml"));
+    public MarketStructure<?> insertPopup(String insertPath) throws IOException {
+        FXMLLoader insertLoader = new FXMLLoader(getClass().getResource(insertPath));
         Node insertNode = insertLoader.load();
         Insertable insertController = insertLoader.getController();
 
@@ -102,8 +102,30 @@ public class MainController {
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setScene(new Scene(skeletonRoot));
         stage.showAndWait();
+        return skeletonController.cancelled ? null : insertController.getResult();
+    }
 
-        manager = (SupermarketManager) insertController.getResult();
+    public MarketStructure<?> insertPopupEdit(String insertPath, MarketStructure itemToEdit) throws IOException {
+        FXMLLoader insertLoader = new FXMLLoader(getClass().getResource(insertPath));
+        Node insertNode = insertLoader.load();
+        Insertable insertController = insertLoader.getController();
+
+        FXMLLoader skeletonLoader = new FXMLLoader(getClass().getResource("/supermarketmanager/ui/popoutSkeleton.fxml"));
+        Parent skeletonRoot = skeletonLoader.load();
+        PopoutMenu skeletonController = skeletonLoader.getController();
+
+        skeletonController.initialize(insertController);
+        insertController.edit(itemToEdit);
+
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setScene(new Scene(skeletonRoot));
+        stage.showAndWait();
+        return skeletonController.cancelled ? null : insertController.getResult();
+    }
+
+    public void createNewManager() throws IOException {
+        manager = (SupermarketManager) insertPopup("/supermarketmanager/ui/newManager.fxml");
     }
 
     public void updateTreeView() throws IOException {
@@ -218,97 +240,35 @@ public class MainController {
 
     }
 
-    public void editFloor(Floor floor){
-
+    public void editFloor(Floor floor) throws IOException {
+        Floor result = (Floor) insertPopupEdit("/supermarketmanager/ui/floorInsert.fxml", floor);
+        LinkedList<Aisle> oldList = floor.getList();
+        if(result != null) {
+            result.addAll(oldList);
+            manager.replace(floor, result);
+            updateTreeView();
+        }
     }
 
     public void editGoodItem(GoodItem goodItem) throws IOException {
-        FXMLLoader insertLoader = new FXMLLoader(getClass().getResource("/supermarketmanager/ui/addGoodItem.fxml"));
-        Node insertNode = insertLoader.load();
-        AddGoodItemInsert insertController = insertLoader.getController();
-
-        GoodItem oldItem = (GoodItem) selectedEntity;
-        Shelf shelfToAdd = (Shelf) manager.findParent(selectedEntity);
-        insertController.initialize((Aisle) manager.findParent(shelfToAdd));
-
-        FXMLLoader skeletonLoader = new FXMLLoader(getClass().getResource("/supermarketmanager/ui/popoutSkeleton.fxml"));
-        Parent skeletonRoot = skeletonLoader.load();
-        PopoutMenu skeletonController = skeletonLoader.getController();
-
-        skeletonController.initialize(insertController);
-        insertController.edit(goodItem);
-
-        Stage stage = new Stage();
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setScene(new Scene(skeletonRoot));
-        stage.showAndWait();
-
-        if(!skeletonController.cancelled) {
-            GoodItem result = (GoodItem) insertController.getResult();
-            if (result != null)
-                manager.addObject(result, shelfToAdd);
+        Shelf shelf = (Shelf) manager.findParent(selectedEntity);
+        GoodItem result = (GoodItem) insertPopup("/supermarketmanager/ui/addGoodItem.fxml");
+        if(result != null) {
+            manager.addObject(result, shelf);
             updateTreeView();
         }
     }
 
     public void editManager() throws IOException {
-        FXMLLoader insertLoader = new FXMLLoader(getClass().getResource("/supermarketmanager/ui/newManager.fxml"));
-        Node insertNode = insertLoader.load();
-        Insertable insertController = insertLoader.getController();
-
-        FXMLLoader skeletonLoader = new FXMLLoader(getClass().getResource("/supermarketmanager/ui/popoutSkeleton.fxml"));
-        Parent skeletonRoot = skeletonLoader.load();
-        PopoutMenu skeletonController = skeletonLoader.getController();
-
-        skeletonController.initialize(insertController); // Pass controller here
-        insertController.edit(manager);
-
-        Stage stage = new Stage();
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setScene(new Scene(skeletonRoot));
-        stage.showAndWait();
-
-        if(!skeletonController.cancelled) {
-            MarketStructure<?> manager = insertController.getResult();
+        SupermarketManager newManager = (SupermarketManager) insertPopupEdit("/supermarketmanager/ui/newManager.fxml", manager);
+        if(newManager != null) {
             LinkedList<Floor> oldList = this.manager.getList();
-            if (manager != null) {
-                this.manager = (SupermarketManager) manager;
-                this.manager.addAll(oldList);
-            }
+            manager = newManager;
+            manager.addAll(oldList);
             updateTreeView();
         }
     }
 
-    public void showAddFloor(ActionEvent actionEvent) throws IOException {
-        FXMLLoader insertLoader = new FXMLLoader(getClass().getResource("/supermarketmanager/ui/floorInsert.fxml"));
-        Node insertNode = insertLoader.load();
-        Insertable insertController = insertLoader.getController();
-
-        FXMLLoader skeletonLoader = new FXMLLoader(getClass().getResource("/supermarketmanager/ui/popoutSkeleton.fxml"));
-        Parent skeletonRoot = skeletonLoader.load();
-        PopoutMenu skeletonController = skeletonLoader.getController();
-
-        skeletonController.initialize(insertController); // Pass controller here
-
-        Stage stage = new Stage();
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setScene(new Scene(skeletonRoot));
-        stage.showAndWait();
-
-        if(!skeletonController.cancelled) {
-            MarketStructure<?> result = insertController.getResult();
-            if (result != null)
-                manager.add((Floor) result);
-            updateTreeView();
-        }
-    }
-
-
-//    public Button addFloor;
-//    public Button addAisle;
-//    public Button addShelf;
-//    public Button addGoodItem;
-//    public Button autoAddGoodItem;
     public void updateButtons(){
         if(manager != null){
             LinkedList<Shelf> list = (LinkedList<Shelf>) manager.getAllShelves();
@@ -335,98 +295,42 @@ public class MainController {
         }
     }
 
-    public void showAddAisle(ActionEvent actionEvent) throws IOException {
-        FXMLLoader insertLoader = new FXMLLoader(getClass().getResource("/supermarketmanager/ui/AisleInsert.fxml"));
-        Node insertNode = insertLoader.load();
-        Insertable insertController = insertLoader.getController();
+    public void showAddFloor(ActionEvent actionEvent) throws IOException {
+        Floor result = (Floor) insertPopup("/supermarketmanager/ui/floorInsert.fxml");
 
-        FXMLLoader skeletonLoader = new FXMLLoader(getClass().getResource("/supermarketmanager/ui/popoutSkeleton.fxml"));
-        Parent skeletonRoot = skeletonLoader.load();
-        PopoutMenu skeletonController = skeletonLoader.getController();
-
-        skeletonController.initialize(insertController); // Pass controller here
-
-        Stage stage = new Stage();
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setScene(new Scene(skeletonRoot));
-        stage.showAndWait();
-
-        if(!skeletonController.cancelled) {
-            Aisle result = (Aisle) insertController.getResult();
-            if (result != null)
-                manager.addObject(result, selectedEntity);
+        if(result != null) {
+            manager.addObject(result, manager);
             updateTreeView();
         }
     }
 
     public void showAddShelf(ActionEvent actionEvent) throws IOException {
-        FXMLLoader insertLoader = new FXMLLoader(getClass().getResource("/supermarketmanager/ui/ShelfInsert.fxml"));
-        Node insertNode = insertLoader.load();
-        Insertable insertController = insertLoader.getController();
+        Shelf result = (Shelf) insertPopup("/supermarketmanager/ui/ShelfInsert.fxml");
+        if(result != null) {
+            manager.addObject(result, selectedEntity);
+            updateTreeView();
+        }
+    }
 
-        FXMLLoader skeletonLoader = new FXMLLoader(getClass().getResource("/supermarketmanager/ui/popoutSkeleton.fxml"));
-        Parent skeletonRoot = skeletonLoader.load();
-        PopoutMenu skeletonController = skeletonLoader.getController();
-
-        skeletonController.initialize(insertController); // Pass controller here
-
-        Stage stage = new Stage();
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setScene(new Scene(skeletonRoot));
-        stage.showAndWait();
-
-        if(!skeletonController.cancelled) {
-            Shelf result = (Shelf) insertController.getResult();
-            if (result != null)
-                manager.addObject(result, selectedEntity);
+    public void showAddAisle(ActionEvent actionEvent) throws IOException {
+        Shelf result = (Shelf) insertPopup("/supermarketmanager/ui/AisleInsert.fxml");
+        if(result != null) {
+            manager.addObject(result, selectedEntity);
             updateTreeView();
         }
     }
 
     public void showAddGoodItem(ActionEvent actionEvent) throws IOException {
-        FXMLLoader insertLoader = new FXMLLoader(getClass().getResource("/supermarketmanager/ui/addGoodItem.fxml"));
-        Node insertNode = insertLoader.load();
-        AddGoodItemInsert insertController = insertLoader.getController();
-
-        Shelf shelfToAdd = (Shelf) selectedEntity;
-        insertController.initialize((Aisle) manager.findParent(selectedEntity));
-
-        FXMLLoader skeletonLoader = new FXMLLoader(getClass().getResource("/supermarketmanager/ui/popoutSkeleton.fxml"));
-        Parent skeletonRoot = skeletonLoader.load();
-        PopoutMenu skeletonController = skeletonLoader.getController();
-
-        skeletonController.initialize(insertController);
-
-        Stage stage = new Stage();
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setScene(new Scene(skeletonRoot));
-        stage.showAndWait();
-
-        if(!skeletonController.cancelled) {
-            GoodItem result = (GoodItem) insertController.getResult();
-            manager.addObject(result, shelfToAdd);
+        GoodItem result = (GoodItem) insertPopup("/supermarketmanager/ui/addGoodItem.fxml");
+        if(result != null) {
+            manager.addObject(result, selectedEntity);
             updateTreeView();
         }
     }
 
     public void showAutoAddGoodItem(ActionEvent actionEvent) throws IOException {
-        FXMLLoader insertLoader = new FXMLLoader(getClass().getResource("/supermarketmanager/ui/autoAddGoodItemInsert.fxml"));
-        Node insertNode = insertLoader.load();
-        Insertable insertController = insertLoader.getController();
-
-        FXMLLoader skeletonLoader = new FXMLLoader(getClass().getResource("/supermarketmanager/ui/popoutSkeleton.fxml"));
-        Parent skeletonRoot = skeletonLoader.load();
-        PopoutMenu skeletonController = skeletonLoader.getController();
-
-        skeletonController.initialize(insertController);
-
-        Stage stage = new Stage();
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setScene(new Scene(skeletonRoot));
-        stage.showAndWait();
-
-        if(!skeletonController.cancelled) {
-            GoodItem result = (GoodItem) insertController.getResult();
+        GoodItem result = (GoodItem) insertPopup("/supermarketmanager/ui/autoAddGoodItemInsert.fxml");
+        if(result != null) {
             LinkedList<MarketStructure<?>> list = (LinkedList<MarketStructure<?>>) manager.find(result);
             if(list.isEmpty()) {
                 manager.addObject(result, manager.findSuitableLocation(result));
@@ -464,7 +368,6 @@ public class MainController {
 
     public void highlightResults(LinkedList<MarketStructure<?>> results) {
         treeView.getSelectionModel().clearSelection();
-        treeView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         MultipleSelectionModel<TreeItem<MarketStructure<?>>> selectionModel = treeView.getSelectionModel();
         TreeItem<MarketStructure<?>> root = treeView.getRoot();
 
