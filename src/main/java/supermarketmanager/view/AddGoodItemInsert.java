@@ -24,8 +24,7 @@ public class AddGoodItemInsert extends Insertable {
     public TextField nameInput;
     public GoodItem goodItem = null;
 
-    public void initialize(Aisle parent){
-        parentAisle = parent;
+    public void initialize() {
         weightType.getItems().addAll(GoodItem.weightTypes);
     }
 
@@ -46,7 +45,7 @@ public class AddGoodItemInsert extends Insertable {
             default -> weightIndex = 0;
         }
         //String name, String description, double price, int quantity, double weight, int weightType, int storageType, String photoURL
-        goodItem = new GoodItem(name, description, price, quantity, weight, weightIndex, parentAisle.getStorageTypeIndex(), photoUrl);
+        goodItem = new GoodItem(name, description, price, quantity, weight, weightIndex, 0, photoUrl);
         return goodItem;
     }
 
