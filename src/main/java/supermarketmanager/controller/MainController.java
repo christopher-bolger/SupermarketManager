@@ -20,8 +20,6 @@ import supermarketmanager.view.initialPopup;
 import java.io.File;
 import java.io.IOException;
 
-//There is a lot of repeated code here (most of the popups) and im well aware I could have simplified it a lot
-// but at this point i'm well overdue on this project and I have to cut corners somewhere...
 public class MainController {
     public Menu editMenu;
     public MenuItem searchName;
@@ -74,13 +72,13 @@ public class MainController {
     }
 
     public SupermarketManager initialPopup() throws IOException {
-        FXMLLoader insertLoader = new FXMLLoader(getClass().getResource("/supermarketmanager/ui/initialPopup.fxml"));
-        Parent insertNode = insertLoader.load();
-        initialPopup insertController = insertLoader.getController();
+        FXMLLoader popupLoader = new FXMLLoader(getClass().getResource("/supermarketmanager/ui/initialPopup.fxml"));
+        Parent popupNode = popupLoader.load();
+        initialPopup insertController = popupLoader.getController();
 
         Stage stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setScene(new Scene(insertNode));
+        stage.setScene(new Scene(popupNode));
         stage.showAndWait();
 
         MarketStructure<?> result = insertController.getResult();
@@ -252,7 +250,7 @@ public class MainController {
 
     public void editGoodItem(GoodItem goodItem) throws IOException {
         Shelf shelf = (Shelf) manager.findParent(selectedEntity);
-        GoodItem result = (GoodItem) insertPopup("/supermarketmanager/ui/addGoodItem.fxml");
+        GoodItem result = (GoodItem) insertPopupEdit("/supermarketmanager/ui/addGoodItem.fxml", goodItem);
         if(result != null) {
             manager.addObject(result, shelf);
             updateTreeView();
@@ -297,7 +295,6 @@ public class MainController {
 
     public void showAddFloor(ActionEvent actionEvent) throws IOException {
         Floor result = (Floor) insertPopup("/supermarketmanager/ui/floorInsert.fxml");
-
         if(result != null) {
             manager.addObject(result, manager);
             updateTreeView();
@@ -323,6 +320,7 @@ public class MainController {
     public void showAddGoodItem(ActionEvent actionEvent) throws IOException {
         GoodItem result = (GoodItem) insertPopup("/supermarketmanager/ui/addGoodItem.fxml");
         if(result != null) {
+            result.setStorageType(((Aisle) manager.findParent(selectedEntity)).getStorageTypeIndex());
             manager.addObject(result, selectedEntity);
             updateTreeView();
         }
@@ -332,7 +330,7 @@ public class MainController {
         GoodItem result = (GoodItem) insertPopup("/supermarketmanager/ui/autoAddGoodItemInsert.fxml");
         if(result != null) {
             LinkedList<MarketStructure<?>> list = (LinkedList<MarketStructure<?>>) manager.find(result);
-            if(list.isEmpty()) {
+            if(list == null || list.isEmpty()) {
                 manager.addObject(result, manager.findSuitableLocation(result));
             }else{
                 manager.addObject(result, manager.findParent(list.getFirst()));
@@ -358,8 +356,8 @@ public class MainController {
     }
 
     public void search(ActionEvent actionEvent) {
-        if(!searchField.getText().isEmpty() || !searchField.getText().isEmpty()) {
-            String[] searchTerm = {searchField.getText(), searchField.getText()};
+        if(!searchField.getText().isEmpty() || !searchDescription.getText().isEmpty()) {
+            String[] searchTerm = {searchField.getText(), searchDescription.getText()};
             LinkedList<MarketStructure<?>> foundItems = (LinkedList<MarketStructure<?>>) manager.search(searchTerm);
             errorOutput.appendText("\n" + "Found " + foundItems.size() + " matches!");
             highlightResults(foundItems);
