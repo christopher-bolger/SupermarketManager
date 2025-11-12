@@ -98,13 +98,13 @@ public class SupermarketManager extends MarketStructure<Floor> {
     }
 
     private boolean addGoodItem(GoodItem item, Shelf parentShelf){
-        LinkedList<MarketStructure<?>> foundItems = (LinkedList<MarketStructure<?>>) find(item);
-        if(foundItems == null || foundItems.isEmpty())
-            return parentShelf.add(item);
-        else if(foundItems.size() == 1)
-            return parentShelf.replace((GoodItem) foundItems.getFirst(), item);
-        else
-            return false; //should never be more than one of the same type
+        for(GoodItem g : getAllGoodItems()){
+            if(g.equals(item)) {
+                ((Shelf) findParent(g)).replace(g, item);
+                return true;
+            }
+        }
+        return parentShelf.add(item);
     }
 
     //I really don't like this
