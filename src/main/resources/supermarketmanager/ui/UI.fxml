@@ -19,7 +19,7 @@
          <children>
             <MenuBar id="menuBar" fx:id="menuBar">
               <menus>
-                <Menu id="menuFileOption" fx:id="fileButton" mnemonicParsing="false" onAction="#showMenu" text="File">
+                <Menu id="menuFileOption" fx:id="fileButton" mnemonicParsing="false" text="File">
                   <items>
                         <MenuItem id="menuOpen" fx:id="openFile" mnemonicParsing="false" onAction="#openExplorer" text="Open" />
                         <MenuItem id="menuSave" fx:id="saveFile" mnemonicParsing="false" onAction="#saveFile" text="Save" />
@@ -36,14 +36,14 @@
                 </Menu>
                   <Menu id="menuSearchOption" mnemonicParsing="false" text="Search">
                      <items>
-                        <MenuItem id="searchMenu" mnemonicParsing="false" text="Search Name">
+                        <MenuItem id="searchMenu" fx:id="searchName" mnemonicParsing="false" onAction="#search" text="Search Name">
                            <graphic>
                               <TextField promptText="Enter name..." />
                            </graphic>
                         </MenuItem>
-                        <MenuItem id="searchMenu" mnemonicParsing="false" text="Search Description">
+                        <MenuItem id="searchMenu" fx:id="searchDescription" mnemonicParsing="false" onAction="#search" text="Search Description">
                            <graphic>
-                              <TextField promptText="Enter Description..." />
+                              <TextField onAction="#search" promptText="Enter Description..." />
                            </graphic>
                         </MenuItem>
                      </items>

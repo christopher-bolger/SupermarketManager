@@ -198,7 +198,7 @@ public class Driver {
     public void autoAddGoodItem(){
         GoodItem newItem = generateGoodItem();
         newItem.setStorageType(ScannerInput.readNextInt("Enter the index of the storage type: " + Arrays.toString(GoodItem.storageTypes)));
-        LinkedList<Object> foundItem = (LinkedList<Object>) manager.find(newItem);
+        LinkedList<MarketStructure<?>> foundItem = (LinkedList<MarketStructure<?>>) manager.find(newItem);
         if(foundItem != null && !foundItem.isEmpty())
             manager.addObject(newItem, manager.findParent(foundItem.getFirst()));
         Shelf shelf = manager.findSuitableLocation(newItem);
@@ -271,7 +271,7 @@ public class Driver {
                 case "goodItem" -> toSearch = new GoodItem(nameToFind, description);
                 default -> toSearch = new Floor(nameToFind);
             }
-            LinkedList<Object> list = (LinkedList<Object>) manager.find(toSearch);
+            LinkedList<MarketStructure<?>> list = (LinkedList<MarketStructure<?>>) manager.find(toSearch);
             if(list == null || list.isEmpty())
                 System.out.println("No " + type + "s found with that property!");
             else if (list.size() == 1)

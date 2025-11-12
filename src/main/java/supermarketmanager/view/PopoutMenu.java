@@ -12,6 +12,7 @@ public class PopoutMenu{
     public BorderPane borderPlane;
     public Button saveButton;
     public Button cancelButton;
+    public boolean cancelled = true;
     MarketStructure<?> marketStructure;
     Insertable inserted;
 
@@ -22,7 +23,9 @@ public class PopoutMenu{
     }
     public void saveResults(ActionEvent actionEvent) {
         marketStructure = getResult();
-        closeWindow(actionEvent);
+        cancelled = false;
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        stage.close();
     }
 
     public void closeWindow(ActionEvent actionEvent) {

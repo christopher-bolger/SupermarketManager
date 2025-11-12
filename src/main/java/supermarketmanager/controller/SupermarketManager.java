@@ -97,7 +97,7 @@ public class SupermarketManager extends MarketStructure<Floor> {
     }
 
     private boolean addGoodItem(GoodItem item, Shelf parentShelf){
-        LinkedList<Object> foundItems = (LinkedList<Object>) find(item);
+        LinkedList<MarketStructure<?>> foundItems = (LinkedList<MarketStructure<?>>) find(item);
         if(foundItems == null || foundItems.isEmpty())
             return parentShelf.add(item);
         else if(foundItems.size() == 1)
@@ -151,10 +151,11 @@ public class SupermarketManager extends MarketStructure<Floor> {
     //TODO
     // need to check if the list is empty before going into the next for loop
     // surely there's a better way because that's a lot of indentation.
-    public Collection<Object> find(Object toFind){
+    public Collection<? extends MarketStructure<?>> find(Object toFind){
         if(toFind == null || isEmpty())
             return null;
-        Collection<Object> list = new LinkedList<>();
+        Collection<MarketStructure<?>> list;
+        list = new LinkedList<>();
         switch(toFind){
             case Floor floor : {
                 for(Floor f : getList())
@@ -256,12 +257,10 @@ public class SupermarketManager extends MarketStructure<Floor> {
             shelfScore = new int[shelves.size()];
             for(int i = 0; i < shelves.size(); i++) {
                 for (String s : splitName)
-                    if (shelves.get(i).getName().toLowerCase().contains(s.toLowerCase()) ||
-                            findParent(shelves.get(i)).getName().toLowerCase().contains(s.toLowerCase()))
+                    if (shelves.get(i).getName().toLowerCase().contains(s.toLowerCase()) || findParent(shelves.get(i)).getName().toLowerCase().contains(s.toLowerCase()))
                         shelfScore[i]++;
                 for(String s : splitDescription)
-                    if(shelves.get(i).getName().toLowerCase().contains(s.toLowerCase()) ||
-                            findParent(shelves.get(i)).getName().toLowerCase().contains(s.toLowerCase()))
+                    if(shelves.get(i).getName().toLowerCase().contains(s.toLowerCase()) || findParent(shelves.get(i)).getName().toLowerCase().contains(s.toLowerCase()))
                         shelfScore[i]++;
             }
         }
@@ -306,6 +305,24 @@ public class SupermarketManager extends MarketStructure<Floor> {
         }else{
             return shelves.get(highestIndex);
         }
+    }
+
+    public Collection<MarketStructure<?>> search(String[] searchItems){
+        if(isEmpty() || searchItems.length == 0)
+            return null;
+        Collection<MarketStructure<?>> found = new LinkedList<>();
+        String name = "", description = "";
+        if(!searchItems[0].isEmpty() && searchItems.length == 1) {
+            name = searchItems[0];
+            found.addAll(find(new Floor(name)));
+            found.addAll(find(new Aisle(name)));
+            found.addAll(find(new Shelf(name)));
+        }
+        else if(searchItems.length == 2 && !searchItems[1].isEmpty()) {
+            description = searchItems[1];
+            found.addAll(find(new GoodItem(name, description)));
+        }
+        return found;
     }
 
     public boolean checkIndex(MarketStructure<?> parent, int index){

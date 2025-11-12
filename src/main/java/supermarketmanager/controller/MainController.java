@@ -21,8 +21,12 @@ import supermarketmanager.view.initialPopup;
 import java.io.File;
 import java.io.IOException;
 
+//There is a lot of repeated code here (most of the popups) and im well aware I could have simplified it a lot
+// but at this point i'm well overdue on this project and I have to cut corners somewhere...
 public class MainController {
     public Menu editMenu;
+    public MenuItem searchName;
+    public MenuItem searchDescription;
     SupermarketManager manager;
     MarketStructure<?> selectedEntity;
     public VBox mainVBox;
@@ -46,8 +50,7 @@ public class MainController {
     public TreeView<MarketStructure<?>> treeView;
     TreeItem<MarketStructure<?>> treeRoot;
 
-    public void showMenu(ActionEvent actionEvent) {
-    }
+
 
     public void initialize() throws IOException {
         updateTreeView();
@@ -114,6 +117,7 @@ public class MainController {
         getTreeChildren();
     }
 
+    //this is ungodly and I apologise
     public void getTreeChildren(){
         if(manager.isEmpty())
             return;
@@ -221,6 +225,7 @@ public class MainController {
         Node insertNode = insertLoader.load();
         AddGoodItemInsert insertController = insertLoader.getController();
 
+        GoodItem oldItem = (GoodItem) selectedEntity;
         Shelf shelfToAdd = (Shelf) manager.findParent(selectedEntity);
         insertController.initialize((Aisle) manager.findParent(shelfToAdd));
 
@@ -236,9 +241,12 @@ public class MainController {
         stage.setScene(new Scene(skeletonRoot));
         stage.showAndWait();
 
-        GoodItem result = (GoodItem) insertController.getResult();
-        if(result != null)
-            shelfToAdd.add(result);
+        if(!skeletonController.cancelled) {
+            GoodItem result = (GoodItem) insertController.getResult();
+            if (result != null)
+                manager.addObject(result, shelfToAdd);
+            updateTreeView();
+        }
     }
 
     public void editManager() throws IOException {
@@ -258,11 +266,14 @@ public class MainController {
         stage.setScene(new Scene(skeletonRoot));
         stage.showAndWait();
 
-        MarketStructure<?> manager = insertController.getResult();
-        LinkedList<Floor> oldList = this.manager.getList();
-        if(manager != null) {
-            this.manager = (SupermarketManager) manager;
-            this.manager.addAll(oldList);
+        if(!skeletonController.cancelled) {
+            MarketStructure<?> manager = insertController.getResult();
+            LinkedList<Floor> oldList = this.manager.getList();
+            if (manager != null) {
+                this.manager = (SupermarketManager) manager;
+                this.manager.addAll(oldList);
+            }
+            updateTreeView();
         }
     }
 
@@ -282,10 +293,12 @@ public class MainController {
         stage.setScene(new Scene(skeletonRoot));
         stage.showAndWait();
 
-        MarketStructure<?> result = insertController.getResult();
-        if(result != null)
-            manager.add((Floor) result);
-        updateTreeView();
+        if(!skeletonController.cancelled) {
+            MarketStructure<?> result = insertController.getResult();
+            if (result != null)
+                manager.add((Floor) result);
+            updateTreeView();
+        }
     }
 
 
@@ -299,32 +312,16 @@ public class MainController {
             LinkedList<Shelf> list = (LinkedList<Shelf>) manager.getAllShelves();
             autoAddGoodItem.disableProperty().set(list == null || list.isEmpty());
         }
+        addFloor.disableProperty().set(true);
+        addAisle.disableProperty().set(true);
+        addShelf.disableProperty().set(true);
+        addGoodItem.disableProperty().set(true);
         switch (selectedEntity){
-            case SupermarketManager manager ->{
-                addFloor.disableProperty().set(false);
-                addAisle.disableProperty().set(true);
-                addShelf.disableProperty().set(true);
-                addGoodItem.disableProperty().set(true);
-            }
-            case Floor floor -> {
-                addFloor.disableProperty().set(true);
-                addAisle.disableProperty().set(false);
-                addShelf.disableProperty().set(true);
-                addGoodItem.disableProperty().set(true);
-            }
-            case Aisle aisle ->{
-                addFloor.disableProperty().set(true);
-                addAisle.disableProperty().set(true);
-                addShelf.disableProperty().set(false);
-                addGoodItem.disableProperty().set(true);
-            }
-            case Shelf shelf -> {
-                addFloor.disableProperty().set(true);
-                addAisle.disableProperty().set(true);
-                addShelf.disableProperty().set(true);
-                addGoodItem.disableProperty().set(false);
-            }
-            case GoodItem goodItem -> {
+            case SupermarketManager ignored -> addFloor.disableProperty().set(false);
+            case Floor ignored -> addAisle.disableProperty().set(false);
+            case Aisle ignored -> addShelf.disableProperty().set(false);
+            case Shelf ignored -> addGoodItem.disableProperty().set(false);
+            case GoodItem ignored -> {
                 addFloor.disableProperty().set(true);
                 addAisle.disableProperty().set(true);
                 addShelf.disableProperty().set(true);
@@ -352,10 +349,12 @@ public class MainController {
         stage.setScene(new Scene(skeletonRoot));
         stage.showAndWait();
 
-        Aisle result = (Aisle) insertController.getResult();
-        if(result != null)
-            manager.addAisle(result, (Floor) selectedEntity);
-        updateTreeView();
+        if(!skeletonController.cancelled) {
+            Aisle result = (Aisle) insertController.getResult();
+            if (result != null)
+                manager.addObject(result, selectedEntity);
+            updateTreeView();
+        }
     }
 
     public void showAddShelf(ActionEvent actionEvent) throws IOException {
@@ -374,10 +373,12 @@ public class MainController {
         stage.setScene(new Scene(skeletonRoot));
         stage.showAndWait();
 
-        Shelf result = (Shelf) insertController.getResult();
-        if(result != null)
-            manager.addShelf(result, (Aisle) selectedEntity);
-        updateTreeView();
+        if(!skeletonController.cancelled) {
+            Shelf result = (Shelf) insertController.getResult();
+            if (result != null)
+                manager.addObject(result, selectedEntity);
+            updateTreeView();
+        }
     }
 
     public void showAddGoodItem(ActionEvent actionEvent) throws IOException {
@@ -399,10 +400,11 @@ public class MainController {
         stage.setScene(new Scene(skeletonRoot));
         stage.showAndWait();
 
-        GoodItem result = (GoodItem) insertController.getResult();
-        if(result != null)
-            shelfToAdd.add(result);
-        updateTreeView();
+        if(!skeletonController.cancelled) {
+            GoodItem result = (GoodItem) insertController.getResult();
+            manager.addObject(result, shelfToAdd);
+            updateTreeView();
+        }
     }
 
     public void showAutoAddGoodItem(ActionEvent actionEvent) throws IOException {
@@ -421,11 +423,16 @@ public class MainController {
         stage.setScene(new Scene(skeletonRoot));
         stage.showAndWait();
 
-        GoodItem result = (GoodItem) insertController.getResult();
-        Shelf shelfToAdd = manager.findSuitableLocation(result);
-        if(result != null && shelfToAdd != null)
-            shelfToAdd.add(result);
-        updateTreeView();
+        if(!skeletonController.cancelled) {
+            GoodItem result = (GoodItem) insertController.getResult();
+            LinkedList<MarketStructure<?>> list = (LinkedList<MarketStructure<?>>) manager.find(result);
+            if(list.isEmpty()) {
+                manager.addObject(result, manager.findSuitableLocation(result));
+            }else{
+                manager.addObject(result, manager.findParent(list.getFirst()));
+            }
+            updateTreeView();
+        }
     }
 
     public void updateEdit(){
@@ -442,5 +449,43 @@ public class MainController {
         updateButtons();
         updateEdit();
         mouseEvent.consume();
+    }
+
+    public void search(ActionEvent actionEvent) {
+        System.out.println("Search triggered");
+        if(!searchName.getText().isEmpty()) {
+            String[] searchTerm = {searchName.getText()};
+            LinkedList<MarketStructure<?>> foundItems = (LinkedList<MarketStructure<?>>) manager.search(searchTerm);
+            System.out.println(foundItems.size());
+            highlightResults(foundItems);
+        }
+    }
+
+    public void highlightResults(LinkedList<MarketStructure<?>> results) {
+        treeView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        MultipleSelectionModel<TreeItem<MarketStructure<?>>> selectionModel = treeView.getSelectionModel();
+        TreeItem<MarketStructure<?>> root = treeView.getRoot();
+
+        for (MarketStructure<?> item : results) {
+            TreeItem<MarketStructure<?>> match = findTreeItem(root, item);
+            System.out.println("Looking for matches");
+            if (match != null) {
+                selectionModel.select(match);
+                System.out.println("Found match: " + match);
+            }
+        }
+        treeView.requestFocus();
+        //treeView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+    }
+
+    private TreeItem<MarketStructure<?>> findTreeItem(TreeItem<MarketStructure<?>> node, MarketStructure<?> target) {
+        if (node.getValue().equals(target)) {
+            return node;
+        }
+        for (TreeItem<MarketStructure<?>> child : node.getChildren()) {
+            TreeItem<MarketStructure<?>> found = findTreeItem(child, target);
+            if (found != null) return found;
+        }
+        return null;
     }
 }

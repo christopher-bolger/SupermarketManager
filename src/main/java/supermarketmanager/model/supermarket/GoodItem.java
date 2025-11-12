@@ -124,7 +124,7 @@ public class GoodItem extends MarketStructure<GoodItem>{
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof GoodItem goodItem)) return false;
-        return super.getName().equalsIgnoreCase(goodItem.getName()) && description.equalsIgnoreCase(goodItem.description);
+        return getWeight() == (goodItem.getWeight()) && description.equalsIgnoreCase(goodItem.description);
     }
 
     @Override
