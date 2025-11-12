@@ -127,6 +127,11 @@ public class GoodItem extends MarketStructure<GoodItem>{
         return getWeight() == (goodItem.getWeight()) && description.equalsIgnoreCase(goodItem.description);
     }
 
+    public boolean roughEquals(GoodItem goodItem) {
+        String nameToCompare = goodItem.getName(), descriptionToCompare = goodItem.getDescription();
+        return super.getName().toLowerCase().contains(nameToCompare.toLowerCase()) || super.getName().toLowerCase().contains(descriptionToCompare.toLowerCase());
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(super.getName(), description);

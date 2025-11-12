@@ -27,6 +27,8 @@ public class MainController {
     public Menu editMenu;
     public MenuItem searchName;
     public MenuItem searchDescription;
+    public TextField searchField;
+    public TextField descriptionField;
     SupermarketManager manager;
     MarketStructure<?> selectedEntity;
     public VBox mainVBox;
@@ -452,30 +454,27 @@ public class MainController {
     }
 
     public void search(ActionEvent actionEvent) {
-        System.out.println("Search triggered");
-        if(!searchName.getText().isEmpty()) {
-            String[] searchTerm = {searchName.getText()};
+        if(!searchField.getText().isEmpty() || !searchField.getText().isEmpty()) {
+            String[] searchTerm = {searchField.getText(), searchField.getText()};
             LinkedList<MarketStructure<?>> foundItems = (LinkedList<MarketStructure<?>>) manager.search(searchTerm);
-            System.out.println(foundItems.size());
+            errorOutput.appendText("\n" + "Found " + foundItems.size() + " matches!");
             highlightResults(foundItems);
         }
     }
 
     public void highlightResults(LinkedList<MarketStructure<?>> results) {
+        treeView.getSelectionModel().clearSelection();
         treeView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         MultipleSelectionModel<TreeItem<MarketStructure<?>>> selectionModel = treeView.getSelectionModel();
         TreeItem<MarketStructure<?>> root = treeView.getRoot();
 
         for (MarketStructure<?> item : results) {
             TreeItem<MarketStructure<?>> match = findTreeItem(root, item);
-            System.out.println("Looking for matches");
             if (match != null) {
                 selectionModel.select(match);
-                System.out.println("Found match: " + match);
             }
         }
         treeView.requestFocus();
-        //treeView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
     }
 
     private TreeItem<MarketStructure<?>> findTreeItem(TreeItem<MarketStructure<?>> node, MarketStructure<?> target) {

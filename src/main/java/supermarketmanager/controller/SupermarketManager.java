@@ -7,6 +7,7 @@ import supermarketmanager.model.linkedlist.LinkedList;
 import supermarketmanager.model.supermarket.*;
 
 import java.io.*;
+import java.sql.SQLOutput;
 import java.util.Collection;
 import java.util.Objects;
 
@@ -189,7 +190,7 @@ public class SupermarketManager extends MarketStructure<Floor> {
                                 for(Shelf s : a.getList())
                                     if(!s.isEmpty())
                                         for (GoodItem g : s.getList())
-                                            if (g.equals(goodItem))
+                                            if (g.roughEquals(goodItem)) //can't do equals because it compares name & weight, we search for name & description
                                                 list.add(g);
                 break;
             }
@@ -312,13 +313,14 @@ public class SupermarketManager extends MarketStructure<Floor> {
             return null;
         Collection<MarketStructure<?>> found = new LinkedList<>();
         String name = "", description = "";
-        if(!searchItems[0].isEmpty() && searchItems.length == 1) {
+        if(!searchItems[0].isEmpty()) {
             name = searchItems[0];
+            System.out.println("Searching for " + name);
             found.addAll(find(new Floor(name)));
             found.addAll(find(new Aisle(name)));
             found.addAll(find(new Shelf(name)));
         }
-        else if(searchItems.length == 2 && !searchItems[1].isEmpty()) {
+        if(!searchItems[1].isEmpty()) {
             description = searchItems[1];
             found.addAll(find(new GoodItem(name, description)));
         }
