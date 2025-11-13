@@ -129,7 +129,12 @@ public class GoodItem extends MarketStructure<GoodItem>{
 
     public boolean roughEquals(GoodItem goodItem) {
         String nameToCompare = goodItem.getName(), descriptionToCompare = goodItem.getDescription();
-        return super.getName().toLowerCase().contains(nameToCompare.toLowerCase()) || super.getName().toLowerCase().contains(descriptionToCompare.toLowerCase());
+        if(!nameToCompare.isEmpty() && !descriptionToCompare.isEmpty())
+            return super.getName().toLowerCase().contains(nameToCompare.toLowerCase()) || getDescription().toLowerCase().contains(descriptionToCompare.toLowerCase());
+        else if(nameToCompare.isEmpty())
+            return getDescription().toLowerCase().contains(descriptionToCompare.toLowerCase());
+        else
+            return super.getName().toLowerCase().contains(nameToCompare.toLowerCase());
     }
 
     @Override
