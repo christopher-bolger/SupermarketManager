@@ -200,7 +200,8 @@ public class MainController {
     }
 
     public void exitApp(ActionEvent actionEvent) {
-        menuBar.getScene().getWindow().setOnCloseRequest(event -> {});
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        stage.close();
     }
 
     public void clearData(ActionEvent actionEvent) throws IOException {
@@ -230,12 +231,30 @@ public class MainController {
         updateTreeView();
     }
 
-    public void editShelf(Shelf shelf){
-
+    public void editShelf(Shelf shelf) throws IOException {
+        Shelf result = (Shelf) insertPopupEdit("/supermarketmanager/ui/AisleInsert.fxml", shelf);
+        Aisle parent = (Aisle) manager.findParent(selectedEntity);
+        LinkedList<GoodItem> oldList = shelf.getList();
+        if(result != null) {
+            result.addAll(oldList);
+            if(parent.replace(shelf, result)) {
+                errorOutput.appendText("\n" + "Successfully edited " + shelf.getName() + ".");
+            }else
+                errorOutput.appendText("\n" + "Failed to edit " + shelf.getName() + ".");
+        }
     }
 
-    public void editAisle(Aisle aisle){
-
+    public void editAisle(Aisle aisle) throws IOException {
+        Aisle result = (Aisle) insertPopupEdit("/supermarketmanager/ui/AisleInsert.fxml", aisle);
+        Floor parent = (Floor) manager.findParent(selectedEntity);
+        LinkedList<Shelf> oldList = aisle.getList();
+        if(result != null) {
+            result.addAll(oldList);
+            if(parent.replace(aisle, result)) {
+                errorOutput.appendText("\n" + "Successfully edited " + aisle.getName() + ".");
+            }else
+                errorOutput.appendText("\n" + "Failed to edit " + aisle.getName() + ".");
+        }
     }
 
     public void editFloor(Floor floor) throws IOException {
@@ -243,8 +262,10 @@ public class MainController {
         LinkedList<Aisle> oldList = floor.getList();
         if(result != null) {
             result.addAll(oldList);
-            manager.replace(floor, result);
-            updateTreeView();
+            if(manager.replace(floor, result)) {
+                errorOutput.appendText("\n" + "Successfully edited " + floor.getName() + ".");
+            }else
+                errorOutput.appendText("\n" + "Failed to edit " + floor.getName() + ".");
         }
     }
 
@@ -252,8 +273,10 @@ public class MainController {
         Shelf shelf = (Shelf) manager.findParent(selectedEntity);
         GoodItem result = (GoodItem) insertPopupEdit("/supermarketmanager/ui/addGoodItem.fxml", goodItem);
         if(result != null) {
-            manager.addObject(result, shelf);
-            updateTreeView();
+            if(manager.addObject(result, shelf)){
+                errorOutput.appendText("\n" + "Successfully edited " + goodItem.getName() + ".");
+            }else
+                errorOutput.appendText("\n" + "Failed to edit " + goodItem.getName() + ".");
         }
     }
 
@@ -263,7 +286,7 @@ public class MainController {
             LinkedList<Floor> oldList = this.manager.getList();
             manager = newManager;
             manager.addAll(oldList);
-            updateTreeView();
+            errorOutput.appendText("\n" + "Successfully edited " + manager.getName() + ".");
         }
     }
 
@@ -296,7 +319,10 @@ public class MainController {
     public void showAddFloor(ActionEvent actionEvent) throws IOException {
         Floor result = (Floor) insertPopup("/supermarketmanager/ui/floorInsert.fxml");
         if(result != null) {
-            manager.addObject(result, manager);
+            if(manager.addObject(result, manager)){
+                errorOutput.appendText("\n" + "Successfully added " + result.getName() + " to " + manager.getName() + ".");
+            }else
+                errorOutput.appendText("\n" + "Couldn't add " + result.getName() + "!");
             updateTreeView();
         }
     }
@@ -304,7 +330,10 @@ public class MainController {
     public void showAddShelf(ActionEvent actionEvent) throws IOException {
         Shelf result = (Shelf) insertPopup("/supermarketmanager/ui/ShelfInsert.fxml");
         if(result != null) {
-            manager.addObject(result, selectedEntity);
+            if(manager.addObject(result, selectedEntity)){
+                errorOutput.appendText("\n" + "Successfully added " + result.getName() + " to " + selectedEntity.getName() + ".");
+            }else
+                errorOutput.appendText("\n" + "Couldn't add " + result.getName() + "!");
             updateTreeView();
         }
     }
@@ -312,7 +341,10 @@ public class MainController {
     public void showAddAisle(ActionEvent actionEvent) throws IOException {
         Shelf result = (Shelf) insertPopup("/supermarketmanager/ui/AisleInsert.fxml");
         if(result != null) {
-            manager.addObject(result, selectedEntity);
+            if(manager.addObject(result, selectedEntity)){
+                errorOutput.appendText("\n" + "Successfully added " + result.getName() + " to " + selectedEntity.getName() + ".");
+            }else
+                errorOutput.appendText("\n" + "Couldn't add " + result.getName() + "!");
             updateTreeView();
         }
     }
@@ -321,7 +353,10 @@ public class MainController {
         GoodItem result = (GoodItem) insertPopup("/supermarketmanager/ui/addGoodItem.fxml");
         if(result != null) {
             result.setStorageType(((Aisle) manager.findParent(selectedEntity)).getStorageTypeIndex());
-            manager.addObject(result, selectedEntity);
+            if(manager.addObject(result, selectedEntity)){
+                errorOutput.appendText("\n" + "Successfully added " + result.getName() + " to " + selectedEntity.getName() + ".");
+            }else
+                errorOutput.appendText("\n" + "Couldn't add " + result.getName() + "!");
             updateTreeView();
         }
     }
@@ -331,9 +366,17 @@ public class MainController {
         if(result != null) {
             LinkedList<MarketStructure<?>> list = (LinkedList<MarketStructure<?>>) manager.find(result);
             if(list == null || list.isEmpty()) {
-                manager.addObject(result, manager.findSuitableLocation(result));
+                Shelf parent = manager.findSuitableLocation(result);
+                if(manager.addObject(result, parent)){
+                    errorOutput.appendText("\n" + "Successfully added " + result.getName() + " to " + parent.getName() + ".");
+                }else
+                    errorOutput.appendText("\n" + "Couldn't add " + result.getName() + "!");
             }else{
-                manager.addObject(result, manager.findParent(list.getFirst()));
+                MarketStructure<?> parentObject = manager.findParent(list.getFirst());
+                if(manager.addObject(result, parentObject)){
+                    errorOutput.appendText("\n" + "Successfully added " + result.getName() + " to " + parentObject.getName() + ".");
+                }else
+                    errorOutput.appendText("\n" + "Couldn't add " + result.getName() + "!");
             }
             updateTreeView();
         }
@@ -356,8 +399,8 @@ public class MainController {
     }
 
     public void search(ActionEvent actionEvent) {
-        if(!searchField.getText().isEmpty() || !searchDescription.getText().isEmpty()) {
-            String[] searchTerm = {searchField.getText(), searchDescription.getText()};
+        if(!searchField.getText().isEmpty() || !descriptionField.getText().isEmpty()) {
+            String[] searchTerm = {searchField.getText(), descriptionField.getText()};
             LinkedList<MarketStructure<?>> foundItems = (LinkedList<MarketStructure<?>>) manager.search(searchTerm);
             errorOutput.appendText("\n" + "Found " + foundItems.size() + " matches!");
             highlightResults(foundItems);
