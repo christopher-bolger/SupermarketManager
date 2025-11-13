@@ -312,16 +312,15 @@ public class SupermarketManager extends MarketStructure<Floor> {
         if(isEmpty() || searchItems.length == 0)
             return null;
         Collection<MarketStructure<?>> found = new LinkedList<>();
-        String name = "", description = "";
-        if(!searchItems[0].isEmpty()) {
-            name = searchItems[0];
-            System.out.println("Searching for " + name);
+        String name = searchItems[0], description = searchItems[1];
+        if(searchItems[0].isEmpty()) {
+            found.addAll(find(new GoodItem(name, description)));
+        }
+        else if(searchItems[1].isEmpty()) {
             found.addAll(find(new Floor(name)));
             found.addAll(find(new Aisle(name)));
             found.addAll(find(new Shelf(name)));
-        }
-        if(!searchItems[1].isEmpty()) {
-            description = searchItems[1];
+        }else{
             found.addAll(find(new GoodItem(name, description)));
         }
         return found;
