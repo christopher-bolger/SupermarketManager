@@ -140,7 +140,7 @@
                     <list>
                       <head>
                         <content class="supermarketmanager.model.supermarket.Shelf">
-                          <name>Strawberries</name>
+                          <name>Berries</name>
                           <list>
                             <head>
                               <content class="supermarketmanager.model.supermarket.GoodItem">

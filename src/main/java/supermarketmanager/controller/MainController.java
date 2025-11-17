@@ -212,7 +212,7 @@ public class MainController {
     }
 
     public void deleteSelectedEntity(ActionEvent actionEvent) throws IOException {
-        if(selectedEntity == null)
+        if(selectedEntity == null || selectedEntity == manager)
             return;
         MarketStructure<?> parentItem = manager.findParent(selectedEntity);
         parentItem.remove(selectedEntity);
