@@ -20,6 +20,9 @@ import supermarketmanager.view.initialPopup;
 import java.io.File;
 import java.io.IOException;
 
+
+//While every other class is completely my own work, I did leverage AI while making the UI & interacting with the elements,
+//not as a programmer, but as a tool for me to understand the structure, but unless states otherwise this is all my own programming
 public class MainController {
     public Menu editMenu;
     public MenuItem searchName;
@@ -48,8 +51,6 @@ public class MainController {
     public TextArea entityOutput;
     public TreeView<MarketStructure<?>> treeView;
     TreeItem<MarketStructure<?>> treeRoot;
-
-
 
     public void initialize() throws IOException {
         updateTreeView();
@@ -414,6 +415,7 @@ public class MainController {
         }
     }
 
+    //Ai was used pretty heavily for this bit, indeed I did copy/paste
     public void highlightResults(LinkedList<MarketStructure<?>> results) {
         treeView.getSelectionModel().clearSelection();
         MultipleSelectionModel<TreeItem<MarketStructure<?>>> selectionModel = treeView.getSelectionModel();

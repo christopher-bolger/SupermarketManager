@@ -5,8 +5,9 @@ import java.util.Objects;
 
 public class GoodItem extends MarketStructure<GoodItem>{
     //figured it's easier to set these here, if you wanted to use imperial you'd only need to change this array
-    public static String[] weightTypes = {"Kg", "g", "L", "mL"};
-    public static String[] storageTypes = {"Unrefrigerated", "Refrigerated", "Frozen"};
+    //Also yes they are arrays but using linkedList here would be a lot of hassle
+    public static final String[] weightTypes = {"Kg", "g", "L", "mL"};
+    public static final String[] storageTypes = {"Unrefrigerated", "Refrigerated", "Frozen"};
     private String description, photoURL;
     private double price, weight;
     private int quantity;

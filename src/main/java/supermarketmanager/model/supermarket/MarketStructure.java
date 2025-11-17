@@ -5,6 +5,10 @@ import supermarketmanager.model.linkedlist.LinkedList;
 import java.util.Collection;
 import java.util.Objects;
 
+//When I first created this my intention was for GoodItem not to inherit,
+//now that it does I should really change it to MarketStructure<? extends MarketStructure<?>>
+//but i've worked around this with a lot of the methods in the classes that depend on or use this class
+// so im not going to change it
 public abstract class MarketStructure<E> {
     private String name = "";
     protected LinkedList<E> list;

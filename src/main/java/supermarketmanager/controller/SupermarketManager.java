@@ -7,12 +7,12 @@ import supermarketmanager.model.linkedlist.LinkedList;
 import supermarketmanager.model.supermarket.*;
 
 import java.io.*;
-import java.sql.SQLOutput;
 import java.util.Collection;
 import java.util.Objects;
 
 public class SupermarketManager extends MarketStructure<Floor> {
     File file;
+
     public SupermarketManager(String name, int[] dimensions, File file){
         super(name, dimensions);
         this.file = file;
@@ -75,7 +75,7 @@ public class SupermarketManager extends MarketStructure<Floor> {
         return list.add(item);
     }
 
-    public boolean addAisle(Aisle item, Floor parentFloor){
+    private boolean addAisle(Aisle item, Floor parentFloor){
         boolean accepted = checkAisleName(item.getName());
         if(accepted)
             return parentFloor.add(item);
@@ -93,7 +93,7 @@ public class SupermarketManager extends MarketStructure<Floor> {
         return totalValue;
     }
 
-    public boolean addShelf(Shelf item, Aisle parentAisle){
+    private boolean addShelf(Shelf item, Aisle parentAisle){
         return parentAisle.add(item);
     }
 
@@ -243,11 +243,13 @@ public class SupermarketManager extends MarketStructure<Floor> {
         LinkedList<GoodItem> otherItems = (LinkedList<GoodItem>) getAllGoodItems();
         LinkedList<Aisle> otherAisles = (LinkedList<Aisle>) getAllAisles();
         LinkedList<Shelf> shelves = null;
+
+        //could use a linkedList here, but it felt forced and in this case I feel that arrays are ok
         String[] splitName = toFind.getName().toLowerCase().split(" ");
         String[] splitDescription = toFind.getDescription().toLowerCase().split(" ");
         int[] score = new int[0], shelfScore = new int[0];
 
-        if(otherAisles != null && !otherAisles.isEmpty()){
+        if(otherAisles != null && !otherAisles.isEmpty()){ //looking for shelf/aisle names that match item
             shelves = new LinkedList<>();
             if(otherAisles.isEmpty())
                 return null;
@@ -282,7 +284,8 @@ public class SupermarketManager extends MarketStructure<Floor> {
                 }
             }
         }
-
+        //one set of scores for aisles/shelves & the other for goodItems,
+        //scores are compared and then the highest score is selected as the winner (if any score is > 0)
         if(score.length == 0 && shelfScore.length == 0)
             return null;
         int highestScore = -1;
