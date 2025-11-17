@@ -72,7 +72,7 @@ public class SupermarketManager extends MarketStructure<Floor> {
     }
 
     private boolean addFloor(Floor item){
-        return getList().add(item);
+        return list.add(item);
     }
 
     public boolean addAisle(Aisle item, Floor parentFloor){
@@ -99,7 +99,7 @@ public class SupermarketManager extends MarketStructure<Floor> {
 
     private boolean addGoodItem(GoodItem item, Shelf parentShelf){
         for(GoodItem g : getAllGoodItems()){
-            if(g.equals(item)) {
+            if(g != null && g.equals(item)) {
                 ((Shelf) findParent(g)).replace(g, item);
                 return true;
             }

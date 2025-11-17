@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import supermarketmanager.model.supermarket.Aisle;
 import supermarketmanager.model.supermarket.Floor;
+import supermarketmanager.model.supermarket.MarketStructure;
 import supermarketmanager.model.supermarket.Shelf;
 
 import java.util.Collection;

@@ -28,7 +28,6 @@ public class Shelf extends MarketStructure<GoodItem>{
     @Override
     public boolean replace(GoodItem itemToReplace, GoodItem item) {
         if(list.contains(itemToReplace)) {
-            System.out.println("Something..." + itemToReplace.getQuantity() + " " + item.getQuantity());
             item.setQuantity(itemToReplace.getQuantity() + item.getQuantity());
             return list.set(list.indexOf(itemToReplace), item) == itemToReplace;
         }

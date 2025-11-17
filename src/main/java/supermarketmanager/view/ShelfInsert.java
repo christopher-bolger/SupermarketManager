@@ -38,10 +38,10 @@ public class ShelfInsert extends Insertable {
 
     @Override
     public void edit(MarketStructure<?> itemToEdit) {
-        if(itemToEdit instanceof Shelf shelf) {
-            nameInput.setText(shelf.getName());
-            shelfNumberInput.setText(String.valueOf(shelf.getShelfNumber()));
-            int[] dimensions = shelf.getDimensions();
+        if(itemToEdit instanceof Shelf) {
+            nameInput.setText(itemToEdit.getName());
+            shelfNumberInput.setText(String.valueOf(((Shelf) itemToEdit).getShelfNumber()));
+            int[] dimensions = itemToEdit.getDimensions();
             dimensionX.setText(String.valueOf(dimensions[0]));
             dimensionY.setText(String.valueOf(dimensions[1]));
         }

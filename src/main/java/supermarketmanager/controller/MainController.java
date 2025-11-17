@@ -232,7 +232,7 @@ public class MainController {
     }
 
     public void editShelf(Shelf shelf) throws IOException {
-        Shelf result = (Shelf) insertPopupEdit("/supermarketmanager/ui/AisleInsert.fxml", shelf);
+        Shelf result = (Shelf) insertPopupEdit("/supermarketmanager/ui/ShelfInsert.fxml", shelf);
         Aisle parent = (Aisle) manager.findParent(selectedEntity);
         LinkedList<GoodItem> oldList = shelf.getList();
         if(result != null) {
@@ -273,7 +273,7 @@ public class MainController {
         Shelf shelf = (Shelf) manager.findParent(selectedEntity);
         GoodItem result = (GoodItem) insertPopupEdit("/supermarketmanager/ui/addGoodItem.fxml", goodItem);
         if(result != null) {
-            if(manager.addObject(result, shelf)){
+            if(shelf.replace((GoodItem) selectedEntity, result)){
                 errorOutput.appendText("\n" + "Successfully edited " + goodItem.getName() + ".");
             }else
                 errorOutput.appendText("\n" + "Failed to edit " + goodItem.getName() + ".");
@@ -339,7 +339,7 @@ public class MainController {
     }
 
     public void showAddAisle(ActionEvent actionEvent) throws IOException {
-        Shelf result = (Shelf) insertPopup("/supermarketmanager/ui/AisleInsert.fxml");
+        Aisle result = (Aisle) insertPopup("/supermarketmanager/ui/AisleInsert.fxml");
         if(result != null) {
             if(manager.addObject(result, selectedEntity)){
                 errorOutput.appendText("\n" + "Successfully added " + result.getName() + " to " + selectedEntity.getName() + ".");
@@ -398,6 +398,13 @@ public class MainController {
         mouseEvent.consume();
     }
 
+    public void showSelectedEntitySearch(MarketStructure<?> item) {
+        if(item == null)
+            return;
+        entityOutput.appendText("\n" + item.details());
+        entityOutput.setScrollTop(Double.MAX_VALUE);
+    }
+
     public void search(ActionEvent actionEvent) {
         if(!searchField.getText().isEmpty() || !descriptionField.getText().isEmpty()) {
             String[] searchTerm = {searchField.getText(), descriptionField.getText()};
@@ -423,6 +430,7 @@ public class MainController {
 
     private TreeItem<MarketStructure<?>> findTreeItem(TreeItem<MarketStructure<?>> node, MarketStructure<?> target) {
         if (node.getValue().equals(target)) {
+            showSelectedEntitySearch(node.getValue());
             return node;
         }
         for (TreeItem<MarketStructure<?>> child : node.getChildren()) {
